@@ -22,7 +22,6 @@ import androidx.core.app.ActivityCompat;
 public class ScanBarcodeActivity extends AppCompatActivity {
     SurfaceView surfaceView;
     TextView txtBarcodeValue;
-    Button btnAction;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
@@ -32,19 +31,8 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_barcode);
-
         txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
         surfaceView = findViewById(R.id.surfaceView);
-        btnAction = findViewById(R.id.btnAction);
-
-        btnAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (data.length() > 0) {
-                    startActivity(new Intent(ScanBarcodeActivity.this, EanActivity.class).putExtra("EAN", data));
-                }
-            }
-        });
     }
 
 
@@ -97,20 +85,9 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                     txtBarcodeValue.post(new Runnable() {
                         @Override
                         public void run() {
-                                btnAction.setText("Proceed");
-                                btnAction.setEnabled(true);
                                 data = barcodes.valueAt(0).displayValue;
                                 txtBarcodeValue.setText(data);
-                        }
-                    });
-                } else {
-                    txtBarcodeValue.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            btnAction.setText("Barcode not found");
-                            btnAction.setEnabled(false);
-                            txtBarcodeValue.setText("No Barcode Detected");
-
+                                startActivity(new Intent(ScanBarcodeActivity.this, EanActivity.class).putExtra("EAN", data));
                         }
                     });
                 }
