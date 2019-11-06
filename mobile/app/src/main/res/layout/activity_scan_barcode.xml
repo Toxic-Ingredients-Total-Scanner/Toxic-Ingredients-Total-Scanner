@@ -9,7 +9,6 @@
         android:id="@+id/surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btnAction"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true" />
@@ -27,11 +26,5 @@
         android:textColor="@android:color/white"
         android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/btnAction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="Barcode not found"
-        android:enabled="false"/>
+
 </RelativeLayout>
