@@ -13,5 +13,6 @@ namespace TITS_API.Architecture
         { }
 
         public DbSet<Product> Products { get; set; }
+
     }
 }

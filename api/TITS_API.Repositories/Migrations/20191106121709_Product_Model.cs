@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace TITS_API.Repositories.Migrations
 {
-    public partial class Init_ProductModel : Migration
+    public partial class Product_Model : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +12,7 @@ namespace TITS_API.Repositories.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Gtin = table.Column<string>(nullable: true),
                     ItemName = table.Column<string>(nullable: true),
                     BrandName = table.Column<string>(nullable: true),

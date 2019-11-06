@@ -29,8 +29,14 @@ namespace TITS_API.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), m => m.MigrationsAssembly("TITS_API.Repositories")));
-
+            services.AddEntityFrameworkNpgsql().AddDbContext<DatabaseContext>
+                (options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
+                npgsql => 
+                { 
+                    npgsql.MigrationsAssembly("TITS_API.Repositories");
+                    npgsql.SetPostgresVersion(new Version(9, 5));
+                }));
+            
             services.AddTransient<ProductRepository>();
 
             services.AddControllers();
