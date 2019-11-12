@@ -21,8 +21,4 @@
     <ProjectReference Include="..\TITS_API.Repositories\TITS_API.Repositories.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

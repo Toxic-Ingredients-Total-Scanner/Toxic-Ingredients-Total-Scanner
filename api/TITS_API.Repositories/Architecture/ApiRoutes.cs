@@ -12,5 +12,12 @@ namespace TITS_API.Repositories.Architecture
         public const string ProductsGetProductByName = "api/products/getByName";
         public const string ProductsAddProduct = "api/products";
         public const string ProductsUpdateProduct = "api/products";
+
+        //Ingredients
+        public const string IngredientsGetIngredientById = "api/ingredients/getById";
+        public const string IngredientsGetIngredientByName = "api/ingredients/getByName";
+        public const string IngredientsGetAllIngredients = "api/ingredients";
+        public const string IngredientsAddIngredient = "api/ingredients";
+        public const string IngredientsUpdateIngredient = "api/ingredients";
     }
 }

@@ -14,14 +14,14 @@ namespace TITS_API.Repositories.Repositories
         public ProductRepository(DatabaseContext context) : base(context)
         { }
 
-        public Task<Product> GetByEan(string ean)
+        public async Task<Product> GetByEan(string ean)
         {
-            return Task.Run(() => _context.Products.FirstOrDefault(p => p.Gtin == ean));
+            return await Task.Run(() => _context.Products.FirstOrDefault(p => p.Gtin == ean));
         }
 
-        public Task<Product> GetByName(string name)
+        public async Task<Product> GetByName(string name)
         {
-            return Task.Run(() => _context.Products.FirstOrDefault(p => p.ItemName == name));
+            return await Task.Run(() => _context.Products.FirstOrDefault(p => p.ItemName == name));
         }
     }
 }

@@ -22,5 +22,9 @@ namespace TITS_API.Models.Models
         public string Description { get; set; }
         public string Picture { get; set; }
         public string Url { get; set; }
+
+
+        [NotMapped]
+        public List<Ingredient> Ingredients { get; set; }
     }
 }
