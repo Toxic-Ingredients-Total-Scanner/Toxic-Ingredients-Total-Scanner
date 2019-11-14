@@ -15,7 +15,7 @@ namespace TITS_API.Services.Services
             _translateService = translateService;
         }
 
-        public static async Task<Ingredient> AutoComplete(Ingredient ingredient)
+        public async Task<Ingredient> AutoComplete(Ingredient ingredient)
         {
             //TODO
 

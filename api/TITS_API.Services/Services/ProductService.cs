@@ -13,13 +13,15 @@ namespace TITS_API.Services.Services
         private readonly ProductRepository _productRepository;
         private readonly IngredientRepository _ingredientRepository;
         private readonly ProductCompositionRepository _productCompositionRepository;
+        private readonly PubChemService _pubChemService;
 
         public ProductService(ProductRepository productRepository, IngredientRepository ingredientRepository,
-            ProductCompositionRepository productCompositionRepository)
+            ProductCompositionRepository productCompositionRepository, PubChemService pubChemService)
         {
             _productRepository = productRepository;
             _ingredientRepository = ingredientRepository;
             _productCompositionRepository = productCompositionRepository;
+            _pubChemService = pubChemService;
         }
 
         public async Task<Product> Add(Product product)
@@ -30,7 +32,7 @@ namespace TITS_API.Services.Services
                 {
                     if (!await _ingredientRepository.Exists(ingredient) && !String.IsNullOrEmpty(ingredient.PolishName))
                     {
-                        ingredient = await _ingredientRepository.Add(await PubChemService.AutoComplete(ingredient));                        
+                        ingredient = await _ingredientRepository.Add(await _pubChemService.AutoComplete(ingredient));                        
                     }
                 });
             }
