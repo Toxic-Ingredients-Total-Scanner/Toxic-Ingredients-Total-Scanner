@@ -77,7 +77,7 @@ namespace TITS_API.Api
             {
                 endpoints.MapControllers();
             });
-
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
