@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GoogleTranslateFreeApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using TITS_API.Architecture;
 using TITS_API.Repositories.Repositories;
+using TITS_API.Services.Services;
 
 namespace TITS_API.Api
 {
@@ -38,6 +40,12 @@ namespace TITS_API.Api
                 }));
             
             services.AddTransient<ProductRepository>();
+            services.AddTransient<IngredientRepository>();
+            services.AddTransient<ProductCompositionRepository>();
+            services.AddTransient<ProductService>();
+            services.AddTransient<TranslateService>();
+            services.AddTransient<PubChemService>();
+            services.AddTransient<GoogleTranslator>();
 
             services.AddControllers();
 
@@ -69,7 +77,7 @@ namespace TITS_API.Api
             {
                 endpoints.MapControllers();
             });
-
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

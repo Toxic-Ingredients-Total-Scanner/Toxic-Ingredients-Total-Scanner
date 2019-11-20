@@ -12,7 +12,7 @@ namespace TITS_API.Models.Models
     {
         [Key]
         public int Id { get; set; }
-        public int PubChemCID { get; set; }
+        public int? PubChemID { get; set; }
         public string PolishName { get; set; }
         public string EnglishName { get; set; }
         public string MolecularFormula { get; set; }

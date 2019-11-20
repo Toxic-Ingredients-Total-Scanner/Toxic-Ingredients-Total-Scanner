@@ -43,6 +43,10 @@ namespace TITS_API.Repositories.Interfaces
         {
             return await _context.Set<TEntity>().FindAsync(id);
         }
+        public async Task<bool> Exists(TEntity entity)
+        {
+            return await _context.Set<TEntity>().ContainsAsync(entity);
+        }
 
         public async Task<List<TEntity>> GetAll()
         {

@@ -36,4 +36,13 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
+# frontend libs
+frontend/logs/*
+frontend/!.gitkeep
+frontend/node_modules/
+frontend/app/lib/
+frontend/tmp
+frontend/.DS_Store
+frontend/.idea
+
 appsettings.json
