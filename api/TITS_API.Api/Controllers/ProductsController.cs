@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TITS_API.Models.Models;
 using TITS_API.Repositories.Architecture;
 using TITS_API.Repositories.Repositories;
+using TITS_API.Services.Services;
 
 namespace TITS_API.Api.Controllers
 {
@@ -15,10 +16,12 @@ namespace TITS_API.Api.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ProductRepository _productRepository;
+        private readonly ProductService _productService;
 
-        public ProductsController(ProductRepository productRepository)
+        public ProductsController(ProductRepository productRepository, ProductService productService)
         {
             _productRepository = productRepository;
+            _productService = productService;
         }
 
 
@@ -53,6 +56,19 @@ namespace TITS_API.Api.Controllers
         public async Task<ActionResult<Product>> GetByName(string name)
         {
             var product = await _productRepository.GetByName(name);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return product;
+        }
+
+
+        [Route(ApiRoutes.ProductsGetProductFromPwS)]
+        [HttpGet]
+        public async Task<ActionResult<Product>> GetFromPwS(string gtin)
+        {
+            var product = await _productService.GetFromPWS(gtin);
             if (product == null)
             {
                 return NotFound();
