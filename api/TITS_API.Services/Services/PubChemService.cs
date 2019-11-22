@@ -15,7 +15,8 @@ namespace TITS_API.Services.Services
         private readonly TranslateService _translateService;
         private readonly HttpClient _http;
 
-        private const string baseUrl = "https://pubchem.ncbi.nlm.nih.gov/rest/pug";
+        private const string apiUrl = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/";
+        private const string baseUrl = "https://pubchem.ncbi.nlm.nih.gov/compound/";
         private const string autoCompleteUrl = "https://pubchem.ncbi.nlm.nih.gov/rest/autocomplete/compound/";
 
         public PubChemService(TranslateService translateService)
@@ -31,8 +32,12 @@ namespace TITS_API.Services.Services
             if (properName == null) return ingredient;
 
             ingredient.EnglishName = properName;
-//            ingredient.PubChemCID = Int32.Parse(await _http.GetStringAsync(baseUrl + properName[0] + "/name/" + properName[1] + "/cids/TXT"));
-//            ingredient.PubChemUrl = baseUrl + properName[0] + properName[1] + "/json";
+            ingredient.PubChemCID = Int32.Parse(await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName +"/cids/TXT"));
+            ingredient.PubChemUrl = baseUrl + ingredient.PubChemCID;
+            ingredient.MolecularFormula = (await _http.GetStringAsync(apiUrl + "compound/cid/" + ingredient.PubChemCID + "/property/MolecularFormula/TXT")).Trim();
+            ingredient.StructureImageUrl = apiUrl + "compound/cid/" + ingredient.PubChemCID + "/PNG";
+            ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
+
 
             return ingredient;
         }
@@ -45,7 +50,6 @@ namespace TITS_API.Services.Services
             var response = JsonConvert.DeserializeObject<AutoCompleteResponse>(pubChemAutoCompleteResponse);
             if (response.Total > 0) return response.Dictionary_Terms.Compound[0];
 
-    
 
             return null;
         }
