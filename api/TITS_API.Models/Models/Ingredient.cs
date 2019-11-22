@@ -12,11 +12,13 @@ namespace TITS_API.Models.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? PubChemID { get; set; }
+        public int? PubChemCID { get; set; }
         public string PolishName { get; set; }
         public string EnglishName { get; set; }
         public string MolecularFormula { get; set; }
-        public string ToxicityGrade { get; set; }
+        public string StructureImageUrl { get; set; }
+        public string ChemicalSafety { get; set; }
+        public string GHSClasificationRaportUrl { get; set; }
         public string PubChemUrl { get; set; }
         public string WikiUrl { get; set; }
 
