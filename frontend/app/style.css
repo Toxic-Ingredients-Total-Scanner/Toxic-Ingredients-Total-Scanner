@@ -1,0 +1,9 @@
+.example-component {
+  width: 100%;
+  padding: 100px;
+  margin: 50px 0px;
+}
+.example-component p {
+  color: red;
+  margin-left: 50px;
+}
