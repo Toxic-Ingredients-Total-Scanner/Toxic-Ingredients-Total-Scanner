@@ -15,6 +15,8 @@ namespace TITS_API.Architecture
         public DbSet<Product> Products { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<ProductComposition> ProductCompositions { get; set; }
+        public DbSet<HazardStatement> HazardStatements { get; set; }
+        public DbSet<IngredientHazardStatement> IngredientHazardStatements { get; set; }
 
     }
 }
