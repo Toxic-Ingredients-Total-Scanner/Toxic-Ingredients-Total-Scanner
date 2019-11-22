@@ -17,10 +17,12 @@ namespace TITS_API.Models.Models
         public string EnglishName { get; set; }
         public string MolecularFormula { get; set; }
         public string StructureImageUrl { get; set; }
-        public string ChemicalSafety { get; set; }
         public string GHSClasificationRaportUrl { get; set; }
         public string PubChemUrl { get; set; }
         public string WikiUrl { get; set; }
 
+
+        [NotMapped]
+        public List<HazardStatement> HazardStatements { get; set; }
     }
 }
