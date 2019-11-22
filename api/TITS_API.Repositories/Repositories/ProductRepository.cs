@@ -21,7 +21,7 @@ namespace TITS_API.Repositories.Repositories
 
         public async Task<Product> GetByName(string name)
         {
-            return await Task.Run(() => _context.Products.FirstOrDefault(p => p.ItemName == name));
+            return await Task.Run(() => _context.Products.FirstOrDefault(p => p.ProductName == name));
         }
 
     }

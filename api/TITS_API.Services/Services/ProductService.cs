@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TITS_API.Api.Configuration;
 using TITS_API.Models.Models;
-using TITS_API.Models.Models.External;
 using TITS_API.Repositories.Repositories;
 
 namespace TITS_API.Services.Services
@@ -73,7 +72,7 @@ namespace TITS_API.Services.Services
             var response = await request.GetResponseAsync();
             var stream = new StreamReader(response.GetResponseStream());
             
-            return JsonConvert.DeserializeObject<ProductPwS>(stream.ReadToEnd()).GetProduct();
+            return JsonConvert.DeserializeObject<Product>(stream.ReadToEnd());
         }
     }
 }

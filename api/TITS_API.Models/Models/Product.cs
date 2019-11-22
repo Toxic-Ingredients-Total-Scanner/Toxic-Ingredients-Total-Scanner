@@ -14,14 +14,16 @@ namespace TITS_API.Models.Models
         [Key]
         public int Id { get; set; }
         public string Gtin { get; set; }
-        public string ItemName { get; set; }
-        public string BrandName { get; set; }
+        public string ProductName { get; set; }
+        public string Brand { get; set; }
         public string BrandOwner { get; set; }
-        public string ManufacturerName { get; set; }
+        public string Manufacturer { get; set; }
         public string CountryOfOrigin { get; set; }
         public string Description { get; set; }
-        public string Picture { get; set; }
+        public string ProductImage { get; set; }
         public string Url { get; set; }
+        public bool? IsLegal { get; set; }
+        public DateTime ModifiedDate { get; set; }
 
 
         [NotMapped]
