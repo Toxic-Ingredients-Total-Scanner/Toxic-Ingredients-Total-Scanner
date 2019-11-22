@@ -2,9 +2,12 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using TITS_API.Models.Models;
 using TITS_API.Models.PubChemResponses;
 
@@ -38,6 +41,23 @@ namespace TITS_API.Services.Services
             ingredient.StructureImageUrl = apiUrl + "compound/cid/" + ingredient.PubChemCID + "/PNG";
             ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
 
+            var wikiResponse = await _http.GetStringAsync("https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/" + ingredient.PubChemCID + "/XML");
+
+            if (!wikiResponse.Contains("PUGVIEW.NotFound"))
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(wikiResponse);
+
+                XmlNodeList elemList = doc.GetElementsByTagName("URL");
+                foreach (XmlNode elem in elemList)
+                {
+                    if (elem.InnerText.Contains("https://en.wikipedia.org/wiki/"))
+                    {
+                        ingredient.WikiUrl = elem.InnerXml;
+                        break;
+                    }
+                }
+            }
 
             return ingredient;
         }
