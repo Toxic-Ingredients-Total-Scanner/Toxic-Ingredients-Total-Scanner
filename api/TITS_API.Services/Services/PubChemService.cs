@@ -29,7 +29,7 @@ namespace TITS_API.Services.Services
             if (properName == null) return ingredient;
 
             ingredient.EnglishName = properName[1];
-            ingredient.PubChemID = Int32.Parse(await _http.GetStringAsync(baseUrl + properName[0] + "/name/" + properName[1] + "/cids/TXT"));
+            ingredient.PubChemCID = Int32.Parse(await _http.GetStringAsync(baseUrl + properName[0] + "/name/" + properName[1] + "/cids/TXT"));
             ingredient.PubChemUrl = baseUrl + properName[0] + properName[1] + "/json";
 
             return ingredient;
