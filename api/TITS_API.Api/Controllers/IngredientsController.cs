@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TITS_API.Models.Models;
 using TITS_API.Repositories.Architecture;
 using TITS_API.Repositories.Repositories;
+using TITS_API.Services.Services;
 
 namespace TITS_API.Api.Controllers
 {
@@ -15,10 +16,12 @@ namespace TITS_API.Api.Controllers
     public class IngredientsController : ControllerBase
     {
         private readonly IngredientRepository _ingredientRepository;
+        private readonly PubChemService _pubChemService;
 
-        public IngredientsController(IngredientRepository ingredientRepository)
+        public IngredientsController(IngredientRepository ingredientRepository, PubChemService pubChemService)
         {
             _ingredientRepository = ingredientRepository;
+            _pubChemService = pubChemService;
         }
 
         [Route(ApiRoutes.IngredientsGetIngredientById)]
@@ -70,6 +73,19 @@ namespace TITS_API.Api.Controllers
                 return NotFound();
             }
             return _ingredient;
+        }
+
+
+        [Route(ApiRoutes.IngredientsPubChemAutocompleteTest)]
+        [HttpGet]
+        public async Task<ActionResult<Ingredient>> PubChemAutocompleteTest(string name)
+        {
+            var ingredient = await _pubChemService.AutoComplete(new Ingredient { PolishName = name});
+            if (ingredient == null)
+            {
+                return NotFound();
+            }
+            return ingredient;
         }
     }
 }
