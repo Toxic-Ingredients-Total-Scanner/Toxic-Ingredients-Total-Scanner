@@ -7,10 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.tits.tits_mobile.HttpHandler.HttpGetRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
 
 import androidx.appcompat.app.AlertDialog;

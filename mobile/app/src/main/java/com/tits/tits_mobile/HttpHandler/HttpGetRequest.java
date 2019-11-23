@@ -1,4 +1,4 @@
-package com.tits.tits_mobile;
+package com.tits.tits_mobile.HttpHandler;
 
 import android.os.AsyncTask;
 
