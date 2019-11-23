@@ -20,5 +20,6 @@ namespace TITS_API.Repositories.Architecture
         public const string IngredientsGetAllIngredients = "api/ingredients";
         public const string IngredientsAddIngredient = "api/ingredients";
         public const string IngredientsUpdateIngredient = "api/ingredients";
+        public const string IngredientsPubChemAutocompleteTest = "api/ingredients/pubChemAutocompleteTest";
     }
 }

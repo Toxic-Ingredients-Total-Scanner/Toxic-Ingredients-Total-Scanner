@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TITS_API.Architecture;
@@ -9,36 +10,16 @@ using TITS_API.Architecture;
 namespace TITS_API.Repositories.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20191122123021_Product_Model_Changes")]
+    partial class Product_Model_Changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            modelBuilder.Entity("TITS_API.Models.Models.HazardStatement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
-
-                    b.Property<string>("Code")
-                        .HasColumnType("text");
-
-                    b.Property<string>("DescriptionEnglish")
-                        .HasColumnType("text");
-
-                    b.Property<string>("DescriptionPolish")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HazardStatements");
-                });
 
             modelBuilder.Entity("TITS_API.Models.Models.Ingredient", b =>
                 {
@@ -47,10 +28,13 @@ namespace TITS_API.Repositories.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
+                    b.Property<string>("ChemicalSafety")
+                        .HasColumnType("text");
+
                     b.Property<string>("EnglishName")
                         .HasColumnType("text");
 
-                    b.Property<string>("GHSClasificationRaportUrl")
+                    b.Property<string>("GHSClassificationRaportURL")
                         .HasColumnType("text");
 
                     b.Property<string>("MolecularFormula")
@@ -65,7 +49,10 @@ namespace TITS_API.Repositories.Migrations
                     b.Property<string>("PubChemUrl")
                         .HasColumnType("text");
 
-                    b.Property<string>("StructureImageUrl")
+                    b.Property<string>("StructureImageURL")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ToxicityGrade")
                         .HasColumnType("text");
 
                     b.Property<string>("WikiUrl")
@@ -74,28 +61,6 @@ namespace TITS_API.Repositories.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Ingredients");
-                });
-
-            modelBuilder.Entity("TITS_API.Models.Models.IngredientHazardStatement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
-
-                    b.Property<int>("HazardStatementId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IngredientId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HazardStatementId");
-
-                    b.HasIndex("IngredientId");
-
-                    b.ToTable("IngredientHazardStatements");
                 });
 
             modelBuilder.Entity("TITS_API.Models.Models.Product", b =>
@@ -163,21 +128,6 @@ namespace TITS_API.Repositories.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductCompositions");
-                });
-
-            modelBuilder.Entity("TITS_API.Models.Models.IngredientHazardStatement", b =>
-                {
-                    b.HasOne("TITS_API.Models.Models.HazardStatement", "HazardStatement")
-                        .WithMany()
-                        .HasForeignKey("HazardStatementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TITS_API.Models.Models.Ingredient", "Ingredient")
-                        .WithMany()
-                        .HasForeignKey("IngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("TITS_API.Models.Models.ProductComposition", b =>
