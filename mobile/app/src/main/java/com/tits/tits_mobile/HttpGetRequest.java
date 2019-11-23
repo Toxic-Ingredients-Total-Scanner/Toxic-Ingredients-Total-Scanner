@@ -3,6 +3,7 @@ package com.tits.tits_mobile;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -28,6 +29,7 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
             connection.setReadTimeout(READ_TIMEOUT);
             connection.setConnectTimeout(CONNECTION_TIMEOUT);
 
+
             //Connect to our url
             connection.connect();         //Create a new InputStreamReader
             InputStreamReader streamReader = new
@@ -42,6 +44,10 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
             reader.close();
             streamReader.close();         //Set our result equal to our stringBuilder
             result = stringBuilder.toString();
+        }
+        catch (FileNotFoundException e) {
+            result = "not found";
+            return result;
         }
         catch(IOException e){
             e.printStackTrace();
