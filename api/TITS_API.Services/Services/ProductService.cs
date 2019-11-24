@@ -74,7 +74,13 @@ namespace TITS_API.Services.Services
                 var response = await request.GetResponseAsync();
                 var stream = new StreamReader(response.GetResponseStream());
 
-                return JsonConvert.DeserializeObject<Product>(stream.ReadToEnd());
+                var product = JsonConvert.DeserializeObject<Product>(stream.ReadToEnd());
+
+                if (product.ProductName == null)
+                {
+                    return null;
+                }
+                else return product; 
             }
             catch(Exception)
             {
