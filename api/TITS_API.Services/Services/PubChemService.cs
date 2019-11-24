@@ -119,28 +119,35 @@ namespace TITS_API.Services.Services
                         }
                     }
                 }
+
+                temp = temp.Trim();
+                GHSStatemments = temp.Split(' ');
+
+                return GHSStatemments;
             }
             catch (Exception)
             {
                 return null;
             }
-
-            temp = temp.Trim();
-            GHSStatemments = temp.Split(' ');
-
-            return GHSStatemments;
         }
 
         private async Task<List<HazardStatement>> GetStatementsByCode(string[] codes)
         {
-            List<HazardStatement> hazardStatements = new List<HazardStatement>();
-
-            foreach(var code in codes)
+            try
             {
-                hazardStatements.Add(await _hazardStatementRepository.GetByCode(code));
-            }
+                List<HazardStatement> hazardStatements = new List<HazardStatement>();
 
-            return hazardStatements;
+                foreach (var code in codes)
+                {
+                    hazardStatements.Add(await _hazardStatementRepository.GetByCode(code));
+                }
+
+                return hazardStatements;
+            }
+            catch(Exception)
+            { 
+                return null; 
+            }
         }       
 
     }
