@@ -14,6 +14,19 @@ public class Ingredient {
     String wikiUrl = null;
     ArrayList<HazardStatement> list;
 
+    public Ingredient(String polishName, String englishName) {
+        this.id = 0;
+        this.pubChemCID = 0;
+        this.polishName = polishName;
+        this.englishName = englishName;
+        this.molecularFormula = null;
+        this.strucutreImageUrl = null;
+        this.ghsClasificationRaportUrl = null;
+        this.pubChemUrl = null;
+        this.wikiUrl = null;
+        this.list = null;
+    }
+
     public String getPolishName() {
         return polishName;
     }

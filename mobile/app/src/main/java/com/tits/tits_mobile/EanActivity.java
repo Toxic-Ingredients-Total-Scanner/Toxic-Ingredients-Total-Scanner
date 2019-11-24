@@ -7,10 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tits.tits_mobile.HttpHandler.HttpGetRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.tits.tits_mobile.models.Ingredient;
+import com.tits.tits_mobile.models.Product;
 
 import java.util.concurrent.ExecutionException;
 
@@ -23,6 +26,7 @@ public class EanActivity extends AppCompatActivity {
     Button anotherScan;
     String EAN = "";
     String pattern = "\\d{13}|\\d{8}";
+    Product prod;
 
 
     @Override
@@ -38,17 +42,15 @@ public class EanActivity extends AppCompatActivity {
         if (EAN != null && EAN.matches(pattern)) {
             EAN = getIntent().getStringExtra("EAN");
 
-            String myUrl = "http://217.182.79.249/api/products/getByEan?ean=" + EAN;   //String to place our result in
+            //String myUrl = "http://217.182.79.249/api/products/getByEan?ean=" + EAN;   //String to place our result in
+            String myUrl = "http://217.182.79.249/api/products/getFullProductInfo?gtin=" + EAN;
             final String result;
 
-            JSONObject json;
 
-
-            HttpGetRequest getRequest = new HttpGetRequest();
+            HttpGetRequest getRequest = new HttpGetRequest(EanActivity.this);
             try {
                 result = getRequest.execute(myUrl).get();
 
-                System.out.println(result);
                 if(result.equals("not found")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(EanActivity.this);
                     builder.setMessage("Product not found, do you want to add new one?")
@@ -68,18 +70,19 @@ public class EanActivity extends AppCompatActivity {
 
 
                 } else {
-                    json = new JSONObject(result);
+                    prod = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readValue(result, Product.class);
+                    eanTxtView.setText(prod.toString());
                 }
-                eanTxtView.setText(result);
+                //eanTxtView.setText(prod.getProductName());
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
+            } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-
-
         } else {
             eanTxtView.setText("Invalid EAN");
         }
