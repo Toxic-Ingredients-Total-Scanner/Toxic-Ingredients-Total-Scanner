@@ -71,7 +71,25 @@ public class EanActivity extends AppCompatActivity {
 
                 } else {
                     prod = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readValue(result, Product.class);
-                    eanTxtView.setText(prod.toString());
+                    if(prod.getIngredients() == null) {
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(EanActivity.this);
+                        builder1.setMessage("Product found, but no ingtedients in our DB's, do you want add?")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        startActivity(new Intent(EanActivity.this, productWithoutIndgredients.class));
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                    }
+                                });
+                        // Create the AlertDialog object and return it
+                        AlertDialog alertDialog1 = builder1.create();
+                        alertDialog1.show();
+                    } else {
+                        eanTxtView.setText(prod.toString());
+                    }
                 }
                 //eanTxtView.setText(prod.getProductName());
             } catch (ExecutionException e) {
