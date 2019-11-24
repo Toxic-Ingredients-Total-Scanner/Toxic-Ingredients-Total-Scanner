@@ -11,12 +11,14 @@ using System.Xml;
 using System.Xml.Linq;
 using TITS_API.Models.Models;
 using TITS_API.Models.PubChemResponses;
+using TITS_API.Repositories.Repositories;
 
 namespace TITS_API.Services.Services
 {
     public class PubChemService
     {
         private readonly TranslateService _translateService;
+        private readonly HazardStatementRepository _hazardStatementRepository;
         private readonly HttpClient _http;
 
         private const string apiUrl = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/";
@@ -24,9 +26,10 @@ namespace TITS_API.Services.Services
         private const string autoCompleteUrl = "https://pubchem.ncbi.nlm.nih.gov/rest/autocomplete/compound/";
         private const string informationUrl = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/";
 
-        public PubChemService(TranslateService translateService)
+        public PubChemService(TranslateService translateService, HazardStatementRepository hazardStatementRepository)
         {
             _translateService = translateService;
+            _hazardStatementRepository = hazardStatementRepository;
             _http = new HttpClient();
         }
 
@@ -43,6 +46,7 @@ namespace TITS_API.Services.Services
             ingredient.StructureImageUrl = apiUrl + "compound/cid/" + ingredient.PubChemCID + "/PNG";
             ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
             ingredient.WikiUrl = await WikipediaURL(ingredient);
+            ingredient.HazardStatements = await GetStatementsByCode(await GHSStatements(ingredient));
              
 
             return ingredient;
@@ -82,7 +86,7 @@ namespace TITS_API.Services.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -116,7 +120,7 @@ namespace TITS_API.Services.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -126,6 +130,18 @@ namespace TITS_API.Services.Services
 
             return GHSStatemments;
         }
+
+        private async Task<List<HazardStatement>> GetStatementsByCode(string[] codes)
+        {
+            List<HazardStatement> hazardStatements = new List<HazardStatement>();
+
+            foreach(var code in codes)
+            {
+                hazardStatements.Add(await _hazardStatementRepository.GetByCode(code));
+            }
+
+            return hazardStatements;
+        }       
 
     }
 }
