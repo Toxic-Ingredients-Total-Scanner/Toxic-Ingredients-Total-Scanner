@@ -11,6 +11,8 @@ namespace TITS_API.Repositories.Architecture
         public const string ProductsGetProductByEan = "api/products/getByEan";
         public const string ProductsGetProductByName = "api/products/getByName";
         public const string ProductsGetProductFromPwS = "api/products/getFromPwS";
+        public const string ProductsGetProductNames = "api/products/getProductNames";
+        public const string ProductsGetFullProductInfo = "api/products/getFullProductInfo";
         public const string ProductsAddProduct = "api/products";
         public const string ProductsUpdateProduct = "api/products";
 

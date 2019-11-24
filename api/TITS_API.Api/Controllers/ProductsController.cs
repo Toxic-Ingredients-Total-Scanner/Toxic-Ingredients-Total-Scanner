@@ -77,6 +77,19 @@ namespace TITS_API.Api.Controllers
         }
 
 
+        [Route(ApiRoutes.ProductsGetProductNames)]
+        [HttpGet]
+        public async Task<ActionResult<string[]>> GetProductNames(string name)
+        {
+            var names = await _productRepository.GetProductNames(name);
+            if (names == null)
+            {
+                return NotFound();
+            }
+            return names;
+        }
+
+
         [Route(ApiRoutes.ProductsAddProduct)]
         [HttpPost]
         public async Task<ActionResult<Product>> Add(Product product)
@@ -100,6 +113,19 @@ namespace TITS_API.Api.Controllers
                 return NotFound();
             }
             return _product;
+        }
+
+
+        [Route(ApiRoutes.ProductsGetFullProductInfo)]
+        [HttpGet]
+        public async Task<ActionResult<Product>> GetFullProductInfo(string gtin)
+        {
+            var product = await _productService.GetFullProductInfo(gtin);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return product;
         }
     }
 }
