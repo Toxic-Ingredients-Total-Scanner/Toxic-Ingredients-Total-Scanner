@@ -64,10 +64,10 @@ namespace TITS_API.Services.Services
         {
             string wikiUrl = "";
 
-            var wikiResponse = await _http.GetStringAsync(informationUrl + ingredient.PubChemCID + "/XML");
-
-            if (!wikiResponse.Contains("PUGVIEW.NotFound"))
+            try
             {
+                var wikiResponse = await _http.GetStringAsync(informationUrl + ingredient.PubChemCID + "/XML?heading=Wikipedia");
+
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(wikiResponse);
 
@@ -80,6 +80,11 @@ namespace TITS_API.Services.Services
                         break;
                     }
                 }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
 
             return wikiUrl;
@@ -89,11 +94,11 @@ namespace TITS_API.Services.Services
         {
             string[] GHSStatemments;
             string temp = "";
-            var GHSResponse = await _http.GetStringAsync(informationUrl + ingredient.PubChemCID + "/XML");
             Regex regex = new Regex(@"(H\d{3}([a-z]|[A-Z]){0,2}( |\:))|(EUH\d{3}( |\:))|(AUH\d{3})( |\:)");
 
-            if (!GHSResponse.Contains("PUGVIEW.NotFound"))
+            try
             {
+                var GHSResponse = await _http.GetStringAsync(informationUrl + ingredient.PubChemCID + "/XML?heading=GHS%20Classification");
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(GHSResponse);
 
@@ -103,13 +108,17 @@ namespace TITS_API.Services.Services
                     Match match = regex.Match(node.InnerXml);
                     if (match.Success)
                     {
-                        String[] splitTable = node.InnerXml.Split(new char[] {' ', ':'});
+                        String[] splitTable = node.InnerXml.Split(new char[] { ' ', ':' });
                         if (!temp.Contains(splitTable[0]))
                         {
                             temp += splitTable[0] + ' ';
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
 
             temp = temp.Trim();
