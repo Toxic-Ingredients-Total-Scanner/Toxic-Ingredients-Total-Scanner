@@ -114,5 +114,18 @@ namespace TITS_API.Api.Controllers
             }
             return _product;
         }
+
+
+        [Route(ApiRoutes.ProductsGetFullProductInfo)]
+        [HttpGet]
+        public async Task<ActionResult<Product>> GetFullProductInfo(string gtin)
+        {
+            var product = await _productService.GetFullProductInfo(gtin);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return product;
+        }
     }
 }

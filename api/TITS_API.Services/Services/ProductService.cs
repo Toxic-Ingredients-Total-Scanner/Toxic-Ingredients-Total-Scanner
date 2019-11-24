@@ -61,18 +61,44 @@ namespace TITS_API.Services.Services
 
         public async Task<Product> GetFromPWS(string gtin)
         {
-            Credentials credentials = SettingsReader.GetCredentials("PwSAPI");
+            try
+            {
+                Credentials credentials = SettingsReader.GetCredentials("PwSAPI");
 
-            var request = (HttpWebRequest)WebRequest.Create(pws + gtin + "?aggregation=SOCIAL");
-            request.Method = "GET";
-            request.Headers.Add(HttpRequestHeader.Accept, "application/json");
-            request.Headers.Add(HttpRequestHeader.Authorization, 
-                "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes($"{credentials.Login}:{credentials.Key}")));
+                var request = (HttpWebRequest)WebRequest.Create(pws + gtin + "?aggregation=SOCIAL");
+                request.Method = "GET";
+                request.Headers.Add(HttpRequestHeader.Accept, "application/json");
+                request.Headers.Add(HttpRequestHeader.Authorization,
+                    "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes($"{credentials.Login}:{credentials.Key}")));
 
-            var response = await request.GetResponseAsync();
-            var stream = new StreamReader(response.GetResponseStream());
-            
-            return JsonConvert.DeserializeObject<Product>(stream.ReadToEnd());
+                var response = await request.GetResponseAsync();
+                var stream = new StreamReader(response.GetResponseStream());
+
+                return JsonConvert.DeserializeObject<Product>(stream.ReadToEnd());
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<Product> GetFullProductInfo(string gtin)
+        {
+            var product = await _productRepository.GetByEan(gtin);
+            if(product == null)
+            {
+                product = await GetFromPWS(gtin);
+                if (product != null)
+                {
+                    product.Gtin = product.Gtin.Length == 14 && product.Gtin[0] == '0' ? product.Gtin.Substring(1, 13) : product.Gtin; 
+                    product = await _productRepository.Add(product);
+                }
+            }
+
+            //var ingredientList = await GetIngredientList(product.Id);
+            //TODO
+
+            return product;
         }
     }
 }
