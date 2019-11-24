@@ -48,6 +48,7 @@ namespace TITS_API.Api
             services.AddTransient<GoogleTranslator>();
             services.AddTransient<HazardStatementRepository>();
             services.AddTransient<IngredientHazardStatementRepository>();
+            services.AddTransient<IngredientService>();
 
             services.AddControllers();
 
