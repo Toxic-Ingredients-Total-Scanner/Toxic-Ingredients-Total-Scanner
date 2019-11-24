@@ -26,7 +26,7 @@ namespace TITS_API.Repositories.Repositories
 
         public async Task<string[]> GetProductNames(string name)
         {
-            return await Task.Run(() => _context.Products.Where(p => p.ProductName.Contains(name)).Select(p => p.ProductName).ToArray());
+            return await Task.Run(() => _context.Products.Where(p => p.ProductName.Contains(name, StringComparison.OrdinalIgnoreCase)).Select(p => p.ProductName).ToArray());
         }
 
     }
