@@ -23,6 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".productWithoutIndgredients"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ScanBarcodeActivity" />
-        <activity android:name=".newProductForm"></activity>
+        <activity android:name=".newProductForm" />
         <activity
             android:name=".EanActivity"
             android:windowSoftInputMode="adjustPan" />
