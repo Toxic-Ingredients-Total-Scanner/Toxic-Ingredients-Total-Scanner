@@ -40,7 +40,10 @@ namespace TITS_API.Services.Services
             if (properName == null) return ingredient;
 
             ingredient.EnglishName = properName;
-            ingredient.PubChemCID = Int32.Parse(await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/cids/TXT"));
+
+            string cids = await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/cids/TXT");
+
+            ingredient.PubChemCID = Int32.Parse(cids.Split()[0]);
             ingredient.PubChemUrl = baseUrl + ingredient.PubChemCID;
             ingredient.MolecularFormula = (await _http.GetStringAsync(apiUrl + "compound/cid/" + ingredient.PubChemCID + "/property/MolecularFormula/TXT")).Trim();
             ingredient.StructureImageUrl = apiUrl + "compound/cid/" + ingredient.PubChemCID + "/PNG";
@@ -91,13 +94,13 @@ namespace TITS_API.Services.Services
                 return null;
             }
 
-            return wikiUrl;
+            return String.IsNullOrEmpty(wikiUrl) ? null : wikiUrl;
         }
 
-        private async Task<string[]> GHSStatements(Ingredient ingredient)
+        private async Task<List<string>> GHSStatements(Ingredient ingredient)
         {
-            string[] GHSStatemments;
-            string temp = "";
+            List<string> codes = new List<string>();
+
             Regex regex = new Regex(@"(H\d{3}([a-z]|[A-Z]){0,2}( |\:))|(EUH\d{3}( |\:))|(AUH\d{3})( |\:)");
 
             try
@@ -113,25 +116,22 @@ namespace TITS_API.Services.Services
                     if (match.Success)
                     {
                         String[] splitTable = node.InnerXml.Split(new char[] { ' ', ':' });
-                        if (!temp.Contains(splitTable[0]))
+                        if (!codes.Contains(splitTable[0]))
                         {
-                            temp += splitTable[0] + ' ';
+                            codes.Add(splitTable[0]);
                         }
                     }
                 }
-
-                temp = temp.Trim();
-                GHSStatemments = temp.Split(' ');
-
-                return GHSStatemments;
+                
+                return codes.Count > 0 ? codes : new string[] { "X404" }.ToList();
             }
             catch (Exception)
             {
-                return new string[] { "X404" } ;
+                return new string[] { "X404" }.ToList() ;
             }
         }
 
-        private async Task<List<HazardStatement>> GetStatementsByCode(string[] codes)
+        private async Task<List<HazardStatement>> GetStatementsByCode(List<string> codes)
         {
             try
             {
