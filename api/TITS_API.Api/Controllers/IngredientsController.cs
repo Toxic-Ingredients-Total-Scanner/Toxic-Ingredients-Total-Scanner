@@ -48,6 +48,19 @@ namespace TITS_API.Api.Controllers
             }
             return ingredient;
         }
+        
+
+        [Route(ApiRoutes.IngredientsGetIngredientNames)]
+        [HttpGet]
+        public async Task<ActionResult<string[]>> GetIngredientNames(string name)
+        {
+            var names = await _ingredientRepository.GetIngredientNames(name);
+            if (names == null)
+            {
+                return NotFound();
+            }
+            return names;
+        }
 
 
         [Route(ApiRoutes.IngredientsAddIngredient)]
