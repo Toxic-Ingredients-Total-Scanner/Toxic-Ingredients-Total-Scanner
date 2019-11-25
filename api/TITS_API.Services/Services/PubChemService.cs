@@ -40,14 +40,14 @@ namespace TITS_API.Services.Services
             if (properName == null) return ingredient;
 
             ingredient.EnglishName = properName;
-            ingredient.PubChemCID = Int32.Parse(await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName +"/cids/TXT"));
+            ingredient.PubChemCID = Int32.Parse(await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/cids/TXT"));
             ingredient.PubChemUrl = baseUrl + ingredient.PubChemCID;
             ingredient.MolecularFormula = (await _http.GetStringAsync(apiUrl + "compound/cid/" + ingredient.PubChemCID + "/property/MolecularFormula/TXT")).Trim();
             ingredient.StructureImageUrl = apiUrl + "compound/cid/" + ingredient.PubChemCID + "/PNG";
             ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
             ingredient.WikiUrl = await WikipediaURL(ingredient);
             ingredient.HazardStatements = await GetStatementsByCode(await GHSStatements(ingredient));
-             
+
 
             return ingredient;
         }
@@ -127,7 +127,7 @@ namespace TITS_API.Services.Services
             }
             catch (Exception)
             {
-                return null;
+                return new string[] { "X404" } ;
             }
         }
 
