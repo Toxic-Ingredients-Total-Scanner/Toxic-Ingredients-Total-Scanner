@@ -5,16 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.squareup.picasso.Picasso;
 import com.tits.tits_mobile.HttpHandler.HttpGetRequest;
 import com.tits.tits_mobile.models.Ingredient;
 import com.tits.tits_mobile.models.Product;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import androidx.appcompat.app.AlertDialog;
@@ -24,6 +27,7 @@ public class EanActivity extends AppCompatActivity {
 
     TextView eanTxtView;
     Button anotherScan;
+    ImageView prodImg;
     String EAN = "";
     String pattern = "\\d{13}|\\d{8}";
     Product prod;
@@ -36,6 +40,7 @@ public class EanActivity extends AppCompatActivity {
 
         eanTxtView = findViewById(R.id.eanTxtView);
         anotherScan = findViewById(R.id.anotherScan);
+        prodImg = findViewById(R.id.img);
 
         EAN = getIntent().getStringExtra("EAN");
 
@@ -81,6 +86,7 @@ public class EanActivity extends AppCompatActivity {
                                 })
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
+                                        Picasso.get().load(prod.getProductImage()).into(prodImg);
                                         eanTxtView.setText(prod.toString());
                                     }
                                 });
@@ -88,7 +94,13 @@ public class EanActivity extends AppCompatActivity {
                         AlertDialog alertDialog1 = builder1.create();
                         alertDialog1.show();
                     } else {
+                        Picasso.get().load(prod.getProductImage()).into(prodImg);
                         eanTxtView.setText(prod.toString());
+
+                        ArrayList<Ingredient> test = prod.getIngredients();
+                        for(Ingredient t : test){
+                            eanTxtView.append(t.getEnglishName() + '\n');
+                        }
                     }
                 }
                 //eanTxtView.setText(prod.getProductName());

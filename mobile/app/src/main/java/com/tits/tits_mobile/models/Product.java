@@ -52,6 +52,10 @@ public class Product {
         this.ingredients = ingredients;
     }
 
+    public String getProductImage() {
+        return productImage;
+    }
+
     @Override
     public String toString() {
         return "productName = " + productName + "\n\n" +

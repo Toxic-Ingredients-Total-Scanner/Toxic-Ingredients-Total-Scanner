@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context="com.tits.tits_mobile.EanActivity">
 
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="171dp"
+        android:layout_height="140dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="555dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/eanTxtView"
         android:layout_width="wrap_content"
