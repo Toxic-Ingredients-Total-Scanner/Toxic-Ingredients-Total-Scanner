@@ -106,7 +106,7 @@ namespace TITS_API.Services.Services
                 }
             }
 
-            return ingredients;
+            return ingredients.Count > 0 ? ingredients : null;
         }
 
         public async Task<Product> GetFullProductInfo(string gtin)
