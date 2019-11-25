@@ -81,7 +81,7 @@ public class EanActivity extends AppCompatActivity {
                                 })
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-
+                                        eanTxtView.setText(prod.toString());
                                     }
                                 });
                         // Create the AlertDialog object and return it
