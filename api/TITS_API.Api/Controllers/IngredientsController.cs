@@ -16,11 +16,15 @@ namespace TITS_API.Api.Controllers
     public class IngredientsController : ControllerBase
     {
         private readonly IngredientRepository _ingredientRepository;
+        private readonly IngredientService _ingredientService;
         private readonly PubChemService _pubChemService;
 
-        public IngredientsController(IngredientRepository ingredientRepository, PubChemService pubChemService)
+        public IngredientsController(IngredientRepository ingredientRepository,
+            PubChemService pubChemService,
+            IngredientService ingredientService)
         {
             _ingredientRepository = ingredientRepository;
+            _ingredientService = ingredientService;
             _pubChemService = pubChemService;
         }
 
@@ -47,6 +51,19 @@ namespace TITS_API.Api.Controllers
                 return NotFound();
             }
             return ingredient;
+        }
+        
+
+        [Route(ApiRoutes.IngredientsGetIngredientNames)]
+        [HttpGet]
+        public async Task<ActionResult<string[]>> GetIngredientNames(string name)
+        {
+            var names = await _ingredientRepository.GetIngredientNames(name);
+            if (names == null)
+            {
+                return NotFound();
+            }
+            return names;
         }
 
 
@@ -85,6 +102,22 @@ namespace TITS_API.Api.Controllers
             {
                 return NotFound();
             }
+            return ingredient;
+        }
+
+
+        [Route(ApiRoutes.IngredientsPubChemAutocompleteTest)]
+        [HttpPost]
+        public async Task<ActionResult<Ingredient>> AddAutocompletedIngredientTest(string name)
+        {
+            var ingredient = await _pubChemService.AutoComplete(new Ingredient { PolishName = name });
+            if (ingredient == null)
+            {
+                return NotFound();
+            }
+            ingredient = await _ingredientRepository.Add(ingredient);
+            await _ingredientService.AddRelationsToHazardStatements(ingredient.Id, ingredient.HazardStatements);
+
             return ingredient;
         }
     }

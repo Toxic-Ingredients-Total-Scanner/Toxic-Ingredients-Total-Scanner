@@ -118,7 +118,7 @@ INSERT INTO public.""HazardStatements"" VALUES (107, 'AUH031', 'Kontakt z kwasem
 INSERT INTO public.""HazardStatements"" VALUES (108, 'AUH032', 'Kontakt z kwasem wydziela bardzo toksyczne gazy', 'Contact with acid liberates very toxic gas');
 INSERT INTO public.""HazardStatements"" VALUES (109, 'AUH044', 'Zagrożenie wybuchem po ogrzaniu w zamkniętym pojemniku', 'Risk of explosion if heated under confinement');
 INSERT INTO public.""HazardStatements"" VALUES (110, 'AUH066', 'Częsty kontakt może spowodować wysuszenie i pękanie skóry', 'Repeated exposure may cause skin dryness and cracking');
-
+INSERT INTO public.""HazardStatements"" VALUES (111, 'X404', 'Niesklasyfikowane.', 'Not classified.');
 ");
         }
 

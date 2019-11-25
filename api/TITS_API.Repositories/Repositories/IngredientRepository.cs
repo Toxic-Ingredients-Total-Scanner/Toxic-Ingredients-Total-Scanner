@@ -18,5 +18,10 @@ namespace TITS_API.Repositories.Repositories
         {
             return await Task.Run(() => _context.Ingredients.FirstOrDefault(p => p.PolishName == name));
         }
+
+        public async Task<string[]> GetIngredientNames(string name)
+        {
+            return await Task.Run(() => _context.Ingredients.Where(p => p.PolishName.ToUpper().Contains(name.ToUpper())).Select(p => p.PolishName).ToArray());
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace TITS_API.Repositories.Architecture
         //Ingredients
         public const string IngredientsGetIngredientById = "api/ingredients/getById";
         public const string IngredientsGetIngredientByName = "api/ingredients/getByName";
+        public const string IngredientsGetIngredientNames = "api/ingredients/getIngredientNames";
         public const string IngredientsGetAllIngredients = "api/ingredients";
         public const string IngredientsAddIngredient = "api/ingredients";
         public const string IngredientsUpdateIngredient = "api/ingredients";

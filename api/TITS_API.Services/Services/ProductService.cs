@@ -21,15 +21,17 @@ namespace TITS_API.Services.Services
         private readonly IngredientRepository _ingredientRepository;
         private readonly ProductCompositionRepository _productCompositionRepository;
         private readonly PubChemService _pubChemService;
+        private readonly IngredientService _ingredientService;
         
 
         public ProductService(ProductRepository productRepository, IngredientRepository ingredientRepository,
-            ProductCompositionRepository productCompositionRepository, PubChemService pubChemService)
+            ProductCompositionRepository productCompositionRepository, PubChemService pubChemService , IngredientService ingredientService)
         {
             _productRepository = productRepository;
             _ingredientRepository = ingredientRepository;
             _productCompositionRepository = productCompositionRepository;
             _pubChemService = pubChemService;
+            _ingredientService = ingredientService;
         }
 
         public async Task<Product> Add(Product product)
@@ -87,6 +89,25 @@ namespace TITS_API.Services.Services
                 return null;
             }
         }
+        
+        public async Task<List<Ingredient>> GetIngredientList(int productId)
+        {
+            List<Ingredient> ingredients = new List<Ingredient>();
+            var relations = await _productCompositionRepository.GetRelations(productId);
+            if (relations != null)
+            {
+                foreach (var relation in relations)
+                {
+                    ingredients.Add(await _ingredientRepository.Get(relation.IngredientId));
+                }
+                foreach (var ingredient in ingredients)
+                {
+                    ingredient.HazardStatements = await _ingredientService.GetHazardStatemensList(ingredient.Id);
+                }
+            }
+
+            return ingredients.Count > 0 ? ingredients : null;
+        }
 
         public async Task<Product> GetFullProductInfo(string gtin)
         {
@@ -101,10 +122,28 @@ namespace TITS_API.Services.Services
                 }
             }
 
-            //var ingredientList = await GetIngredientList(product.Id);
-            //TODO
+            if(product != null)
+            {
+                product.Ingredients = await GetIngredientList(product.Id);
+            }
 
             return product;
+        }
+
+        public async Task<List<ProductComposition>> AddRelationsToIngrediends(int productId, List<Ingredient> ingredients)
+        {
+            List<ProductComposition> pc = new List<ProductComposition>();
+
+            foreach (var  ingredient in ingredients)
+            {
+                pc.Add(await _productCompositionRepository.Add(new ProductComposition
+                {
+                    ProductId = productId,
+                    IngredientId = ingredient.Id
+                }));
+            }
+
+            return pc;
         }
     }
 }
