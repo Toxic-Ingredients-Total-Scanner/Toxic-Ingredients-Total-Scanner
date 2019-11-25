@@ -119,8 +119,12 @@ namespace TITS_API.Services.Services
                 {
                     product.Gtin = product.Gtin.Length == 14 && product.Gtin[0] == '0' ? product.Gtin.Substring(1, 13) : product.Gtin; 
                     product = await _productRepository.Add(product);
-                    product.Ingredients = await GetIngredientList(product.Id);
                 }
+            }
+
+            if(product != null)
+            {
+                product.Ingredients = await GetIngredientList(product.Id);
             }
 
             return product;
