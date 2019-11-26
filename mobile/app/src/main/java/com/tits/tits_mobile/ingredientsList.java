@@ -3,6 +3,7 @@ package com.tits.tits_mobile;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -27,6 +28,8 @@ public class ingredientsList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredients_list);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         list = findViewById(R.id.listview);
         //ingList = new ArrayList<>();
         ingStrings = new ArrayList<>();
@@ -39,13 +42,15 @@ public class ingredientsList extends AppCompatActivity {
         }
 
 
+//        ArrayAdapter adapter = new ArrayAdapter(
+//                this,R.layout.list_item ,R.id.itemName, ingStrings
+//        );
 
-        ArrayAdapter adapter = new ArrayAdapter(
-                this,R.layout.list_item ,R.id.itemName, ingStrings
+        ArrayAdapter adapter = new ArrayAdapter<String>(
+                this, R.layout.list_item, R.id.ingName, ingStrings
         );
 
         list.setAdapter(adapter);
-
 
     }
 }
