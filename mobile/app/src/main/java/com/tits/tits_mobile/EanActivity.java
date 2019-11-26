@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,12 +26,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class EanActivity extends AppCompatActivity {
 
-    TextView eanTxtView;
-    Button anotherScan;
+    TextView brand;
+    TextView productName;
+    TextView description;
+
+    Button showIngredients;
     ImageView prodImg;
     String EAN = "";
     String pattern = "\\d{13}|\\d{8}";
     Product prod;
+    ArrayList<Ingredient> ingList;
 
 
     @Override
@@ -38,8 +43,12 @@ public class EanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ean);
 
-        eanTxtView = findViewById(R.id.eanTxtView);
-        anotherScan = findViewById(R.id.anotherScan);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        brand = findViewById(R.id.brand);
+        productName = findViewById(R.id.productName);
+        description = findViewById(R.id.description);
+        showIngredients = findViewById(R.id.showIngredients);
         prodImg = findViewById(R.id.img);
 
         EAN = getIntent().getStringExtra("EAN");
@@ -78,7 +87,7 @@ public class EanActivity extends AppCompatActivity {
                     prod = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readValue(result, Product.class);
                     if(prod.getIngredients() == null) {
                         AlertDialog.Builder builder1 = new AlertDialog.Builder(EanActivity.this);
-                        builder1.setMessage("Product found, but no ingtedients in our DB's, do you want add?")
+                        builder1.setMessage("Product found, but no ingredients in our DB's, do you want add?")
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         startActivity(new Intent(EanActivity.this, productWithoutIndgredients.class));
@@ -87,7 +96,9 @@ public class EanActivity extends AppCompatActivity {
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         Picasso.get().load(prod.getProductImage()).into(prodImg);
-                                        eanTxtView.setText(prod.toString());
+                                        brand.setText(prod.getBrand());
+                                        productName.setText(prod.getProductName());
+                                        description.setText(prod.getDescription());
                                     }
                                 });
                         // Create the AlertDialog object and return it
@@ -95,12 +106,12 @@ public class EanActivity extends AppCompatActivity {
                         alertDialog1.show();
                     } else {
                         Picasso.get().load(prod.getProductImage()).into(prodImg);
-                        eanTxtView.setText(prod.toString());
+                        brand.setText(prod.getBrand());
+                        productName.setText(prod.getProductName());
+                        description.setText(prod.getDescription());
 
-                        ArrayList<Ingredient> test = prod.getIngredients();
-                        for(Ingredient t : test){
-                            eanTxtView.append(t.getEnglishName() + '\n');
-                        }
+                        ingList = prod.getIngredients();
+
                     }
                 }
                 //eanTxtView.setText(prod.getProductName());
@@ -114,13 +125,15 @@ public class EanActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else {
-            eanTxtView.setText("Invalid EAN");
+            brand.setText("Invalid EAN");
         }
 
-        anotherScan.setOnClickListener(new View.OnClickListener() {
+        showIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    startActivity(new Intent(EanActivity.this, MainActivity.class));
+                Bundle extra = new Bundle();
+                extra.putSerializable("arr", ingList);
+                startActivity(new Intent(EanActivity.this, ingredientsList.class).putExtra("ingList", extra));
             }
         });
 

@@ -2,10 +2,11 @@ package com.tits.tits_mobile.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @JsonIgnoreProperties
-public class Ingredient {
+public class Ingredient implements Serializable {
     int id = 0;
     int pubChemCID = 0;
     String polishName;
@@ -17,7 +18,9 @@ public class Ingredient {
     String wikiUrl = null;
     ArrayList<HazardStatement> hazardStatements;
 
-    public Ingredient(){}
+    public Ingredient(){
+        super();
+    }
 
     public Ingredient(String polishName, String englishName) {
         this.polishName = polishName;
