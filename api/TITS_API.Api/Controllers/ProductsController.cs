@@ -25,38 +25,26 @@ namespace TITS_API.Api.Controllers
         }
 
 
-        [Route(ApiRoutes.ProductsGetProductById)]
+        [Route(ApiRoutes.ProductsGetProduct)]
         [HttpGet]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<Product>> Get(int id, string ean, string name)
         {
-            var product = await _productRepository.Get(id);
+            Product product = null;
+
+            if(id != 0)
+            {
+                product = await _productRepository.Get(id);
+            }
+            else if(!String.IsNullOrEmpty(ean))
+            {
+                product ??= await _productRepository.GetByEan(ean);
+            }
+            else if (!String.IsNullOrEmpty(name))
+            {
+                product ??= await _productRepository.GetByName(name);
+            }
+
             if(product == null)
-            {
-                return NotFound();
-            }
-            return product;
-        }
-
-
-        [Route(ApiRoutes.ProductsGetProductByEan)]
-        [HttpGet]
-        public async Task<ActionResult<Product>> GetByEan(string ean)
-        {
-            var product = await _productRepository.GetByEan(ean);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return product;
-        }
-
-
-        [Route(ApiRoutes.ProductsGetProductByName)]
-        [HttpGet]
-        public async Task<ActionResult<Product>> GetByName(string name)
-        {
-            var product = await _productRepository.GetByName(name);
-            if (product == null)
             {
                 return NotFound();
             }
@@ -94,7 +82,7 @@ namespace TITS_API.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> Add(Product product)
         {
-            var _product = await _productRepository.Add(product);
+            var _product = await _productService.Add(product);
             if (_product == null)
             {
                 return NotFound();

@@ -35,11 +35,13 @@ namespace TITS_API.Services.Services
 
         public async Task<Ingredient> AutoComplete(Ingredient ingredient)
         {
-            var properName = await FindProperEnglishName(ingredient.PolishName);
+            if(ingredient.EnglishName == null)
+            {
+                var properName = await FindProperEnglishName(ingredient.PolishName);
+                if (properName == null) return ingredient;
 
-            if (properName == null) return ingredient;
-
-            ingredient.EnglishName = properName;
+                ingredient.EnglishName = properName;
+            }
 
             string cids = await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/cids/TXT");
 

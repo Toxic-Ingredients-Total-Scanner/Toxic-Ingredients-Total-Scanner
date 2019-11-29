@@ -40,7 +40,13 @@ namespace TITS_API.Services.Services
             {
                 product.Ingredients.ForEach(async ingredient =>
                 {
-                    if (!await _ingredientRepository.Exists(ingredient) && !String.IsNullOrEmpty(ingredient.PolishName))
+                    var ing = await _ingredientRepository.GetByName(ingredient.PolishName);
+
+                    if (ing != null)
+                    {
+                        ingredient = ing;
+                    }
+                    else if(!String.IsNullOrEmpty(ingredient.PolishName))
                     {
                         ingredient = await _ingredientRepository.Add(await _pubChemService.AutoComplete(ingredient));                        
                     }
@@ -49,14 +55,24 @@ namespace TITS_API.Services.Services
 
             Product p = await _productRepository.Add(product);
 
-            product.Ingredients.ForEach(async ingredient =>
+            if(product.Ingredients != null)
             {
-                await _productCompositionRepository.Add(new ProductComposition
-                { 
-                    ProductId = p.Id,
-                    IngredientId = ingredient.Id
+                product.Ingredients.ForEach(async ingredient =>
+                {
+                    await _productCompositionRepository.Add(new ProductComposition
+                    {
+                        ProductId = p.Id,
+                        IngredientId = ingredient.Id
+                    });
+
+                    var hs = _ingredientService.GetHazardStatemensList(ingredient.Id);
+                    if(hs == null)
+                    {
+                        await _ingredientService.AddRelationsToHazardStatements(ingredient.Id, ingredient.HazardStatements);
+                    }
+
                 });
-            });
+            }
 
             return p;
         }
