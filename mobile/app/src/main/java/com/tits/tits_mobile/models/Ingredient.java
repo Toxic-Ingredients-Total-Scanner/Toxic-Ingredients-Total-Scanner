@@ -1,8 +1,12 @@
 package com.tits.tits_mobile.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Ingredient {
+@JsonIgnoreProperties
+public class Ingredient implements Serializable {
     int id = 0;
     int pubChemCID = 0;
     String polishName;
@@ -12,19 +16,15 @@ public class Ingredient {
     String ghsClasificationRaportUrl = null;
     String pubChemUrl = null;
     String wikiUrl = null;
-    ArrayList<HazardStatement> list;
+    ArrayList<HazardStatement> hazardStatements;
+
+    public Ingredient(){
+        super();
+    }
 
     public Ingredient(String polishName, String englishName) {
-        this.id = 0;
-        this.pubChemCID = 0;
         this.polishName = polishName;
         this.englishName = englishName;
-        this.molecularFormula = null;
-        this.strucutreImageUrl = null;
-        this.ghsClasificationRaportUrl = null;
-        this.pubChemUrl = null;
-        this.wikiUrl = null;
-        this.list = null;
     }
 
     public String getPolishName() {
@@ -42,4 +42,6 @@ public class Ingredient {
     public void setEnglishName(String englishName) {
         this.englishName = englishName;
     }
+
+
 }

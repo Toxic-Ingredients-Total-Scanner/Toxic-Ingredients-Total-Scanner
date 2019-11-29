@@ -2,10 +2,11 @@ package com.tits.tits_mobile.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @JsonIgnoreProperties
-public class Product {
+public class Product implements Serializable {
     private int id;
     private String gtin;
     private String productName;
@@ -50,6 +51,15 @@ public class Product {
 
     public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public Product(){
+        super();
+    }
+
+
+    public String getProductImage() {
+        return productImage;
     }
 
     @Override
