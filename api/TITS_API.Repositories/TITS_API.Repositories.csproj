@@ -20,4 +20,8 @@
     <ProjectReference Include="..\TITS_API.Models\TITS_API.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InsertsBackup\" />
+  </ItemGroup>
+
 </Project>

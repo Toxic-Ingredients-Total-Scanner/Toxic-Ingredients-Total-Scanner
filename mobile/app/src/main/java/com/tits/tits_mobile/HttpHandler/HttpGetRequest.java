@@ -1,8 +1,14 @@
-package com.tits.tits_mobile;
+package com.tits.tits_mobile.HttpHandler;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
+import com.tits.tits_mobile.EanActivity;
+import com.tits.tits_mobile.MainActivity;
+
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -12,8 +18,24 @@ import java.net.URL;
 
 public class HttpGetRequest extends AsyncTask<String, Void, String> {
     public static final String REQUEST_METHOD = "GET";
-    public static final int READ_TIMEOUT = 15000;
-    public static final int CONNECTION_TIMEOUT = 15000;
+    public static final int READ_TIMEOUT = 30000;
+    public static final int CONNECTION_TIMEOUT = 30000;
+
+    private ProgressDialog pDialog;
+
+    public HttpGetRequest(Activity activity){
+        pDialog = new ProgressDialog(activity);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        // Showing progress dialog
+        pDialog.setMessage("Sending request...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+    }
 
     @Override
     protected String doInBackground(String... params){
@@ -27,6 +49,7 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
             connection.setRequestMethod(REQUEST_METHOD);
             connection.setReadTimeout(READ_TIMEOUT);
             connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
 
             //Connect to our url
             connection.connect();         //Create a new InputStreamReader
@@ -43,6 +66,10 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
             streamReader.close();         //Set our result equal to our stringBuilder
             result = stringBuilder.toString();
         }
+        catch (FileNotFoundException e) {
+            result = "not found";
+            return result;
+        }
         catch(IOException e){
             e.printStackTrace();
             result = null;
@@ -53,5 +80,8 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result){
         super.onPostExecute(result);
+        if (pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
     }
 }

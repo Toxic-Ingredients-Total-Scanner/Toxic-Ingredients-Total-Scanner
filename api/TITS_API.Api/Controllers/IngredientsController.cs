@@ -5,30 +5,43 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TITS_API.Models.Models;
-using TITS_API.Repositories.Architecture;
 using TITS_API.Repositories.Repositories;
 using TITS_API.Services.Services;
 
 namespace TITS_API.Api.Controllers
 {
-    
+    [Route("api/[controller]")]
     [ApiController]
     public class IngredientsController : ControllerBase
     {
         private readonly IngredientRepository _ingredientRepository;
+        private readonly IngredientService _ingredientService;
         private readonly PubChemService _pubChemService;
 
-        public IngredientsController(IngredientRepository ingredientRepository, PubChemService pubChemService)
+        public IngredientsController(IngredientRepository ingredientRepository,
+            PubChemService pubChemService,
+            IngredientService ingredientService)
         {
             _ingredientRepository = ingredientRepository;
+            _ingredientService = ingredientService;
             _pubChemService = pubChemService;
         }
 
-        [Route(ApiRoutes.IngredientsGetIngredientById)]
+
         [HttpGet]
-        public async Task<ActionResult<Ingredient>> GetById(int id)
+        public async Task<ActionResult<Ingredient>> Get(int id, string name)
         {
-            var ingredient = await _ingredientRepository.Get(id);
+            Ingredient ingredient = null;
+
+            if (id != 0)
+            {
+                ingredient = await _ingredientRepository.Get(id);
+            }
+            else if (!String.IsNullOrEmpty(name))
+            {
+                ingredient ??= await _ingredientRepository.GetByName(name);
+            }
+
             if (ingredient == null)
             {
                 return NotFound();
@@ -37,20 +50,19 @@ namespace TITS_API.Api.Controllers
         }
 
 
-        [Route(ApiRoutes.IngredientsGetIngredientByName)]
+        [Route("names")]
         [HttpGet]
-        public async Task<ActionResult<Ingredient>> GetByName(string name)
+        public async Task<ActionResult<string[]>> GetIngredientNames(string name)
         {
-            var ingredient = await _ingredientRepository.GetByName(name);
-            if (ingredient == null)
+            var names = await _ingredientRepository.GetIngredientNames(name);
+            if (names == null)
             {
                 return NotFound();
             }
-            return ingredient;
+            return names;
         }
 
 
-        [Route(ApiRoutes.IngredientsAddIngredient)]
         [HttpPost]
         public async Task<ActionResult<Ingredient>> Add(Ingredient ingredient)
         {
@@ -63,7 +75,6 @@ namespace TITS_API.Api.Controllers
         }
 
 
-        [Route(ApiRoutes.IngredientsUpdateIngredient)]
         [HttpPut]
         public async Task<ActionResult<Ingredient>> Update(Ingredient ingredient)
         {
@@ -76,15 +87,31 @@ namespace TITS_API.Api.Controllers
         }
 
 
-        [Route(ApiRoutes.IngredientsPubChemAutocompleteTest)]
+        [Route("autocomplete")]
         [HttpGet]
-        public async Task<ActionResult<Ingredient>> PubChemAutocompleteTest(string name)
+        public async Task<ActionResult<Ingredient>> PubChemAutocomplete(string name)
         {
             var ingredient = await _pubChemService.AutoComplete(new Ingredient { PolishName = name});
             if (ingredient == null)
             {
                 return NotFound();
             }
+            return ingredient;
+        }
+
+
+        [Route("autocomplete")]
+        [HttpPost]
+        public async Task<ActionResult<Ingredient>> AddAutocompletedIngredient(string name)
+        {
+            var ingredient = await _pubChemService.AutoComplete(new Ingredient { PolishName = name });
+            if (ingredient == null)
+            {
+                return NotFound();
+            }
+            ingredient = await _ingredientRepository.Add(ingredient);
+            await _ingredientService.AddRelationsToHazardStatements(ingredient.Id, ingredient.HazardStatements);
+
             return ingredient;
         }
     }
