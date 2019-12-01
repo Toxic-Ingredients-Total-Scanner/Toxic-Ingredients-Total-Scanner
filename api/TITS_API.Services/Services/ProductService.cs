@@ -53,6 +53,7 @@ namespace TITS_API.Services.Services
                 });
             }
 
+            product.ModifiedDate = DateTime.Now;
             Product p = await _productRepository.Add(product);
 
             if(product.Ingredients != null)

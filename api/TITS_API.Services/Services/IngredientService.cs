@@ -23,6 +23,7 @@ namespace TITS_API.Services.Services
             _ihsRepository = ingredientHazardStatementRepository;
         }
 
+
         public async Task<List<HazardStatement>> GetHazardStatemensList(int ingredientId)
         {
             List<HazardStatement> hazardStatements = new List<HazardStatement>();
@@ -37,6 +38,7 @@ namespace TITS_API.Services.Services
 
             return hazardStatements;
         }
+
 
         public async Task<List<IngredientHazardStatement>> AddRelationsToHazardStatements(int ingredientId, List<HazardStatement> hazardStatements)
         {
