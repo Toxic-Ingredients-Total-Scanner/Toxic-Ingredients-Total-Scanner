@@ -34,6 +34,69 @@ namespace TITS_API.Services.Services
             _ingredientService = ingredientService;
         }
 
+
+        public async Task<Product> GetFullRequest(string gtin)
+        {
+            var product = await _productRepository.GetByEan(gtin);
+            if (product == null)
+            {
+                product = await GetFromPWS(gtin);
+                if (product != null)
+                {
+                    product.Gtin = product.Gtin.Length == 14 && product.Gtin[0] == '0' ? product.Gtin.Substring(1, 13) : product.Gtin;
+                    product = await _productRepository.Add(product);
+                }
+            }
+
+            if (product != null)
+            {
+                product.Ingredients = await GetIngredientList(product.Id);
+            }
+
+            return product;
+        }
+
+
+        public async Task<Product> Update(Product product)
+        {
+            List<Ingredient> ingredients = null;
+
+            if(product.Ingredients != null)
+            {
+                ingredients = product.Ingredients;
+
+                ingredients.ForEach(async ing =>
+                {
+                    if(ing.Id == 0 && !String.IsNullOrEmpty(ing.PolishName))
+                    {
+                        ing = await _ingredientRepository.Add(ing);
+                    }
+
+                    try
+                    {
+                        await _productCompositionRepository.Delete(ing.Id);
+                    }
+                    catch(Exception)
+                    { }
+
+                    await _productCompositionRepository.Add(new ProductComposition
+                    {
+                        ProductId = product.Id,
+                        IngredientId = ing.Id
+                    });
+
+                });
+            }
+
+            product.ModifiedDate = DateTime.Now;
+            var p = await _productRepository.Update(product);
+
+            p.Ingredients = ingredients;
+
+            return p;
+        }
+
+
         public async Task<Product> Add(Product product)
         {
             if (product.Ingredients != null)
@@ -78,6 +141,7 @@ namespace TITS_API.Services.Services
             return p;
         }
 
+
         public async Task<Product> GetFromPWS(string gtin)
         {
             try
@@ -105,8 +169,9 @@ namespace TITS_API.Services.Services
             {
                 return null;
             }
-        }
+        }        
         
+
         public async Task<List<Ingredient>> GetIngredientList(int productId)
         {
             List<Ingredient> ingredients = new List<Ingredient>();
@@ -126,26 +191,6 @@ namespace TITS_API.Services.Services
             return ingredients.Count > 0 ? ingredients : null;
         }
 
-        public async Task<Product> GetFullProductInfo(string gtin)
-        {
-            var product = await _productRepository.GetByEan(gtin);
-            if(product == null)
-            {
-                product = await GetFromPWS(gtin);
-                if (product != null)
-                {
-                    product.Gtin = product.Gtin.Length == 14 && product.Gtin[0] == '0' ? product.Gtin.Substring(1, 13) : product.Gtin; 
-                    product = await _productRepository.Add(product);
-                }
-            }
-
-            if(product != null)
-            {
-                product.Ingredients = await GetIngredientList(product.Id);
-            }
-
-            return product;
-        }
 
         public async Task<List<ProductComposition>> AddRelationsToIngrediends(int productId, List<Ingredient> ingredients)
         {
