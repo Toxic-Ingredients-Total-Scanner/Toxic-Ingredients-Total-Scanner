@@ -21,7 +21,8 @@ namespace TITS_API.Repositories.Repositories
 
         public async Task<string[]> GetIngredientNames(string name)
         {
-            return await Task.Run(() => _context.Ingredients.Where(p => p.PolishName.ToUpper().Contains(name.ToUpper())).Select(p => p.PolishName).ToArray());
+            var words = name.Split().ToList();
+            return await Task.Run(() => _context.Ingredients.AsEnumerable().Where(i => words.All(w => i.PolishName.ToUpper().Contains(w.ToUpper()))).Select(i => i.PolishName).ToArray());
         }
     }
 }
