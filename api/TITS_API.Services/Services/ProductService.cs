@@ -35,18 +35,44 @@ namespace TITS_API.Services.Services
         }
 
 
-        public async Task<Product> GetFullRequest(string gtin)
+        public async Task<Product> GetFullRequestById(int id)
         {
-            var product = await _productRepository.GetByEan(gtin);
+            var product = await _productRepository.Get(id);
+
+            if (product != null)
+            {
+                product.Ingredients = await GetIngredientList(product.Id);
+            }
+
+            return product;
+        }
+
+
+        public async Task<Product> GetFullRequestByEan(string ean)
+        {
+            var product = await _productRepository.GetByEan(ean);
             if (product == null)
             {
-                product = await GetFromPWS(gtin);
+                product = await GetFromPWS(ean);
                 if (product != null)
                 {
                     product.Gtin = product.Gtin.Length == 14 && product.Gtin[0] == '0' ? product.Gtin.Substring(1, 13) : product.Gtin;
                     product = await _productRepository.Add(product);
                 }
             }
+
+            if (product != null)
+            {
+                product.Ingredients = await GetIngredientList(product.Id);
+            }
+
+            return product;
+        }
+
+
+        public async Task<Product> GetFullRequestByName(string name)
+        {
+            var product = await _productRepository.GetByName(name);
 
             if (product != null)
             {

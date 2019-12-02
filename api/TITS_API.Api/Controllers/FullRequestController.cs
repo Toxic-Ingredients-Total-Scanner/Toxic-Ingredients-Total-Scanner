@@ -22,9 +22,22 @@ namespace TITS_API.Api.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<Product>> Get(string gtin)
+        public async Task<ActionResult<Product>> Get(int id, string ean, string name)
         {
-            var product = await _productService.GetFullRequest(gtin);
+            Product product = null;
+
+            if (id != 0)
+            {
+                product = await _productService.GetFullRequestById(id);
+            }
+            else if (!String.IsNullOrEmpty(ean))
+            {
+                product ??= await _productService.GetFullRequestByEan(ean);
+            }
+            else if (!String.IsNullOrEmpty(name))
+            {
+                product ??= await _productService.GetFullRequestByName(name);
+            }
             if (product == null)
             {
                 return NotFound();
