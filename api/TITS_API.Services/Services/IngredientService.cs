@@ -36,7 +36,7 @@ namespace TITS_API.Services.Services
                 }
             }
 
-            return hazardStatements;
+            return hazardStatements.Count > 0 ? hazardStatements : null;
         }
 
 

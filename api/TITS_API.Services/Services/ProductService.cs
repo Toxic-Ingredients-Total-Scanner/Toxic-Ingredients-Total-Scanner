@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TITS_API.Api.Configuration;
 using TITS_API.Models.Models;
 using TITS_API.Repositories.Repositories;
+using System.Linq;
 
 namespace TITS_API.Services.Services
 {
@@ -57,7 +58,7 @@ namespace TITS_API.Services.Services
         }
 
 
-        public async Task<Product> Update(Product product)
+        public async Task<Product> Update(Product product)//TO FIX
         {
             List<Ingredient> ingredients = null;
 
@@ -65,27 +66,32 @@ namespace TITS_API.Services.Services
             {
                 ingredients = product.Ingredients;
 
-                ingredients.ForEach(async ing =>
+                for(int i = 0; i < ingredients.Count; i++)
                 {
-                    if(ing.Id == 0 && !String.IsNullOrEmpty(ing.PolishName))
+                    if (ingredients[i].Id == 0 && !String.IsNullOrEmpty(ingredients[i].PolishName))
                     {
-                        ing = await _ingredientRepository.Add(ing);
+                        ingredients[i] = await _ingredientRepository.Add(ingredients[i]);
                     }
 
                     try
                     {
-                        await _productCompositionRepository.Delete(ing.Id);
+                        var relations = await _productCompositionRepository.GetRelations(product.Id);
+                        var ids = relations.Where(r => r.ProductId == product.Id && r.IngredientId == ingredients[i].Id).Select(r => r.Id).ToArray();
+
+                        if(ids == null)
+                        {
+                            await _productCompositionRepository.Delete(ids[0]);
+                        }
                     }
-                    catch(Exception)
+                    catch (Exception)
                     { }
 
                     await _productCompositionRepository.Add(new ProductComposition
                     {
                         ProductId = product.Id,
-                        IngredientId = ing.Id
+                        IngredientId = ingredients[i].Id
                     });
-
-                });
+                }
             }
 
             product.ModifiedDate = DateTime.Now;
@@ -99,43 +105,49 @@ namespace TITS_API.Services.Services
 
         public async Task<Product> Add(Product product)
         {
+            List<Ingredient> ingredients = null;
+
             if (product.Ingredients != null)
             {
-                product.Ingredients.ForEach(async ingredient =>
+                ingredients = product.Ingredients;
+
+                for (int i = 0; i < ingredients.Count; i++)
                 {
-                    var ing = await _ingredientRepository.GetByName(ingredient.PolishName);
+                    var ing = await _ingredientRepository.GetByName(ingredients[i].PolishName);
 
                     if (ing != null)
                     {
-                        ingredient = ing;
+                        ingredients[i] = ing;
                     }
-                    else if(!String.IsNullOrEmpty(ingredient.PolishName))
+                    else if (!String.IsNullOrEmpty(ingredients[i].PolishName))
                     {
-                        ingredient = await _ingredientRepository.Add(await _pubChemService.AutoComplete(ingredient));                        
+                        var completed = await _pubChemService.AutoComplete(ingredients[i]);
+                        ingredients[i] = await _ingredientRepository.Add(completed);
+                        ingredients[i].HazardStatements = completed.HazardStatements;
                     }
-                });
+                }           
             }
 
             product.ModifiedDate = DateTime.Now;
             Product p = await _productRepository.Add(product);
 
-            if(product.Ingredients != null)
+            if(ingredients != null)
             {
-                product.Ingredients.ForEach(async ingredient =>
+                for (int i = 0; i < ingredients.Count; i++)
                 {
                     await _productCompositionRepository.Add(new ProductComposition
                     {
                         ProductId = p.Id,
-                        IngredientId = ingredient.Id
+                        IngredientId = ingredients[i].Id
                     });
 
-                    var hs = _ingredientService.GetHazardStatemensList(ingredient.Id);
-                    if(hs == null)
+                    var hs = await _ingredientService.GetHazardStatemensList(ingredients[i].Id);
+                    if (hs == null)
                     {
-                        await _ingredientService.AddRelationsToHazardStatements(ingredient.Id, ingredient.HazardStatements);
+                        await _ingredientService.AddRelationsToHazardStatements(ingredients[i].Id, ingredients[i].HazardStatements);
                     }
+                }
 
-                });
             }
 
             return p;
