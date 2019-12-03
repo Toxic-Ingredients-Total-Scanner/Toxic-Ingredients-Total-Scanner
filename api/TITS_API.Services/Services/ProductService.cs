@@ -84,11 +84,27 @@ namespace TITS_API.Services.Services
         }
 
 
-        public async Task<Product> Update(Product product)//TO FIX
+        public async Task<Product> Update(Product product)
         {
             List<Ingredient> ingredients = null;
 
-            if(product.Ingredients != null)
+            try
+            {
+                var relations = await _productCompositionRepository.GetRelations(product.Id);
+                var ids = relations.Where(r => r.ProductId == product.Id).Select(r => r.Id).ToList();
+
+                if (ids != null)
+                {
+                    foreach(var id in ids)
+                    {
+                        await _productCompositionRepository.Delete(id);
+                    }
+                }
+            }
+            catch (Exception)
+            { }
+
+            if (product.Ingredients != null)
             {
                 ingredients = product.Ingredients;
 
@@ -97,20 +113,7 @@ namespace TITS_API.Services.Services
                     if (ingredients[i].Id == 0 && !String.IsNullOrEmpty(ingredients[i].PolishName))
                     {
                         ingredients[i] = await _ingredientRepository.Add(ingredients[i]);
-                    }
-
-                    try
-                    {
-                        var relations = await _productCompositionRepository.GetRelations(product.Id);
-                        var ids = relations.Where(r => r.ProductId == product.Id && r.IngredientId == ingredients[i].Id).Select(r => r.Id).ToArray();
-
-                        if(ids == null)
-                        {
-                            await _productCompositionRepository.Delete(ids[0]);
-                        }
-                    }
-                    catch (Exception)
-                    { }
+                    }                   
 
                     await _productCompositionRepository.Add(new ProductComposition
                     {
