@@ -26,6 +26,7 @@ public class Ingredient implements Serializable {
         this.polishName = polishName;
     }
 
+
     public String getPolishName() {
         return polishName;
     }
