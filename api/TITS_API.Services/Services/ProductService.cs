@@ -104,11 +104,11 @@ namespace TITS_API.Services.Services
 
             if (product.Ingredients != null)
             {
-                ingredients = product.Ingredients;
+                ingredients = new List<Ingredient>();
 
-                for(int i = 0; i < ingredients.Count; i++)
+                for(int i = 0; i < product.Ingredients.Count; i++)
                 {
-                    var ing = await _ingredientService.GetOrAddIfNotExists(ingredients[i]);
+                    var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
 
                     if(ing != null)
                     {
@@ -117,7 +117,7 @@ namespace TITS_API.Services.Services
                             ProductId = product.Id,
                             IngredientId = ing.Id
                         });
-                        ingredients[i] = ing;
+                        ingredients.Add(ing);
                     }
                 }
             }
@@ -137,15 +137,15 @@ namespace TITS_API.Services.Services
 
             if (product.Ingredients != null)
             {
-                ingredients = product.Ingredients;
+                ingredients = new List<Ingredient>();
 
-                for (int i = 0; i < ingredients.Count; i++)
+                for (int i = 0; i < product.Ingredients.Count; i++)
                 {
-                    var ing = await _ingredientService.GetOrAddIfNotExists(ingredients[i]);
+                    var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
 
                     if (ing != null)
                     {
-                        ingredients[i] = ing;
+                        ingredients.Add(ing);
                     }
                 }           
             }
@@ -164,6 +164,8 @@ namespace TITS_API.Services.Services
                     });
                 }
             }
+
+            p.Ingredients = ingredients;
 
             return p;
         }
