@@ -84,33 +84,45 @@ namespace TITS_API.Services.Services
         }
 
 
-        public async Task<Product> Update(Product product)//TO FIX
+        public async Task<Product> Update(Product product)
         {
             List<Ingredient> ingredients = null;
 
-            if(product.Ingredients != null)
+            try
+            {
+                var relations = await _productCompositionRepository.GetRelations(product.Id);
+                var ids = relations.Where(r => r.ProductId == product.Id).Select(r => r.Id).ToList();
+
+                if (ids != null)
+                {
+                    foreach(var id in ids)
+                    {
+                        await _productCompositionRepository.Delete(id);
+                    }
+                }
+            }
+            catch (Exception)
+            { }
+
+            if (product.Ingredients != null)
             {
                 ingredients = product.Ingredients;
 
                 for(int i = 0; i < ingredients.Count; i++)
                 {
-                    if (ingredients[i].Id == 0 && !String.IsNullOrEmpty(ingredients[i].PolishName))
-                    {
-                        ingredients[i] = await _ingredientRepository.Add(ingredients[i]);
-                    }
+                    var ing = await _ingredientRepository.GetByName(ingredients[i].PolishName);
 
-                    try
+                    if (ing != null)
                     {
-                        var relations = await _productCompositionRepository.GetRelations(product.Id);
-                        var ids = relations.Where(r => r.ProductId == product.Id && r.IngredientId == ingredients[i].Id).Select(r => r.Id).ToArray();
-
-                        if(ids == null)
-                        {
-                            await _productCompositionRepository.Delete(ids[0]);
-                        }
+                        ingredients[i] = ing;
                     }
-                    catch (Exception)
-                    { }
+                    else if (!String.IsNullOrEmpty(ingredients[i].PolishName))
+                    {
+                        var completed = await _pubChemService.AutoComplete(ingredients[i]);
+                        ingredients[i] = await _ingredientRepository.Add(completed);
+                        ingredients[i].HazardStatements = completed.HazardStatements;
+                        await _ingredientService.AddRelationsToHazardStatements(ingredients[i].Id, ingredients[i].HazardStatements);
+                    }           
 
                     await _productCompositionRepository.Add(new ProductComposition
                     {
