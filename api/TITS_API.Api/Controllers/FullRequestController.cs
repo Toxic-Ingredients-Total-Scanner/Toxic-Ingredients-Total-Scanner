@@ -52,7 +52,7 @@ namespace TITS_API.Api.Controllers
             var p = await _productService.Add(product);
             if (p == null)
             {
-                return NotFound();
+                return Conflict();
             }
             return p;
         }

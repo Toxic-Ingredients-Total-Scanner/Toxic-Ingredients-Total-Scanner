@@ -46,6 +46,7 @@ namespace TITS_API.Api.Controllers
             {
                 return NotFound();
             }
+            ingredient.HazardStatements = await _ingredientService.GetHazardStatemensList(ingredient.Id);
             return ingredient;
         }
 
