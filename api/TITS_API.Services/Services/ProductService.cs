@@ -22,16 +22,14 @@ namespace TITS_API.Services.Services
         private readonly ProductRepository _productRepository;
         private readonly IngredientRepository _ingredientRepository;
         private readonly ProductCompositionRepository _productCompositionRepository;
-        private readonly PubChemService _pubChemService;
         private readonly IngredientService _ingredientService;
         
 
-        public ProductService(DatabaseContext context, PubChemService pubChemService , IngredientService ingredientService)
+        public ProductService(DatabaseContext context, IngredientService ingredientService)
         {
             _productRepository = new ProductRepository(context);
             _ingredientRepository = new IngredientRepository(context);
             _productCompositionRepository = new ProductCompositionRepository(context);
-            _pubChemService = pubChemService;
             _ingredientService = ingredientService;
         }
 
@@ -106,29 +104,21 @@ namespace TITS_API.Services.Services
 
             if (product.Ingredients != null)
             {
-                ingredients = product.Ingredients;
+                ingredients = new List<Ingredient>();
 
-                for(int i = 0; i < ingredients.Count; i++)
+                for(int i = 0; i < product.Ingredients.Count; i++)
                 {
-                    var ing = await _ingredientRepository.GetByName(ingredients[i].PolishName);
+                    var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
 
-                    if (ing != null)
+                    if(ing != null)
                     {
-                        ingredients[i] = ing;
+                        await _productCompositionRepository.Add(new ProductComposition
+                        {
+                            ProductId = product.Id,
+                            IngredientId = ing.Id
+                        });
+                        ingredients.Add(ing);
                     }
-                    else if (!String.IsNullOrEmpty(ingredients[i].PolishName))
-                    {
-                        var completed = await _pubChemService.AutoComplete(ingredients[i]);
-                        ingredients[i] = await _ingredientRepository.Add(completed);
-                        ingredients[i].HazardStatements = completed.HazardStatements;
-                        await _ingredientService.AddRelationsToHazardStatements(ingredients[i].Id, ingredients[i].HazardStatements);
-                    }           
-
-                    await _productCompositionRepository.Add(new ProductComposition
-                    {
-                        ProductId = product.Id,
-                        IngredientId = ingredients[i].Id
-                    });
                 }
             }
 
@@ -147,21 +137,15 @@ namespace TITS_API.Services.Services
 
             if (product.Ingredients != null)
             {
-                ingredients = product.Ingredients;
+                ingredients = new List<Ingredient>();
 
-                for (int i = 0; i < ingredients.Count; i++)
+                for (int i = 0; i < product.Ingredients.Count; i++)
                 {
-                    var ing = await _ingredientRepository.GetByName(ingredients[i].PolishName);
+                    var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
 
                     if (ing != null)
                     {
-                        ingredients[i] = ing;
-                    }
-                    else if (!String.IsNullOrEmpty(ingredients[i].PolishName))
-                    {
-                        var completed = await _pubChemService.AutoComplete(ingredients[i]);
-                        ingredients[i] = await _ingredientRepository.Add(completed);
-                        ingredients[i].HazardStatements = completed.HazardStatements;
+                        ingredients.Add(ing);
                     }
                 }           
             }
@@ -178,15 +162,10 @@ namespace TITS_API.Services.Services
                         ProductId = p.Id,
                         IngredientId = ingredients[i].Id
                     });
-
-                    var hs = await _ingredientService.GetHazardStatemensList(ingredients[i].Id);
-                    if (hs == null)
-                    {
-                        await _ingredientService.AddRelationsToHazardStatements(ingredients[i].Id, ingredients[i].HazardStatements);
-                    }
                 }
-
             }
+
+            p.Ingredients = ingredients;
 
             return p;
         }

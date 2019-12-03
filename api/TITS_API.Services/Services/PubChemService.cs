@@ -38,6 +38,7 @@ namespace TITS_API.Services.Services
         {
             var properName = await FindProperEnglishName(ingredient);
             if (properName == null) return null;
+            ingredient.EnglishName = properName;
 
             string cids = await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/cids/TXT");
 
@@ -45,10 +46,15 @@ namespace TITS_API.Services.Services
             ingredient.PubChemUrl = baseUrl + ingredient.PubChemCID;
             ingredient.MolecularFormula = (await _http.GetStringAsync(apiUrl + "compound/cid/" + ingredient.PubChemCID + "/property/MolecularFormula/TXT")).Trim();
             ingredient.StructureImageUrl = apiUrl + "compound/cid/" + ingredient.PubChemCID + "/PNG";
-            ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
             ingredient.WikiUrl = await WikipediaURL(ingredient);
-            ingredient.HazardStatements = await GetStatementsByCode(await GHSStatements(ingredient));
-            
+
+            var codes = await GHSStatements(ingredient);
+            ingredient.HazardStatements = await GetStatementsByCode(codes);
+            if(!codes.Contains("X404"))
+            {
+                ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
+            }
+
             return ingredient;
         }
 
