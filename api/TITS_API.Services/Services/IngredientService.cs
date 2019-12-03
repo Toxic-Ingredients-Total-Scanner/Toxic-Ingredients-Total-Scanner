@@ -14,12 +14,14 @@ namespace TITS_API.Services.Services
         private readonly IngredientRepository _ingredientRepository;
         private readonly HazardStatementRepository _hsRepository;
         private readonly IngredientHazardStatementRepository _ihsRepository;
+        private readonly PubChemService _pubChemService;
 
-        public IngredientService(DatabaseContext context)
+        public IngredientService(DatabaseContext context, PubChemService pubChemService)
         {
             _ingredientRepository = new IngredientRepository(context);
             _hsRepository = new HazardStatementRepository(context);
             _ihsRepository = new IngredientHazardStatementRepository(context);
+            _pubChemService = pubChemService;
         }
 
 
@@ -53,6 +55,32 @@ namespace TITS_API.Services.Services
             }
 
             return ihs;
+        }
+
+
+        public async Task<Ingredient> GetOrAddIfNotExists(Ingredient ingredient)
+        {
+            if (ingredient.PolishName == null) return null;
+
+            var ing = await _ingredientRepository.GetByName(ingredient.PolishName);
+
+            if(ing != null)
+            {
+                ing.HazardStatements = await GetHazardStatemensList(ing.Id);
+                return ing;
+            }
+            else
+            {
+                ing = await _pubChemService.AutoComplete(ingredient);
+
+                if (ing == null) return null;
+
+                var newIngredient = await _ingredientRepository.Add(ing);
+                await AddRelationsToHazardStatements(newIngredient.Id, ing.HazardStatements);
+                newIngredient.HazardStatements = ing.HazardStatements;
+
+                return newIngredient;
+            }
         }
     }
 }
