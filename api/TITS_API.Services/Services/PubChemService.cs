@@ -36,13 +36,8 @@ namespace TITS_API.Services.Services
 
         public async Task<Ingredient> AutoComplete(Ingredient ingredient)
         {
-            if(ingredient.EnglishName == null)
-            {
-                var properName = await FindProperEnglishName(ingredient.PolishName);
-                if (properName == null) return ingredient;
-
-                ingredient.EnglishName = properName;
-            }
+            var properName = await FindProperEnglishName(ingredient);
+            if (properName == null) return null;
 
             string cids = await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/cids/TXT");
 
@@ -53,19 +48,26 @@ namespace TITS_API.Services.Services
             ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
             ingredient.WikiUrl = await WikipediaURL(ingredient);
             ingredient.HazardStatements = await GetStatementsByCode(await GHSStatements(ingredient));
-
-
+            
             return ingredient;
         }
 
-        private async Task<string> FindProperEnglishName(string polishName)
+        private async Task<string> FindProperEnglishName(Ingredient ingredient)
         {
-            var translationResult = _translateService.Translate(polishName, Language.Polish, Language.English);
+            string pubChemAutoCompleteResponse;
 
-            var pubChemAutoCompleteResponse = await _http.GetAsync(autoCompleteUrl + translationResult.MergedTranslation + "/json?limit=1").Result.Content.ReadAsStringAsync();
+            if (ingredient.EnglishName != null)
+            {
+                pubChemAutoCompleteResponse = await _http.GetAsync(autoCompleteUrl + ingredient.EnglishName + "/json?limit=1").Result.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                var translationResult = _translateService.Translate(ingredient.PolishName, Language.Polish, Language.English);
+                pubChemAutoCompleteResponse = await _http.GetAsync(autoCompleteUrl + translationResult.MergedTranslation + "/json?limit=1").Result.Content.ReadAsStringAsync();
+            }
+
             var response = JsonConvert.DeserializeObject<AutoCompleteResponse>(pubChemAutoCompleteResponse);
             if (response.Total > 0) return response.Dictionary_Terms.Compound[0];
-
 
             return null;
         }
