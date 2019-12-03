@@ -110,10 +110,19 @@ namespace TITS_API.Services.Services
 
                 for(int i = 0; i < ingredients.Count; i++)
                 {
-                    if (ingredients[i].Id == 0 && !String.IsNullOrEmpty(ingredients[i].PolishName))
+                    var ing = await _ingredientRepository.GetByName(ingredients[i].PolishName);
+
+                    if (ing != null)
                     {
-                        ingredients[i] = await _ingredientRepository.Add(ingredients[i]);
-                    }                   
+                        ingredients[i] = ing;
+                    }
+                    else if (!String.IsNullOrEmpty(ingredients[i].PolishName))
+                    {
+                        var completed = await _pubChemService.AutoComplete(ingredients[i]);
+                        ingredients[i] = await _ingredientRepository.Add(completed);
+                        ingredients[i].HazardStatements = completed.HazardStatements;
+                        await _ingredientService.AddRelationsToHazardStatements(ingredients[i].Id, ingredients[i].HazardStatements);
+                    }           
 
                     await _productCompositionRepository.Add(new ProductComposition
                     {
