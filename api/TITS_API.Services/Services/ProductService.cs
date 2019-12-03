@@ -11,6 +11,7 @@ using TITS_API.Api.Configuration;
 using TITS_API.Models.Models;
 using TITS_API.Repositories.Repositories;
 using System.Linq;
+using TITS_API.Architecture;
 
 namespace TITS_API.Services.Services
 {
@@ -25,12 +26,11 @@ namespace TITS_API.Services.Services
         private readonly IngredientService _ingredientService;
         
 
-        public ProductService(ProductRepository productRepository, IngredientRepository ingredientRepository,
-            ProductCompositionRepository productCompositionRepository, PubChemService pubChemService , IngredientService ingredientService)
+        public ProductService(DatabaseContext context, PubChemService pubChemService , IngredientService ingredientService)
         {
-            _productRepository = productRepository;
-            _ingredientRepository = ingredientRepository;
-            _productCompositionRepository = productCompositionRepository;
+            _productRepository = new ProductRepository(context);
+            _ingredientRepository = new IngredientRepository(context);
+            _productCompositionRepository = new ProductCompositionRepository(context);
             _pubChemService = pubChemService;
             _ingredientService = ingredientService;
         }

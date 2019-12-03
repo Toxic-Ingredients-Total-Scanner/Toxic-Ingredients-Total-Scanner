@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using TITS_API.Architecture;
 using TITS_API.Models.Models;
 using TITS_API.Models.PubChemResponses;
 using TITS_API.Repositories.Repositories;
@@ -26,10 +27,10 @@ namespace TITS_API.Services.Services
         private const string autoCompleteUrl = "https://pubchem.ncbi.nlm.nih.gov/rest/autocomplete/compound/";
         private const string informationUrl = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/";
 
-        public PubChemService(TranslateService translateService, HazardStatementRepository hazardStatementRepository)
+        public PubChemService(TranslateService translateService, DatabaseContext context)
         {
             _translateService = translateService;
-            _hazardStatementRepository = hazardStatementRepository;
+            _hazardStatementRepository = new HazardStatementRepository(context);
             _http = new HttpClient();
         }
 

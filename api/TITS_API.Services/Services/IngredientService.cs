@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TITS_API.Models.Models;
 using TITS_API.Repositories.Repositories;
 using System.Linq;
+using TITS_API.Architecture;
 
 namespace TITS_API.Services.Services
 {
@@ -14,13 +15,11 @@ namespace TITS_API.Services.Services
         private readonly HazardStatementRepository _hsRepository;
         private readonly IngredientHazardStatementRepository _ihsRepository;
 
-        public IngredientService(IngredientRepository ingredientRepository,
-            HazardStatementRepository hazardStatementRepository,
-            IngredientHazardStatementRepository ingredientHazardStatementRepository)
+        public IngredientService(DatabaseContext context)
         {
-            _ingredientRepository = ingredientRepository;
-            _hsRepository = hazardStatementRepository;
-            _ihsRepository = ingredientHazardStatementRepository;
+            _ingredientRepository = new IngredientRepository(context);
+            _hsRepository = new HazardStatementRepository(context);
+            _ihsRepository = new IngredientHazardStatementRepository(context);
         }
 
 

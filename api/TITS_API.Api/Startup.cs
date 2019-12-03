@@ -49,6 +49,7 @@ namespace TITS_API.Api
             services.AddTransient<HazardStatementRepository>();
             services.AddTransient<IngredientHazardStatementRepository>();
             services.AddTransient<IngredientService>();
+            services.AddTransient<DatabaseContext>();
 
             services.AddControllers();
 
