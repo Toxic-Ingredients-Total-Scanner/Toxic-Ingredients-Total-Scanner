@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TITS_API.Models.Models;
 using TITS_API.Repositories.Repositories;
 using System.Linq;
+using TITS_API.Architecture;
 
 namespace TITS_API.Services.Services
 {
@@ -14,14 +15,13 @@ namespace TITS_API.Services.Services
         private readonly HazardStatementRepository _hsRepository;
         private readonly IngredientHazardStatementRepository _ihsRepository;
 
-        public IngredientService(IngredientRepository ingredientRepository,
-            HazardStatementRepository hazardStatementRepository,
-            IngredientHazardStatementRepository ingredientHazardStatementRepository)
+        public IngredientService(DatabaseContext context)
         {
-            _ingredientRepository = ingredientRepository;
-            _hsRepository = hazardStatementRepository;
-            _ihsRepository = ingredientHazardStatementRepository;
+            _ingredientRepository = new IngredientRepository(context);
+            _hsRepository = new HazardStatementRepository(context);
+            _ihsRepository = new IngredientHazardStatementRepository(context);
         }
+
 
         public async Task<List<HazardStatement>> GetHazardStatemensList(int ingredientId)
         {
@@ -35,8 +35,9 @@ namespace TITS_API.Services.Services
                 }
             }
 
-            return hazardStatements;
+            return hazardStatements.Count > 0 ? hazardStatements : null;
         }
+
 
         public async Task<List<IngredientHazardStatement>> AddRelationsToHazardStatements(int ingredientId, List<HazardStatement> hazardStatements)
         {

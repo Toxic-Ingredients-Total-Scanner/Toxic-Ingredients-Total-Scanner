@@ -5,31 +5,41 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TITS_API.Models.Models;
-using TITS_API.Repositories.Architecture;
 using TITS_API.Repositories.Repositories;
 using TITS_API.Services.Services;
 
 namespace TITS_API.Api.Controllers
 {
-    
+    [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly ProductRepository _productRepository;
-        private readonly ProductService _productService;
 
         public ProductsController(ProductRepository productRepository, ProductService productService)
         {
             _productRepository = productRepository;
-            _productService = productService;
         }
 
 
-        [Route(ApiRoutes.ProductsGetProductById)]
         [HttpGet]
-        public async Task<ActionResult<Product>> GetById(int id)
+        public async Task<ActionResult<Product>> Get(int id, string ean, string name)
         {
-            var product = await _productRepository.Get(id);
+            Product product = null;
+
+            if(id != 0)
+            {
+                product = await _productRepository.Get(id);
+            }
+            else if(!String.IsNullOrEmpty(ean))
+            {
+                product ??= await _productRepository.GetByEan(ean);
+            }
+            else if (!String.IsNullOrEmpty(name))
+            {
+                product ??= await _productRepository.GetByName(name);
+            }
+
             if(product == null)
             {
                 return NotFound();
@@ -38,50 +48,11 @@ namespace TITS_API.Api.Controllers
         }
 
 
-        [Route(ApiRoutes.ProductsGetProductByEan)]
+        [Route("names")]
         [HttpGet]
-        public async Task<ActionResult<Product>> GetByEan(string ean)
+        public async Task<ActionResult<string[]>> GetProductNames(string phrase)
         {
-            var product = await _productRepository.GetByEan(ean);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return product;
-        }
-
-
-        [Route(ApiRoutes.ProductsGetProductByName)]
-        [HttpGet]
-        public async Task<ActionResult<Product>> GetByName(string name)
-        {
-            var product = await _productRepository.GetByName(name);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return product;
-        }
-
-
-        [Route(ApiRoutes.ProductsGetProductFromPwS)]
-        [HttpGet]
-        public async Task<ActionResult<Product>> GetFromPwS(string gtin)
-        {
-            var product = await _productService.GetFromPWS(gtin);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return product;
-        }
-
-
-        [Route(ApiRoutes.ProductsGetProductNames)]
-        [HttpGet]
-        public async Task<ActionResult<string[]>> GetProductNames(string name)
-        {
-            var names = await _productRepository.GetProductNames(name);
+            var names = await _productRepository.GetProductNames(phrase);
             if (names == null)
             {
                 return NotFound();
@@ -90,10 +61,10 @@ namespace TITS_API.Api.Controllers
         }
 
 
-        [Route(ApiRoutes.ProductsAddProduct)]
         [HttpPost]
         public async Task<ActionResult<Product>> Add(Product product)
         {
+            product.ModifiedDate = DateTime.Now;
             var _product = await _productRepository.Add(product);
             if (_product == null)
             {
@@ -103,29 +74,16 @@ namespace TITS_API.Api.Controllers
         }
 
 
-        [Route(ApiRoutes.ProductsUpdateProduct)]
         [HttpPut]
         public async Task<ActionResult<Product>> Update(Product product)
         {
+            product.ModifiedDate = DateTime.Now;
             var _product = await _productRepository.Update(product);
             if (_product == null)
             {
                 return NotFound();
             }
             return _product;
-        }
-
-
-        [Route(ApiRoutes.ProductsGetFullProductInfo)]
-        [HttpGet]
-        public async Task<ActionResult<Product>> GetFullProductInfo(string gtin)
-        {
-            var product = await _productService.GetFullProductInfo(gtin);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            return product;
         }
     }
 }
