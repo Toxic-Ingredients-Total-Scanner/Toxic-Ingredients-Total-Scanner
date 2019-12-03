@@ -21,6 +21,7 @@ namespace TITS_API.Models.Models
         public string CountryOfOrigin { get; set; }
         public string Description { get; set; }
         public string ProductImage { get; set; }
+        public string Base64Image { get; set; }
         public string Url { get; set; }
         public bool? IsLegal { get; set; }
         public DateTime ModifiedDate { get; set; }
