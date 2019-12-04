@@ -5,25 +5,21 @@
         controller: searchInputController
     });
 
-    searchInputController.$inject = ['$scope', '$element', '$attrs', '$http'];
+    searchInputController.$inject = ['productsService'];
 
-    function searchInputController($scope, $element, $attrs, $http) {
+    function searchInputController(productsService) {
         var $ctrl = this;
         $ctrl.search
         $ctrl.hints;
 
-        $ctrl.searchFor = function() {
-            if($ctrl.search.length < 3) return $ctrl.hints = [];
-            return $http({
-                method: 'GET',
-                url: '/api/Products/names?phrase=' + $ctrl.search
-            }).then(function successCallback(response) {
-                $ctrl.hints = response.data;
-                console.log($ctrl.hints);
-            }, function errorCallback(response) {
-            });
+        $ctrl.searchFor = searchFor;
+
+        function searchFor(searching) {
+            productsService.searchFor(searching).then(
+              function(response) {
+                  $ctrl.hints = response;
+              }
+            )
         }
-
-
     }
 })(window.angular);
