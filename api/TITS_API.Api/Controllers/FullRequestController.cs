@@ -20,7 +20,13 @@ namespace TITS_API.Api.Controllers
             _productService = productService;
         }
 
-
+        /// <summary>
+        /// Get product with ingredients by id, ean(gtin) or name. Priority: id, ean, name.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="ean"></param>
+        /// <param name="name"></param>
+        /// <returns>Product</returns>
         [HttpGet]
         public async Task<ActionResult<Product>> Get(int id, string ean, string name)
         {
@@ -45,7 +51,12 @@ namespace TITS_API.Api.Controllers
             return product;
         }
 
-
+        /// <summary>
+        /// Add new product and ingredients if they don't exists, and relations between them.
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns>Product</returns>
+        /// <response code="409">If product with specified ean(gtin) already exists in database.</response>
         [HttpPost]
         public async Task<ActionResult<Product>> Add(Product product)
         {
@@ -57,7 +68,11 @@ namespace TITS_API.Api.Controllers
             return p;
         }
 
-
+        /// <summary>
+        /// Update product and relations between product and ingredients.
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns>Product</returns>
         [HttpPut]
         public async Task<ActionResult<Product>> Update(Product product)
         {

@@ -1,0 +1,5 @@
+<div class="search-input">
+    <h2>Type product name:</h2>
+    <input class="product-search" ng-model="$ctrl.search" ng-change="$ctrl.searchFor()" ng-model-options="{debounce:500}">
+    <search-hints hints="$ctrl.hints"></search-hints>
+</div>
