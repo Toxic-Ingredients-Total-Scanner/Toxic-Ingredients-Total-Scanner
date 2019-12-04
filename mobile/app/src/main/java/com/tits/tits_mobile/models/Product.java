@@ -1,5 +1,6 @@
 package com.tits.tits_mobile.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -13,12 +14,13 @@ public class Product implements Serializable {
     private String brand;
     private String brandOwner;
     private String manufacturer;
-    private String coutnryOfOrigin;
+    private String countryOfOrigin;
     private String description;
     private String productImage;
+    private String base64Image;
     private String url;
     private String isLegal;
-    private String modifiedDate;
+    //private String modifiedDate;
     private ArrayList<Ingredient> ingredients;
 
     public String getProductName() {
@@ -49,18 +51,87 @@ public class Product implements Serializable {
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
     public Product(){
         super();
+    }
+
+    public String getGtin() {
+        return gtin;
+    }
+
+    public void setGtin(String gtin) {
+        this.gtin = gtin;
+    }
+
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
 
     public String getProductImage() {
         return productImage;
     }
+
+    public String getBrandOwner() {
+        return brandOwner;
+    }
+
+    public void setBrandOwner(String brandOwner) {
+        this.brandOwner = brandOwner;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public String getCountryOfOrigin() {
+        return countryOfOrigin;
+    }
+
+    public void setCountryOfOrigin(String countryOfOrigin) {
+        this.countryOfOrigin = countryOfOrigin;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
+    }
+
+    public String getBase64Image() {
+        return base64Image;
+    }
+
+    public void setBase64Image(String base64Image) {
+        this.base64Image = base64Image;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getIsLegal() {
+        return isLegal;
+    }
+
+    public void setIsLegal(String isLegal) {
+        this.isLegal = isLegal;
+    }
+
 
     @Override
     public String toString() {

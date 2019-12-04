@@ -22,10 +22,10 @@ public class Ingredient implements Serializable {
         super();
     }
 
-    public Ingredient(String polishName, String englishName) {
+    public Ingredient(String polishName) {
         this.polishName = polishName;
-        this.englishName = englishName;
     }
+
 
     public String getPolishName() {
         return polishName;

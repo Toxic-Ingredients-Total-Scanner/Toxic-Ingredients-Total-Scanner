@@ -56,8 +56,7 @@ public class EanActivity extends AppCompatActivity {
         if (EAN != null && EAN.matches(pattern)) {
             EAN = getIntent().getStringExtra("EAN");
 
-            //String myUrl = "http://217.182.79.249/api/products/getByEan?ean=" + EAN;   //String to place our result in
-            String myUrl = "http://217.182.79.249/api/products/getFullProductInfo?gtin=" + EAN;
+            String myUrl = "http://217.182.79.249/api/Products/fullRequest?ean=" + EAN;
             final String result;
 
 

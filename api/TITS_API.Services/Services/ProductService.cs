@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using TITS_API.Api.Configuration;
 using TITS_API.Models.Models;
 using TITS_API.Repositories.Repositories;
+using System.Linq;
+using TITS_API.Architecture;
 
 namespace TITS_API.Services.Services
 {
@@ -20,63 +22,158 @@ namespace TITS_API.Services.Services
         private readonly ProductRepository _productRepository;
         private readonly IngredientRepository _ingredientRepository;
         private readonly ProductCompositionRepository _productCompositionRepository;
-        private readonly PubChemService _pubChemService;
         private readonly IngredientService _ingredientService;
         
 
-        public ProductService(ProductRepository productRepository, IngredientRepository ingredientRepository,
-            ProductCompositionRepository productCompositionRepository, PubChemService pubChemService , IngredientService ingredientService)
+        public ProductService(DatabaseContext context, IngredientService ingredientService)
         {
-            _productRepository = productRepository;
-            _ingredientRepository = ingredientRepository;
-            _productCompositionRepository = productCompositionRepository;
-            _pubChemService = pubChemService;
+            _productRepository = new ProductRepository(context);
+            _ingredientRepository = new IngredientRepository(context);
+            _productCompositionRepository = new ProductCompositionRepository(context);
             _ingredientService = ingredientService;
         }
 
-        public async Task<Product> Add(Product product)
+
+        public async Task<Product> GetFullRequestById(int id)
         {
+            var product = await _productRepository.Get(id);
+
+            if (product != null)
+            {
+                product.Ingredients = await GetIngredientList(product.Id);
+            }
+
+            return product;
+        }
+
+
+        public async Task<Product> GetFullRequestByEan(string ean)
+        {
+            var product = await _productRepository.GetByEan(ean);
+            if (product == null)
+            {
+                product = await GetFromPWS(ean);
+                if (product != null)
+                {
+                    product.Gtin = product.Gtin.Length == 14 && product.Gtin[0] == '0' ? product.Gtin.Substring(1, 13) : product.Gtin;
+                    product = await _productRepository.Add(product);
+                }
+            }
+
+            if (product != null)
+            {
+                product.Ingredients = await GetIngredientList(product.Id);
+            }
+
+            return product;
+        }
+
+
+        public async Task<Product> GetFullRequestByName(string name)
+        {
+            var product = await _productRepository.GetByName(name);
+
+            if (product != null)
+            {
+                product.Ingredients = await GetIngredientList(product.Id);
+            }
+
+            return product;
+        }
+
+
+        public async Task<Product> Update(Product product)
+        {
+            List<Ingredient> ingredients = null;
+
+            try
+            {
+                var relations = await _productCompositionRepository.GetRelations(product.Id);
+                var ids = relations.Where(r => r.ProductId == product.Id).Select(r => r.Id).ToList();
+
+                if (ids != null)
+                {
+                    foreach(var id in ids)
+                    {
+                        await _productCompositionRepository.Delete(id);
+                    }
+                }
+            }
+            catch (Exception)
+            { }
+
             if (product.Ingredients != null)
             {
-                product.Ingredients.ForEach(async ingredient =>
-                {
-                    var ing = await _ingredientRepository.GetByName(ingredient.PolishName);
+                ingredients = new List<Ingredient>();
 
-                    if (ing != null)
+                for(int i = 0; i < product.Ingredients.Count; i++)
+                {
+                    var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
+
+                    if(ing != null)
                     {
-                        ingredient = ing;
+                        await _productCompositionRepository.Add(new ProductComposition
+                        {
+                            ProductId = product.Id,
+                            IngredientId = ing.Id
+                        });
+                        ingredients.Add(ing);
                     }
-                    else if(!String.IsNullOrEmpty(ingredient.PolishName))
-                    {
-                        ingredient = await _ingredientRepository.Add(await _pubChemService.AutoComplete(ingredient));                        
-                    }
-                });
+                }
             }
 
             product.ModifiedDate = DateTime.Now;
-            Product p = await _productRepository.Add(product);
+            var p = await _productRepository.Update(product);
 
-            if(product.Ingredients != null)
-            {
-                product.Ingredients.ForEach(async ingredient =>
-                {
-                    await _productCompositionRepository.Add(new ProductComposition
-                    {
-                        ProductId = p.Id,
-                        IngredientId = ingredient.Id
-                    });
-
-                    var hs = _ingredientService.GetHazardStatemensList(ingredient.Id);
-                    if(hs == null)
-                    {
-                        await _ingredientService.AddRelationsToHazardStatements(ingredient.Id, ingredient.HazardStatements);
-                    }
-
-                });
-            }
+            p.Ingredients = ingredients;
 
             return p;
         }
+
+
+        public async Task<Product> Add(Product product)
+        {
+            if (await _productRepository.GetByEan(product.Gtin) == null)
+            {
+                List<Ingredient> ingredients = null;
+
+                if (product.Ingredients != null)
+                {
+                    ingredients = new List<Ingredient>();
+
+                    for (int i = 0; i < product.Ingredients.Count; i++)
+                    {
+                        var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
+
+                        if (ing != null)
+                        {
+                            ingredients.Add(ing);
+                        }
+                    }
+                }
+
+                product.ModifiedDate = DateTime.Now;
+                Product p = await _productRepository.Add(product);
+
+                if (ingredients != null)
+                {
+                    for (int i = 0; i < ingredients.Count; i++)
+                    {
+                        await _productCompositionRepository.Add(new ProductComposition
+                        {
+                            ProductId = p.Id,
+                            IngredientId = ingredients[i].Id
+                        });
+                    }
+                }
+
+                p.Ingredients = ingredients;
+
+                return p;
+            }
+            else return null;            
+        }
+
 
         public async Task<Product> GetFromPWS(string gtin)
         {
@@ -105,8 +202,9 @@ namespace TITS_API.Services.Services
             {
                 return null;
             }
-        }
+        }        
         
+
         public async Task<List<Ingredient>> GetIngredientList(int productId)
         {
             List<Ingredient> ingredients = new List<Ingredient>();
@@ -126,26 +224,6 @@ namespace TITS_API.Services.Services
             return ingredients.Count > 0 ? ingredients : null;
         }
 
-        public async Task<Product> GetFullProductInfo(string gtin)
-        {
-            var product = await _productRepository.GetByEan(gtin);
-            if(product == null)
-            {
-                product = await GetFromPWS(gtin);
-                if (product != null)
-                {
-                    product.Gtin = product.Gtin.Length == 14 && product.Gtin[0] == '0' ? product.Gtin.Substring(1, 13) : product.Gtin; 
-                    product = await _productRepository.Add(product);
-                }
-            }
-
-            if(product != null)
-            {
-                product.Ingredients = await GetIngredientList(product.Id);
-            }
-
-            return product;
-        }
 
         public async Task<List<ProductComposition>> AddRelationsToIngrediends(int productId, List<Ingredient> ingredients)
         {

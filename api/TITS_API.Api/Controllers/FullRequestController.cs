@@ -22,9 +22,22 @@ namespace TITS_API.Api.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<Product>> Get(string gtin)
+        public async Task<ActionResult<Product>> Get(int id, string ean, string name)
         {
-            var product = await _productService.GetFullProductInfo(gtin);
+            Product product = null;
+
+            if (id != 0)
+            {
+                product = await _productService.GetFullRequestById(id);
+            }
+            else if (!String.IsNullOrEmpty(ean))
+            {
+                product ??= await _productService.GetFullRequestByEan(ean);
+            }
+            else if (!String.IsNullOrEmpty(name))
+            {
+                product ??= await _productService.GetFullRequestByName(name);
+            }
             if (product == null)
             {
                 return NotFound();
@@ -37,6 +50,18 @@ namespace TITS_API.Api.Controllers
         public async Task<ActionResult<Product>> Add(Product product)
         {
             var p = await _productService.Add(product);
+            if (p == null)
+            {
+                return Conflict();
+            }
+            return p;
+        }
+
+
+        [HttpPut]
+        public async Task<ActionResult<Product>> Update(Product product)
+        {
+            var p = await _productService.Update(product);
             if (p == null)
             {
                 return NotFound();
