@@ -64,11 +64,27 @@ namespace TITS_API.Services.Services
 
             if (ingredient.EnglishName != null)
             {
+                try
+                {
+                    var synonyms = await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/synonyms/TXT");
+                    var synonym = synonyms.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                    return synonym;
+                }
+                catch {}
+
                 pubChemAutoCompleteResponse = await _http.GetAsync(autoCompleteUrl + ingredient.EnglishName + "/json?limit=1").Result.Content.ReadAsStringAsync();
+
             }
             else
             {
-                var translationResult = _translateService.Translate(ingredient.PolishName, Language.Polish, Language.English);
+                var translationResult = _translateService.Translate(ingredient.PolishName, Language.Polish, Language.English);                
+                try
+                {
+                    var synonyms = await _http.GetStringAsync(apiUrl + "compound/name/" + translationResult.MergedTranslation + "/synonyms/TXT");
+                    var synonym = synonyms.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                    return synonym;
+                }
+                catch { }
                 pubChemAutoCompleteResponse = await _http.GetAsync(autoCompleteUrl + translationResult.MergedTranslation + "/json?limit=1").Result.Content.ReadAsStringAsync();
             }
 
@@ -159,7 +175,7 @@ namespace TITS_API.Services.Services
             { 
                 return null; 
             }
-        }       
+        }
 
     }
 }
