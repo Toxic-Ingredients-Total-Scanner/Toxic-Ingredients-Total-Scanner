@@ -1,9 +1,12 @@
-.example-component {
+.search-input {
   width: 100%;
   padding: 100px;
   margin: 50px 0px;
 }
-.example-component p {
+.search-input p {
   color: red;
   margin-left: 50px;
+}
+.search-input input.product-search {
+  width: 100%;
 }
