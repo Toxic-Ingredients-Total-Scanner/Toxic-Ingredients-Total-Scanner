@@ -21,7 +21,13 @@ namespace TITS_API.Api.Controllers
             _productRepository = productRepository;
         }
 
-
+        /// <summary>
+        /// Get product without ingredients by id, ean(gtin) or name. Priority: id > ean > name.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="ean"></param>
+        /// <param name="name"></param>
+        /// <returns>Product</returns>
         [HttpGet]
         public async Task<ActionResult<Product>> Get(int id, string ean, string name)
         {
@@ -47,7 +53,11 @@ namespace TITS_API.Api.Controllers
             return product;
         }
 
-
+        /// <summary>
+        /// Get products names as string array.
+        /// </summary>
+        /// <param name="phrase"></param>
+        /// <returns>Product</returns>
         [Route("names")]
         [HttpGet]
         public async Task<ActionResult<string[]>> GetProductNames(string phrase)
@@ -60,7 +70,11 @@ namespace TITS_API.Api.Controllers
             return names;
         }
 
-
+        /// <summary>
+        /// Add product without ingredients.
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns>Product</returns>
         [HttpPost]
         public async Task<ActionResult<Product>> Add(Product product)
         {
@@ -73,7 +87,11 @@ namespace TITS_API.Api.Controllers
             return _product;
         }
 
-
+        /// <summary>
+        /// Update product without ingredients
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns>Product</returns>
         [HttpPut]
         public async Task<ActionResult<Product>> Update(Product product)
         {
