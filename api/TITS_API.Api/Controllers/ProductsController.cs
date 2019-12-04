@@ -22,7 +22,7 @@ namespace TITS_API.Api.Controllers
         }
 
         /// <summary>
-        /// Get product without ingredients by id, ean(gtin) or name. Priority: id > ean > name.
+        /// Get product without ingredients by id, ean(gtin) or name. Priority: id, ean, name.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="ean"></param>
