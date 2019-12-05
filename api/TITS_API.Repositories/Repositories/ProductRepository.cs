@@ -24,10 +24,15 @@ namespace TITS_API.Repositories.Repositories
             return await Task.Run(() => _context.Products.FirstOrDefault(p => p.ProductName == name));
         }
 
-        public async Task<string[]> GetProductNames(string name)
+        public async Task<List<ProductHint>> GetProductNames(string name)
         {
             var words = name.Split().ToList();
-            return await Task.Run(() => _context.Products.AsEnumerable().Where(p => words.All(w => p.ProductName.ToUpper().Contains(w.ToUpper()))).Select(p => p.ProductName).ToArray());
+            return await Task.Run(() =>
+            _context.Products.AsEnumerable().Where(p => words.All(w => p.ProductName.ToUpper().Contains(w.ToUpper()))).Select(p =>
+            new ProductHint
+            { ProductName = p.ProductName,
+                Gtin = p.Gtin
+            }).Take(10).ToList());
         }
 
     }

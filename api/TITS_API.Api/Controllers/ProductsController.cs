@@ -54,13 +54,13 @@ namespace TITS_API.Api.Controllers
         }
 
         /// <summary>
-        /// Get products names as string array.
+        /// Get products names with eans(gtin) as array.
         /// </summary>
         /// <param name="phrase"></param>
         /// <returns>Product</returns>
         [Route("names")]
         [HttpGet]
-        public async Task<ActionResult<string[]>> GetProductNames(string phrase)
+        public async Task<ActionResult<List<ProductHint>>> GetProductNames(string phrase)
         {
             var names = await _productRepository.GetProductNames(phrase);
             if (names == null)
