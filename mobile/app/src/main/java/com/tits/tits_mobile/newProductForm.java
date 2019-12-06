@@ -87,11 +87,11 @@ public class newProductForm extends AppCompatActivity {
                     json = "JsonProcessingException";
                 }
 
-                System.out.println(json);
                 String result;
                 HttpPostRequest postRequest = new HttpPostRequest();
                 try {
-                    postRequest.execute(json);
+                    result = postRequest.execute(json).get();
+                    System.out.println(result);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
