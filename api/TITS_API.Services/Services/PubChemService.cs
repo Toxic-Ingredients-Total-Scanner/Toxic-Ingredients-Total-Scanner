@@ -36,26 +36,33 @@ namespace TITS_API.Services.Services
 
         public async Task<Ingredient> AutoComplete(Ingredient ingredient)
         {
-            var properName = await FindProperEnglishName(ingredient);
-            if (properName == null) return null;
-            ingredient.EnglishName = properName;
-
-            string cids = await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/cids/TXT");
-
-            ingredient.PubChemCID = Int32.Parse(cids.Split()[0]);
-            ingredient.PubChemUrl = baseUrl + ingredient.PubChemCID;
-            ingredient.MolecularFormula = (await _http.GetStringAsync(apiUrl + "compound/cid/" + ingredient.PubChemCID + "/property/MolecularFormula/TXT")).Trim();
-            ingredient.StructureImageUrl = apiUrl + "compound/cid/" + ingredient.PubChemCID + "/PNG";
-            ingredient.WikiUrl = await WikipediaURL(ingredient);
-
-            var codes = await GHSStatements(ingredient);
-            ingredient.HazardStatements = await GetStatementsByCode(codes);
-            if(!codes.Contains("X404"))
+            try
             {
-                ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
-            }
+                var properName = await FindProperEnglishName(ingredient);
+                if (properName == null) return null;
+                ingredient.EnglishName = properName;
 
-            return ingredient;
+                string cids = await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/cids/TXT");
+
+                ingredient.PubChemCID = Int32.Parse(cids.Split()[0]);
+                ingredient.PubChemUrl = baseUrl + ingredient.PubChemCID;
+                ingredient.MolecularFormula = (await _http.GetStringAsync(apiUrl + "compound/cid/" + ingredient.PubChemCID + "/property/MolecularFormula/TXT")).Trim();
+                ingredient.StructureImageUrl = apiUrl + "compound/cid/" + ingredient.PubChemCID + "/PNG";
+                ingredient.WikiUrl = await WikipediaURL(ingredient);
+
+                var codes = await GHSStatements(ingredient);
+                ingredient.HazardStatements = await GetStatementsByCode(codes);
+                if (!codes.Contains("X404"))
+                {
+                    ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
+                }
+
+                return ingredient;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         private async Task<string> FindProperEnglishName(Ingredient ingredient)
