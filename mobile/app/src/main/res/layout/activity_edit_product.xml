@@ -12,8 +12,11 @@
         android:layout_height="52dp"
         android:ems="10"
         android:hint="EAN"
-        android:inputType="textPersonName"
+        android:inputType="none"
         android:layout_below="@+id/title"
+        android:editable="false"
+        android:focusable="false"
+        android:clickable="false"
         android:gravity="center"
         android:layout_centerHorizontal="true"/>
 
