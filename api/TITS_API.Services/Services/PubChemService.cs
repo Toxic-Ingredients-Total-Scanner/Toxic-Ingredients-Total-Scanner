@@ -73,9 +73,8 @@ namespace TITS_API.Services.Services
             {
                 try
                 {
-                    var synonyms = await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/synonyms/TXT");
-                    var synonym = synonyms.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                    return synonym;
+                    await _http.GetStringAsync(apiUrl + "compound/name/" + ingredient.EnglishName + "/JSON");
+                    return ingredient.EnglishName;
                 }
                 catch {}
 
@@ -87,9 +86,8 @@ namespace TITS_API.Services.Services
                 var translationResult = _translateService.Translate(ingredient.PolishName, Language.Polish, Language.English);                
                 try
                 {
-                    var synonyms = await _http.GetStringAsync(apiUrl + "compound/name/" + translationResult.MergedTranslation + "/synonyms/TXT");
-                    var synonym = synonyms.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                    return synonym;
+                    await _http.GetStringAsync(apiUrl + "compound/name/" + translationResult.MergedTranslation + "/JSON");
+                    return translationResult.MergedTranslation;
                 }
                 catch { }
                 pubChemAutoCompleteResponse = await _http.GetAsync(autoCompleteUrl + translationResult.MergedTranslation + "/json?limit=1").Result.Content.ReadAsStringAsync();
