@@ -147,5 +147,26 @@ namespace TITS_API.Api.Controllers
 
             return ing;
         }
+
+        /// <summary>
+        /// Scan again specified ingredient in PubChem and update info in database.
+        /// </summary>
+        /// <param name="ingredient"></param>
+        /// <returns>Ingredient</returns>
+        [Route("autocomplete")]
+        [HttpPut]
+        public async Task<ActionResult<Ingredient>> UpdateAutocompletedIngredient(Ingredient ingredient)
+        {
+            var ing = await _pubChemService.AutoComplete(ingredient);
+            if (ing == null)
+            {
+                return NotFound();
+            }
+            await _ingredientService.UpdateRelationsWithHazardStatements(ingredient);
+            var i = await _ingredientRepository.Update(ing);
+            i.HazardStatements = ingredient.HazardStatements;
+
+            return i;
+        }
     }
 }
