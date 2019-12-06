@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using GoogleTranslateFreeApi;
 using Microsoft.AspNetCore.Builder;
@@ -60,6 +62,10 @@ namespace TITS_API.Api
                     Version = "v1",
                     Title = "Toxic Ingredients Total Scanner - API"
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 

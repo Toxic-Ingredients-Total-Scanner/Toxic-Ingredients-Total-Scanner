@@ -23,10 +23,14 @@ function style() {
 
 function watch() {
     browserSync.init({
-        server: {
-            baseDir: './app'
-        },
-        port: 8000
+        // server: {
+        //     baseDir: './app'
+        // },
+        port: 8000,
+        proxy: {
+            target: 'localhost:8000', // original port
+            ws: true // enables websockets
+        }
     });
     gulp.watch('./app/**/*.less', style);
     gulp.watch('./**/*.html').on('change', browserSync.reload);

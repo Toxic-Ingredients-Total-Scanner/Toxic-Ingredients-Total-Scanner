@@ -27,7 +27,12 @@ namespace TITS_API.Api.Controllers
             _pubChemService = pubChemService;
         }
 
-
+        /// <summary>
+        /// Get ingredient with hazard statements by id or name. If both are set, id has higher priority.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <returns>Ingredient</returns>
         [HttpGet]
         public async Task<ActionResult<Ingredient>> Get(int id, string name)
         {
@@ -46,10 +51,15 @@ namespace TITS_API.Api.Controllers
             {
                 return NotFound();
             }
+            ingredient.HazardStatements = await _ingredientService.GetHazardStatemensList(ingredient.Id);
             return ingredient;
         }
 
-
+        /// <summary>
+        /// Get ingredients names as string array.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>string[]</returns>
         [Route("names")]
         [HttpGet]
         public async Task<ActionResult<string[]>> GetIngredientNames(string name)
@@ -62,10 +72,20 @@ namespace TITS_API.Api.Controllers
             return names;
         }
 
-
+        /// <summary>
+        /// Add ingredient without hazard statements.
+        /// </summary>
+        /// <param name="ingredient"></param>
+        /// <returns>Ingredient</returns>
+        /// <response code="409">If ingredient with specified polish name already exists in database.</response>
         [HttpPost]
         public async Task<ActionResult<Ingredient>> Add(Ingredient ingredient)
         {
+            if (_ingredientRepository.GetByName(ingredient.PolishName) != null)
+            {
+                return Conflict();
+            }
+
             var _ingredient = await _ingredientRepository.Add(ingredient);
             if (_ingredient == null)
             {
@@ -74,7 +94,11 @@ namespace TITS_API.Api.Controllers
             return _ingredient;
         }
 
-
+        /// <summary>
+        /// Update ingredient without hazard statements.
+        /// </summary>
+        /// <param name="ingredient"></param>
+        /// <returns>Ingredient</returns>
         [HttpPut]
         public async Task<ActionResult<Ingredient>> Update(Ingredient ingredient)
         {
@@ -86,7 +110,11 @@ namespace TITS_API.Api.Controllers
             return _ingredient;
         }
 
-
+        /// <summary>
+        /// Get info about specified ingredient from PubChem.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Ingredient</returns>
         [Route("autocomplete")]
         [HttpGet]
         public async Task<ActionResult<Ingredient>> PubChemAutocomplete(string name)
@@ -99,7 +127,11 @@ namespace TITS_API.Api.Controllers
             return ingredient;
         }
 
-
+        /// <summary>
+        /// Get info about specified ingredient from PubChem and insert it to database. 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Ingredient</returns>
         [Route("autocomplete")]
         [HttpPost]
         public async Task<ActionResult<Ingredient>> AddAutocompletedIngredient(string name)
@@ -109,10 +141,32 @@ namespace TITS_API.Api.Controllers
             {
                 return NotFound();
             }
-            ingredient = await _ingredientRepository.Add(ingredient);
             await _ingredientService.AddRelationsToHazardStatements(ingredient.Id, ingredient.HazardStatements);
+            var ing = await _ingredientRepository.Add(ingredient);
+            ing.HazardStatements = ingredient.HazardStatements;
 
-            return ingredient;
+            return ing;
+        }
+
+        /// <summary>
+        /// Scan again specified ingredient in PubChem and update info in database.
+        /// </summary>
+        /// <param name="ingredient"></param>
+        /// <returns>Ingredient</returns>
+        [Route("autocomplete")]
+        [HttpPut]
+        public async Task<ActionResult<Ingredient>> UpdateAutocompletedIngredient(Ingredient ingredient)
+        {
+            var ing = await _pubChemService.AutoComplete(ingredient);
+            if (ing == null)
+            {
+                return NotFound();
+            }
+            await _ingredientService.UpdateRelationsWithHazardStatements(ingredient);
+            var i = await _ingredientRepository.Update(ing);
+            i.HazardStatements = ingredient.HazardStatements;
+
+            return i;
         }
     }
 }

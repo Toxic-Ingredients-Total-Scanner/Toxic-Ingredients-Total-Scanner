@@ -11,6 +11,7 @@ namespace TITS_API.Api
 {
     public class Program
     {
+#pragma warning disable CS1591
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -22,5 +23,6 @@ namespace TITS_API.Api
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+#pragma warning restore CS1591
     }
 }

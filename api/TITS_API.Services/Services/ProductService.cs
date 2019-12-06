@@ -108,7 +108,7 @@ namespace TITS_API.Services.Services
 
                 for(int i = 0; i < product.Ingredients.Count; i++)
                 {
-                    var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
+                    var ing = await _ingredientService.GetOrAddIfNotExistsAndGet(product.Ingredients[i]);
 
                     if(ing != null)
                     {
@@ -133,41 +133,45 @@ namespace TITS_API.Services.Services
 
         public async Task<Product> Add(Product product)
         {
-            List<Ingredient> ingredients = null;
-
-            if (product.Ingredients != null)
+            if (await _productRepository.GetByEan(product.Gtin) == null)
             {
-                ingredients = new List<Ingredient>();
+                List<Ingredient> ingredients = null;
 
-                for (int i = 0; i < product.Ingredients.Count; i++)
+                if (product.Ingredients != null)
                 {
-                    var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
+                    ingredients = new List<Ingredient>();
 
-                    if (ing != null)
+                    for (int i = 0; i < product.Ingredients.Count; i++)
                     {
-                        ingredients.Add(ing);
+                        var ing = await _ingredientService.GetOrAddIfNotExistsAndGet(product.Ingredients[i]);
+
+                        if (ing != null)
+                        {
+                            ingredients.Add(ing);
+                        }
                     }
-                }           
-            }
-
-            product.ModifiedDate = DateTime.Now;
-            Product p = await _productRepository.Add(product);
-
-            if(ingredients != null)
-            {
-                for (int i = 0; i < ingredients.Count; i++)
-                {
-                    await _productCompositionRepository.Add(new ProductComposition
-                    {
-                        ProductId = p.Id,
-                        IngredientId = ingredients[i].Id
-                    });
                 }
+
+                product.ModifiedDate = DateTime.Now;
+                Product p = await _productRepository.Add(product);
+
+                if (ingredients != null)
+                {
+                    for (int i = 0; i < ingredients.Count; i++)
+                    {
+                        await _productCompositionRepository.Add(new ProductComposition
+                        {
+                            ProductId = p.Id,
+                            IngredientId = ingredients[i].Id
+                        });
+                    }
+                }
+
+                p.Ingredients = ingredients;
+
+                return p;
             }
-
-            p.Ingredients = ingredients;
-
-            return p;
+            else return null;            
         }
 
 

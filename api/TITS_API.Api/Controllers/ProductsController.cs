@@ -21,7 +21,13 @@ namespace TITS_API.Api.Controllers
             _productRepository = productRepository;
         }
 
-
+        /// <summary>
+        /// Get product without ingredients by id, ean(gtin) or name. Priority: id, ean, name.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="ean"></param>
+        /// <param name="name"></param>
+        /// <returns>Product</returns>
         [HttpGet]
         public async Task<ActionResult<Product>> Get(int id, string ean, string name)
         {
@@ -47,10 +53,14 @@ namespace TITS_API.Api.Controllers
             return product;
         }
 
-
+        /// <summary>
+        /// Get products names with eans(gtin) as array.
+        /// </summary>
+        /// <param name="phrase"></param>
+        /// <returns>Product</returns>
         [Route("names")]
         [HttpGet]
-        public async Task<ActionResult<string[]>> GetProductNames(string phrase)
+        public async Task<ActionResult<List<ProductHint>>> GetProductNames(string phrase)
         {
             var names = await _productRepository.GetProductNames(phrase);
             if (names == null)
@@ -60,10 +70,20 @@ namespace TITS_API.Api.Controllers
             return names;
         }
 
-
+        /// <summary>
+        /// Add product without ingredients.
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns>Product</returns>
+        /// <response code="409">If product with specified ean(gtin) already exists in database.</response>
         [HttpPost]
         public async Task<ActionResult<Product>> Add(Product product)
         {
+            if (await _productRepository.GetByEan(product.Gtin) != null)
+            {
+                return Conflict();
+            }
+            
             product.ModifiedDate = DateTime.Now;
             var _product = await _productRepository.Add(product);
             if (_product == null)
@@ -73,7 +93,11 @@ namespace TITS_API.Api.Controllers
             return _product;
         }
 
-
+        /// <summary>
+        /// Update product without ingredients
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns>Product</returns>
         [HttpPut]
         public async Task<ActionResult<Product>> Update(Product product)
         {
