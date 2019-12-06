@@ -77,9 +77,15 @@ namespace TITS_API.Api.Controllers
         /// </summary>
         /// <param name="ingredient"></param>
         /// <returns>Ingredient</returns>
+        /// <response code="409">If ingredient with specified polish name already exists in database.</response>
         [HttpPost]
         public async Task<ActionResult<Ingredient>> Add(Ingredient ingredient)
         {
+            if (_ingredientRepository.GetByName(ingredient.PolishName) != null)
+            {
+                return Conflict();
+            }
+
             var _ingredient = await _ingredientRepository.Add(ingredient);
             if (_ingredient == null)
             {
