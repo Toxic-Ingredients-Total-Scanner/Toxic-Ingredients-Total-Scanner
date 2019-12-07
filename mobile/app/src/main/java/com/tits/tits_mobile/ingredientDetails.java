@@ -26,7 +26,9 @@ public class ingredientDetails extends AppCompatActivity {
 
         ingDetails = findViewById(R.id.ingDetails);
         String ingName = getIntent().getStringExtra("ingName");
+        ingName = ingName.replace(" ", "%20");
         myUrl = "http://217.182.79.249/api/Ingredients?name=" + ingName;
+
 
         HttpGetRequest getRequest = new HttpGetRequest(ingredientDetails.this);
         try {

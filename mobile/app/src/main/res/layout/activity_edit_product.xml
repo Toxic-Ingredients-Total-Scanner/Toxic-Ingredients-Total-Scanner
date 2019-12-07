@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".editProduct">
+
+    <EditText
+        android:id="@+id/ean"
+        android:layout_width="295dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:hint="EAN"
+        android:inputType="none"
+        android:layout_below="@+id/title"
+        android:editable="false"
+        android:focusable="false"
+        android:clickable="false"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/brand"
+        android:layout_width="295dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:hint="Brand"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/ean"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/productName"
+        android:layout_width="295dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:hint="Product Name"
+        android:inputType="textPersonName"
+        android:layout_below="@id/brand"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/ingredients"
+        android:layout_width="295dp"
+        android:layout_height="52dp"
+        android:ems="10"
+        android:hint="New ingredient"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/productName"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/confirmIng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/ingredients"
+        android:layout_below="@id/productName"
+        android:text="OK"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please edit the product:"
+        android:textSize="24dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/secondTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exisiting ingredients:\n(Click to remove)"
+        android:textSize="18dp"
+        android:layout_below="@id/ingredients"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/secondTitle"
+        android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"/>
+
+
+    <Button
+        android:id="@+id/sendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_green_light"
+        android:text="Send"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
