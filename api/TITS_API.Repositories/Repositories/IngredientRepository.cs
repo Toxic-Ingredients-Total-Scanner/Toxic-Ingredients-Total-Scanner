@@ -69,5 +69,10 @@ namespace TITS_API.Repositories.Repositories
                         .Select(i => i.PolishName).Take(take).ToArray());
             }
         }
+
+        public async Task<string[]> GetAllNames()
+        {
+            return await Task.Run(() => _context.Ingredients.Select(i => i.PolishName).ToArray());
+        }
     }
 }
