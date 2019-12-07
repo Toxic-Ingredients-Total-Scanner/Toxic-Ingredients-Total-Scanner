@@ -42,7 +42,7 @@
         android:gravity="center"
         android:layout_centerHorizontal="true"/>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/ingredients"
         android:layout_width="295dp"
         android:layout_height="52dp"
