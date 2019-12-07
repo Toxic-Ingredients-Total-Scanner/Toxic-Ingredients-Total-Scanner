@@ -56,15 +56,31 @@ namespace TITS_API.Api.Controllers
         }
 
         /// <summary>
-        /// Get ingredients names as string array.
+        /// Get ingredients names matching param as string array.
         /// </summary>
         /// <param name="name"></param>
         /// <returns>string[]</returns>
-        [Route("names")]
+        [Route("names/{name}")]
         [HttpGet]
         public async Task<ActionResult<string[]>> GetIngredientNames(string name)
         {
             var names = await _ingredientRepository.GetIngredientNames(name);
+            if (names == null)
+            {
+                return NotFound();
+            }
+            return names;
+        }
+        
+        /// <summary>
+        /// Get all ingredients names as string array.
+        /// </summary>
+        /// <returns>string[]</returns>
+        [Route("names")]
+        [HttpGet]
+        public async Task<ActionResult<string[]>> GetIngredientNames()
+        {
+            var names = await _ingredientRepository.GetAllNames();
             if (names == null)
             {
                 return NotFound();
