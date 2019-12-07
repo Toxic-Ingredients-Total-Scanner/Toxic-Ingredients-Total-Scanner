@@ -34,6 +34,7 @@ public class editProduct extends AppCompatActivity {
     EditText ingredientsEditText;
     ListView list;
     Button sendBtn;
+    Button confirmIng;
     String json;
 
     public Ingredient findIngredientByName(String name) {
@@ -57,6 +58,7 @@ public class editProduct extends AppCompatActivity {
         productNameEditText = findViewById(R.id.productName);
         ingredientsEditText = findViewById(R.id.ingredients);
         sendBtn = findViewById(R.id.sendBtn);
+        confirmIng = findViewById(R.id.confirmIng);
         list = findViewById(R.id.listview);
 
 
@@ -73,6 +75,8 @@ public class editProduct extends AppCompatActivity {
             ingStrings.add(i.getPolishName());
             //System.out.println(i.getPolishName());
         }
+
+
 
         final ArrayAdapter adapter = new ArrayAdapter<String>(
                 this, R.layout.list_item_edit, R.id.ingName, ingStrings
@@ -95,26 +99,31 @@ public class editProduct extends AppCompatActivity {
 
         });
 
+        confirmIng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ingStrings.add(ingredientsEditText.getText().toString());
+                ingredientsEditText.setText("");
+                adapter.notifyDataSetChanged();
+                System.out.println(ingStrings);
+            }
+        });
+
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Product editedProduct = new Product();
-                ArrayList<Ingredient> editedIngredients = new ArrayList<>();
+                ArrayList<Ingredient> ingredientsList = new ArrayList<>();
 
-                String field = ingredientsEditText.getText().toString();
-                List<String> ingredientsArr = Arrays.asList(field.split("\\s*,\\s*"));
-
-                for (String item : ingredientsArr){
+                for (String item : ingStrings){
                     ingList.add(new Ingredient(item));
+                    ingredientsList.add(new Ingredient(item));
                 }
 
-                for(Ingredient i : ingList){
-                    editedIngredients.add(i);
-                }
 
                 editedProduct.setBrand(brandEditText.getText().toString());
                 editedProduct.setProductName(productNameEditText.getText().toString());
-                editedProduct.setIngredients(editedIngredients);
+                editedProduct.setIngredients(ingredientsList);
                 editedProduct.setId(prod.getId());
                 editedProduct.setGtin(prod.getGtin());
 
@@ -124,6 +133,8 @@ public class editProduct extends AppCompatActivity {
                     e.printStackTrace();
                     json = "JsonProcessingException";
                 }
+
+                System.out.println(json);
 
                 HttpPutRequest putRequest = new HttpPutRequest();
                 try {
