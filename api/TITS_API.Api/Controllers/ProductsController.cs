@@ -54,13 +54,13 @@ namespace TITS_API.Api.Controllers
         }
 
         /// <summary>
-        /// Get products names as string array.
+        /// Get products names with eans(gtin) as array.
         /// </summary>
         /// <param name="phrase"></param>
         /// <returns>Product</returns>
         [Route("names")]
         [HttpGet]
-        public async Task<ActionResult<string[]>> GetProductNames(string phrase)
+        public async Task<ActionResult<List<ProductHint>>> GetProductNames(string phrase)
         {
             var names = await _productRepository.GetProductNames(phrase);
             if (names == null)
@@ -75,9 +75,15 @@ namespace TITS_API.Api.Controllers
         /// </summary>
         /// <param name="product"></param>
         /// <returns>Product</returns>
+        /// <response code="409">If product with specified ean(gtin) already exists in database.</response>
         [HttpPost]
         public async Task<ActionResult<Product>> Add(Product product)
         {
+            if (await _productRepository.GetByEan(product.Gtin) != null)
+            {
+                return Conflict();
+            }
+            
             product.ModifiedDate = DateTime.Now;
             var _product = await _productRepository.Add(product);
             if (_product == null)

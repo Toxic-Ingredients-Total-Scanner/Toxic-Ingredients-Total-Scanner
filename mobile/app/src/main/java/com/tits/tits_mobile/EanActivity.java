@@ -31,6 +31,7 @@ public class EanActivity extends AppCompatActivity {
     TextView description;
 
     Button showIngredients;
+    Button editItem;
     ImageView prodImg;
     String EAN = "";
     String pattern = "\\d{13}|\\d{8}";
@@ -50,6 +51,7 @@ public class EanActivity extends AppCompatActivity {
         description = findViewById(R.id.description);
         showIngredients = findViewById(R.id.showIngredients);
         prodImg = findViewById(R.id.img);
+        editItem = findViewById(R.id.editItem);
 
         EAN = getIntent().getStringExtra("EAN");
 
@@ -89,7 +91,7 @@ public class EanActivity extends AppCompatActivity {
                         builder1.setMessage("Product found, but no ingredients in our DB's, do you want add?")
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        startActivity(new Intent(EanActivity.this, productWithoutIndgredients.class));
+                                        startActivity(new Intent(EanActivity.this, productWithoutIndgredients.class).putExtra("prod", prod));
                                     }
                                 })
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -133,6 +135,13 @@ public class EanActivity extends AppCompatActivity {
                 Bundle extra = new Bundle();
                 extra.putSerializable("arr", ingList);
                 startActivity(new Intent(EanActivity.this, ingredientsList.class).putExtra("ingList", extra));
+            }
+        });
+
+        editItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EanActivity.this, editProduct.class).putExtra("prod", prod));
             }
         });
 

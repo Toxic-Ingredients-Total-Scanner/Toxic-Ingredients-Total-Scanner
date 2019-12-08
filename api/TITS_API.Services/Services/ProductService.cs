@@ -108,7 +108,7 @@ namespace TITS_API.Services.Services
 
                 for(int i = 0; i < product.Ingredients.Count; i++)
                 {
-                    var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
+                    var ing = await _ingredientService.GetOrAddIfNotExistsAndGet(product.Ingredients[i]);
 
                     if(ing != null)
                     {
@@ -143,7 +143,7 @@ namespace TITS_API.Services.Services
 
                     for (int i = 0; i < product.Ingredients.Count; i++)
                     {
-                        var ing = await _ingredientService.GetOrAddIfNotExists(product.Ingredients[i]);
+                        var ing = await _ingredientService.GetOrAddIfNotExistsAndGet(product.Ingredients[i]);
 
                         if (ing != null)
                         {

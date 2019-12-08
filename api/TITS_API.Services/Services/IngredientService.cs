@@ -58,7 +58,31 @@ namespace TITS_API.Services.Services
         }
 
 
-        public async Task<Ingredient> GetOrAddIfNotExists(Ingredient ingredient)
+        public async Task<List<IngredientHazardStatement>> UpdateRelationsWithHazardStatements(Ingredient ingredient)
+        {
+            var oldRelations = await _ihsRepository.GetRelations(ingredient.Id);
+
+            foreach(var ihs in oldRelations)
+            {
+                await _ihsRepository.Delete(ihs.Id);
+            }
+
+            List<IngredientHazardStatement> newRelations = new List<IngredientHazardStatement>();
+
+            foreach (var statement in ingredient.HazardStatements)
+            {
+                newRelations.Add(await _ihsRepository.Add(new IngredientHazardStatement
+                {
+                    IngredientId = ingredient.Id,
+                    HazardStatementId = statement.Id
+                }));
+            }
+
+            return newRelations;
+        }
+
+
+        public async Task<Ingredient> GetOrAddIfNotExistsAndGet(Ingredient ingredient)
         {
             if (ingredient.PolishName == null) return null;
 

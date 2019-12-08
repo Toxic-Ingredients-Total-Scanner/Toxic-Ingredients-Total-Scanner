@@ -56,15 +56,31 @@ namespace TITS_API.Api.Controllers
         }
 
         /// <summary>
-        /// Get ingredients names as string array.
+        /// Get ingredients names matching param as string array.
         /// </summary>
         /// <param name="name"></param>
         /// <returns>string[]</returns>
-        [Route("names")]
+        [Route("names/{name}")]
         [HttpGet]
         public async Task<ActionResult<string[]>> GetIngredientNames(string name)
         {
             var names = await _ingredientRepository.GetIngredientNames(name);
+            if (names == null)
+            {
+                return NotFound();
+            }
+            return names;
+        }
+        
+        /// <summary>
+        /// Get all ingredients names as string array.
+        /// </summary>
+        /// <returns>string[]</returns>
+        [Route("names")]
+        [HttpGet]
+        public async Task<ActionResult<string[]>> GetIngredientNames()
+        {
+            var names = await _ingredientRepository.GetAllNames();
             if (names == null)
             {
                 return NotFound();
@@ -77,9 +93,15 @@ namespace TITS_API.Api.Controllers
         /// </summary>
         /// <param name="ingredient"></param>
         /// <returns>Ingredient</returns>
+        /// <response code="409">If ingredient with specified polish name already exists in database.</response>
         [HttpPost]
         public async Task<ActionResult<Ingredient>> Add(Ingredient ingredient)
         {
+            if (_ingredientRepository.GetByName(ingredient.PolishName) != null)
+            {
+                return Conflict();
+            }
+
             var _ingredient = await _ingredientRepository.Add(ingredient);
             if (_ingredient == null)
             {
@@ -140,6 +162,27 @@ namespace TITS_API.Api.Controllers
             ing.HazardStatements = ingredient.HazardStatements;
 
             return ing;
+        }
+
+        /// <summary>
+        /// Scan again specified ingredient in PubChem and update info in database.
+        /// </summary>
+        /// <param name="ingredient"></param>
+        /// <returns>Ingredient</returns>
+        [Route("autocomplete")]
+        [HttpPut]
+        public async Task<ActionResult<Ingredient>> UpdateAutocompletedIngredient(Ingredient ingredient)
+        {
+            var ing = await _pubChemService.AutoComplete(ingredient);
+            if (ing == null)
+            {
+                return NotFound();
+            }
+            await _ingredientService.UpdateRelationsWithHazardStatements(ingredient);
+            var i = await _ingredientRepository.Update(ing);
+            i.HazardStatements = ingredient.HazardStatements;
+
+            return i;
         }
     }
 }

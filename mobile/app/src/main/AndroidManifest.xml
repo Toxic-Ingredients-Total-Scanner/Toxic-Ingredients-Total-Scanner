@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ingredientDetails"></activity>
+        <activity android:name=".editProduct"></activity>
+        <activity android:name=".ingredientDetails" />
         <activity android:name=".ingredientsList" />
         <activity android:name=".productWithoutIndgredients" />
         <activity android:name=".MainActivity">
