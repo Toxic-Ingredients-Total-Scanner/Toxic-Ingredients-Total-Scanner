@@ -5,9 +5,9 @@
     controller: productViewController
   });
 
-  productViewController.$inject = ['productsService', '$routeParams', '$route'];
+  productViewController.$inject = ['productsService', '$routeParams'];
 
-  function productViewController(productsService, $routeParams, $route) {
+  function productViewController(productsService, $routeParams) {
     var $ctrl = this;
 
     $ctrl.ean = $routeParams.ean;

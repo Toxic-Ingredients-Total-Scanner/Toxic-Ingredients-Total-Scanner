@@ -1,4 +1,4 @@
 (function(angular) {
   'use strict';
-  angular.module('toxicIngredientsTotalScanner.products', ['ngResource', 'ui.router']);
+  angular.module('toxicIngredientsTotalScanner.products', ['ngResource', 'ngRoute']);
 })(window.angular);

@@ -2,17 +2,22 @@
   'use strict';
   angular.module('toxicIngredientsTotalScanner').config(productsConfig);
 
-  productsConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+  productsConfig.$inject = ['$locationProvider', '$routeProvider'];
 
-  function productsConfig($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/');
+  function productsConfig($locationProvider, $routeProvider) {
+      $locationProvider.html5Mode(true);
+      $locationProvider.hashPrefix('');
 
-    $stateProvider
-      .state('productViewState', {
-        url: '/product/{ean:[0-9]*}',
-        template: '<product-view></product-view>'
-      });
-
+      $routeProvider
+          .when("/product/:ean", {
+              template: "<product-view></product-view>"
+              // controller: "productViewController"
+          })
+      $routeProvider.otherwise({redirectTo:'/'});
 
   }
+
+    angular.module('toxicIngredientsTotalScanner').controller("Ctrl", function($scope, $routeParams) {
+        $scope.param = $routeParams.param;
+    });
 })(window.angular);

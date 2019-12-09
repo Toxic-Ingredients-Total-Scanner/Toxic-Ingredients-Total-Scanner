@@ -21,15 +21,17 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="lib/angular/angular.js"></script>
   <script src="lib/angular-route/angular-route.js"></script>
+  <script src="lib/angular-resource/angular-resource.js"></script>
   <script src="app.js"></script>
+  <script src="products/products.service.js"></script>
+  <script src="products/products.config.js"></script>
+  <script src="products/products.module.js"></script>
   <script src="products/search-input/search-input.component.js"></script>
   <script src="products/search-hints/search-hints.component.js"></script>
   <script src="navigation-bar/navigation-bar.js"></script>
-  <script src="products/products.service.js"></script>
-  <script src="products/products.config.js"></script>
   <script src="products/product-view/product-view.component.js"></script>
-  <script src="products/products.module.js"></script>
   <navigation-bar></navigation-bar>
+  <div ng-view></div>
   <search-input></search-input>
   <div style="height: 1000px; width: 100%; background-color: #c0c0c0;"></div>
 </body>

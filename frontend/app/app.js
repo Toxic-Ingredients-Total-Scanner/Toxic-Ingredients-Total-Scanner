@@ -1,8 +1,5 @@
 (function(angular) {
   'use strict';
-  angular.module('toxicIngredientsTotalScanner', [
-    'ngResource',
-    'ui.router',
-    'toxicIngredientsTotalScanner.products'
-  ]);
+  angular.module('toxicIngredientsTotalScanner', ['ngRoute']
+  );
 })(window.angular);
