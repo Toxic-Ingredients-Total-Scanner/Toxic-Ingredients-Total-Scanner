@@ -1,3 +1,4 @@
 <div>
-    <h1>SIEMANO KOLANO {{$ctrl.ean}}</h1>
+    <h1 ng-click="$ctrl.getProductByEan($ctrl.ean)">SIEMANO KOLANO {{$ctrl.ean}}</h1>
+    <pre>{{$ctrl.product}}</pre>
 </div>

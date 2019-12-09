@@ -11,5 +11,16 @@
     var $ctrl = this;
 
     $ctrl.ean = $routeParams.ean;
+    $ctrl.product = {};
+
+    $ctrl.getProductByEan = getProductByEan;
+
+    function getProductByEan() {
+      productsService.getFullProductInfoByEan($ctrl.ean).then(
+        function(response) {
+          $ctrl.product = response.data;
+        }
+      )
+    }
   }
 })(window.angular);

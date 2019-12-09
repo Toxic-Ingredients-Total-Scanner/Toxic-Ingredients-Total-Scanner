@@ -8,14 +8,23 @@
     var self = this;
 
     self.searchFor = searchFor;
+    self.getFullProductInfoByEan = getFullProductInfoByEan;
 
-    //TODO handle returned promise object
+
     function searchFor(searching) {
       return $http.get('/api/Products/names?phrase=' + searching)
         .then(function(response) {
           return response;
       }, function errorCallback(response) {
       });
+    }
+
+    function getFullProductInfoByEan(eanCode) {
+      return $http.get('/api/Products/fullRequest?ean=' + eanCode)
+        .then(function(response) {
+          return response;
+        }, function errorCallback(response) {
+        });
     }
   }
 })(window.angular);

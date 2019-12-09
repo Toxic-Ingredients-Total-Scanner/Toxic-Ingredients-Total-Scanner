@@ -11,13 +11,8 @@
       $routeProvider
           .when("/product/:ean", {
               template: "<product-view></product-view>"
-              // controller: "productViewController"
           })
       $routeProvider.otherwise({redirectTo:'/'});
 
   }
-
-    angular.module('toxicIngredientsTotalScanner').controller("Ctrl", function($scope, $routeParams) {
-        $scope.param = $routeParams.param;
-    });
 })(window.angular);
