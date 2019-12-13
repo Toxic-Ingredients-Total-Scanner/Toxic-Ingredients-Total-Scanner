@@ -7,6 +7,8 @@ var concat = require('gulp-concat');
 var minify = require('gulp-minify-css');
 var merge = require('merge-stream');
 
+var historyApiFallback = require('connect-history-api-fallback');
+
 //tasks
 function style() {
   var lessStream = gulp.src('./app/**/*.less')
@@ -27,6 +29,7 @@ function watch() {
         //     baseDir: './app'
         // },
         port: 8000,
+        middleware: [ historyApiFallback() ],
         proxy: {
             target: 'localhost:8000', // original port
             ws: true // enables websockets

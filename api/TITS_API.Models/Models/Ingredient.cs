@@ -8,10 +8,8 @@ using TITS_API.Models.Interfaces;
 namespace TITS_API.Models.Models
 {
     [Table("Ingredients")]
-    public class Ingredient : IEntity
+    public class Ingredient : TrackedEntity
     {
-        [Key]
-        public int Id { get; set; }
         public int? PubChemCID { get; set; }
         public string PolishName { get; set; }
         public string EnglishName { get; set; }
@@ -24,5 +22,12 @@ namespace TITS_API.Models.Models
 
         [NotMapped]
         public List<HazardStatement> HazardStatements { get; set; }
+
+        public override string ToString()
+        {
+            return PubChemCID + ", " + PolishName + ", " + EnglishName + ", " + 
+                MolecularFormula + ", " + StructureImageUrl + ", " +
+                GHSClasificationRaportUrl + ", " + PubChemUrl + ", " + WikiUrl;
+        }
     }
 }
