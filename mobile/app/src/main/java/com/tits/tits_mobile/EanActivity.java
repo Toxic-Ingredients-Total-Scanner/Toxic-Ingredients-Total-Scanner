@@ -71,7 +71,7 @@ public class EanActivity extends AppCompatActivity {
                     builder.setMessage("Product not found, do you want to add new one?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    startActivity(new Intent(EanActivity.this, newProductForm.class).putExtra("EAN", EAN));
+                                    startActivity(new Intent(EanActivity.this, editProduct.class).putExtra("EAN", EAN));
                                 }
                             })
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -91,7 +91,7 @@ public class EanActivity extends AppCompatActivity {
                         builder1.setMessage("Product found, but no ingredients in our DB's, do you want add?")
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        startActivity(new Intent(EanActivity.this, productWithoutIndgredients.class).putExtra("prod", prod));
+                                        startActivity(new Intent(EanActivity.this, editProduct.class).putExtra("prod", prod));
                                     }
                                 })
                                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

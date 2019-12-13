@@ -16,6 +16,11 @@ public class Ingredient implements Serializable {
     String ghsClasificationRaportUrl = null;
     String pubChemUrl = null;
     String wikiUrl = null;
+
+    public ArrayList<HazardStatement> getHazardStatements() {
+        return hazardStatements;
+    }
+
     ArrayList<HazardStatement> hazardStatements;
 
     public Ingredient(){
