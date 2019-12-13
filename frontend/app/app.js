@@ -1,4 +1,5 @@
 (function(angular) {
   'use strict';
-  angular.module('toxicIngredientsTotalScanner', []);
+  angular.module('toxicIngredientsTotalScanner', ['ngRoute']
+  );
 })(window.angular);

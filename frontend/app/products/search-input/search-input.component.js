@@ -9,15 +9,15 @@
 
     function searchInputController(productsService) {
         var $ctrl = this;
-        $ctrl.search
-        $ctrl.hints;
+        $ctrl.search = "";
+        $ctrl.hints = [];
 
         $ctrl.searchFor = searchFor;
 
-        function searchFor(searching) {
-            productsService.searchFor(searching).then(
+        function searchFor() {
+            productsService.searchFor($ctrl.search).then(
               function(response) {
-                  $ctrl.hints = response;
+                  $ctrl.hints = response.data;
               }
             )
         }

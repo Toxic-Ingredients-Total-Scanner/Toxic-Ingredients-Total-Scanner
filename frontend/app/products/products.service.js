@@ -7,20 +7,24 @@
   function productsServiceController($http) {
     var self = this;
 
-    self.randomFunction = randomFunction;
     self.searchFor = searchFor;
+    self.getFullProductInfoByEan = getFullProductInfoByEan;
 
-    function randomFunction(param) {
-      console.log("productsService " + param);
-    }
 
-    //TODO handle returned promise object
     function searchFor(searching) {
       return $http.get('/api/Products/names?phrase=' + searching)
-        .then(function successCallback(response) {
-        return response.data;
+        .then(function(response) {
+          return response;
       }, function errorCallback(response) {
       });
+    }
+
+    function getFullProductInfoByEan(eanCode) {
+      return $http.get('/api/Products/fullRequest?ean=' + eanCode)
+        .then(function(response) {
+          return response;
+        }, function errorCallback(response) {
+        });
     }
   }
 })(window.angular);
