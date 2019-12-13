@@ -122,7 +122,6 @@ namespace TITS_API.Services.Services
                 }
             }
 
-            product.ModifiedDate = DateTime.Now;
             var p = await _productRepository.Update(product);
 
             p.Ingredients = ingredients;
@@ -152,7 +151,6 @@ namespace TITS_API.Services.Services
                     }
                 }
 
-                product.ModifiedDate = DateTime.Now;
                 Product p = await _productRepository.Add(product);
 
                 if (ingredients != null)
