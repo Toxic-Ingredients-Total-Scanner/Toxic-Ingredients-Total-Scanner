@@ -13,4 +13,8 @@
     function searchHintsController(productsService) {
         var $ctrl = this;
     }
+
+    function getProductFullData() {
+
+    }
 })(window.angular);

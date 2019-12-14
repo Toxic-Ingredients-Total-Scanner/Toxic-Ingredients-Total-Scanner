@@ -1,5 +1,23 @@
 body {
   font-family: "Catamaran";
+  color: #111111;
+}
+a {
+  color: #E73D1C;
+}
+.card {
+  background-color: #E4EBEF;
+  border-bottom: 3px solid #E73D1C;
+  border-radius: 25px;
+  padding: 20px;
+}
+
+#main-page-1 {
+  background-image: url("../img/woman1.jpg");
+  background-color: #E4EBEF;
+}
+#home-page-search-input-card {
+  margin: 100px 0px;
 }
 
 
@@ -18,12 +36,15 @@ div.search-hints {
   /* Firefox 3.5 - 3.6 */
   box-shadow: 1px 1px 3px 3px #ccc;
   border: solid 1px #ccc;
+  position: absolute;
+  display: block;
+  width: 100%;
+  z-index: 1000;
+  background-color: #E4EBEF;
 }
 
 .search-input {
   width: 100%;
-  padding: 100px;
-  margin: 50px 0px;
 }
 .search-input p {
   color: red;

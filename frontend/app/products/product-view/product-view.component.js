@@ -11,11 +11,11 @@
     var $ctrl = this;
 
     $ctrl.ean = $routeParams.ean;
-    $ctrl.product = {};
+    $ctrl.product = getProductsByEan();
 
-    $ctrl.getProductByEan = getProductByEan;
+    $ctrl.getProductsByEan = getProductsByEan;
 
-    function getProductByEan() {
+    function getProductsByEan() {
       productsService.getFullProductInfoByEan($ctrl.ean).then(
         function(response) {
           $ctrl.product = response.data;

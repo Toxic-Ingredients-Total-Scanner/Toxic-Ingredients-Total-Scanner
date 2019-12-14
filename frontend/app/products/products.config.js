@@ -12,6 +12,9 @@
           .when("/product/:ean", {
               template: "<product-view></product-view>"
           })
+          .when("/", {
+            template: "<home-page></home-page>"
+          });
       $routeProvider.otherwise({redirectTo:'/'});
 
   }
