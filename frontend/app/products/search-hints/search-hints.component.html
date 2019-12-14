@@ -1,5 +1,5 @@
-<div class="search-hints">
-    <div class="hint" ng-if="$ctrl.hints.length > 0" ng-repeat="hint in $ctrl.hints|limitTo:5">
+<div class="search-hints" ng-if="$ctrl.hints.length > 0">
+    <div class="hint" ng-repeat="hint in $ctrl.hints|limitTo:5">
         <a href="/product/{{hint.gtin}}">{{hint.productName}}</a>
     </div>
 </div>

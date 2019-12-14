@@ -5,42 +5,76 @@ body {
 a {
   color: #E73D1C;
 }
+a:hover {
+  color: #9A1701;
+}
+p {
+  text-align: justify;
+}
 .card {
-  background-color: #E4EBEF;
+  background-color: #fff;
   border-bottom: 3px solid #E73D1C;
-  border-radius: 25px;
-  padding: 20px;
+  border-radius: 7px;
+  padding: 30px;
+  box-shadow: 0 5px 10px #C6C6C6;
+}
+.card h2 {
+  text-align: center;
+}
+input:focus {
+  outline: none !important;
+  border: 1px solid #E73D1C;
+}
+.no-padding {
+  margin: 0px;
+  padding: 0px;
 }
 
 #main-page-1 {
-  background-image: url("../img/woman1.jpg");
-  background-color: #E4EBEF;
+  background: url("../img/woman1.jpg") no-repeat center;
+  padding: 0 20%;
+}
+.text-and-pic {
+  padding: 70px 0px;
 }
 #home-page-search-input-card {
-  margin: 100px 0px;
+  margin: 200px 0px;
+}
+#img-healthcare {
+  background: url("../img/healthcare.jpg") no-repeat center top;
+  background-size: cover;
+}
+.inner-text {
+  padding: 50px 20px;
 }
 
-
-div.hint {
-  padding: 10px;
-  width: 100%;
-  border-bottom: 1px solid #ccc;
+.main-desc p {
+  border-bottom: solid 1px #ccc;
 }
-div.hint:hover {
-  background-color: #999999;
+.main-desc .desc-label {
+  font-weight: bold;
 }
-div.search-hints {
-  -webkit-box-shadow: 1px 1px 3px 3px #ccc;
-  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow: 1px 1px 3px 3px #ccc;
-  /* Firefox 3.5 - 3.6 */
-  box-shadow: 1px 1px 3px 3px #ccc;
-  border: solid 1px #ccc;
-  position: absolute;
-  display: block;
+.ingredient-header {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
   width: 100%;
-  z-index: 1000;
-  background-color: #E4EBEF;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+}
+.active-ingredient,
+.ingredient-header {
+  background-color: #ccc;
+}
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: white;
+  overflow: hidden;
 }
 
 .search-input {
@@ -52,4 +86,22 @@ div.search-hints {
 }
 .search-input input.product-search {
   width: 100%;
+}
+
+div.hint {
+  padding: 10px;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+div.hint:hover {
+  background-color: #C6C6C6;
+}
+div.search-hints {
+  box-shadow: 0 5px 10px #C6C6C6;
+  border: solid 1px #ccc;
+  position: absolute;
+  display: block;
+  width: 100%;
+  z-index: 1000;
+  background-color: #fff;
 }

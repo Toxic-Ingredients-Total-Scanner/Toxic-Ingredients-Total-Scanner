@@ -1,4 +1,31 @@
-<div>
-    <h1 ng-click="$ctrl.getProductByEan($ctrl.ean)">SIEMANO KOLANO {{$ctrl.ean}}</h1>
-    <p ng-bind="$ctrl.product"></p>
+<div class="container">
+    <div class="row">
+        <h1>{{$ctrl.product.productName}}</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6 card main-desc">
+            <p><span class="desc-label">Product name:</span> {{$ctrl.product.productName}}</p>
+            <p><span class="desc-label">Ean code:</span> {{$ctrl.product.gtin}}</p>
+            <p><span class="desc-label">Brand:</span> {{$ctrl.product.brand}}</p>
+            <p><span class="desc-label">Brand owner:</span> {{$ctrl.product.brandOwner}}</p>
+            <p><span class="desc-label">Manufacturer:</span> {{$ctrl.product.manufacturer}}</p>
+            <p><span class="desc-label">Country of origin:</span> {{$ctrl.product.countryOfOrigin}}</p>
+            <p><span class="desc-label">Is legal:</span> {{$ctrl.product.isLegal}}</p>
+            <p><span class="desc-label">Description:</span> {{$ctrl.product.description}}</p>
+        </div>
+        <div class="col-md-6 card">
+            <img style="width:100%" src="{{$ctrl.product.productImage}}"/>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row card">
+        <div class="row">
+            <div class="col-12"><h2>Ingredients</h2></div>
+        </div>
+        <div class="row" ng-repeat="ingredient in $ctrl.product.ingredients">
+            <div class="col-md-12"><button ng-click="$ctrl.toggleIngredient(ingredient)">{{ingredient.englishName}}</button></div>
+        </div>
+    </div>
 </div>

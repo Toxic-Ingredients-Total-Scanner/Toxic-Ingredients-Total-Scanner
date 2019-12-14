@@ -12,6 +12,7 @@
 
     $ctrl.ean = $routeParams.ean;
     $ctrl.product = getProductsByEan();
+    $ctrl.toggleIngredient = toggleIngredient;
 
     $ctrl.getProductsByEan = getProductsByEan;
 
@@ -21,6 +22,12 @@
           $ctrl.product = response.data;
         }
       )
+    }
+
+    function toggleIngredient(ingredient){
+      ingredient.isOpen = ingredient.isOpen || false;
+      ingredient.isOpen = ingredient.isOpen ? false : true ;
+      console.log("Now " + ingredient.englishName + " isOpen: " + ingredient.isOpen);
     }
   }
 })(window.angular);
