@@ -57,6 +57,8 @@ namespace TITS_API.Services.Services
                     ingredient.GHSClasificationRaportUrl = ingredient.PubChemUrl + "#datasheet=LCSS&section=GHS-Classification&fullscreen=true";
                 }
 
+                ingredient.UpdatedBy = "PubChem";
+
                 return ingredient;
             }
             catch (Exception)

@@ -9,10 +9,8 @@ using TITS_API.Models.Interfaces;
 namespace TITS_API.Models.Models
 {
     [Table("Products")]
-    public class Product : IEntity
+    public class Product : TrackedEntity
     {
-        [Key]
-        public int Id { get; set; }
         public string Gtin { get; set; }
         public string ProductName { get; set; }
         public string Brand { get; set; }
@@ -24,10 +22,17 @@ namespace TITS_API.Models.Models
         public string Base64Image { get; set; }
         public string Url { get; set; }
         public bool? IsLegal { get; set; }
-        public DateTime ModifiedDate { get; set; }
 
 
         [NotMapped]
         public List<Ingredient> Ingredients { get; set; }
+
+
+        public override string ToString()
+        {
+            return Gtin + ", " + ProductName + ", " + Brand + ", " + BrandOwner + ", " + 
+                Manufacturer + ", " + CountryOfOrigin + ", " + Description + ", " + 
+                ProductImage + ", " + Base64Image + ", " + Url + ", " + IsLegal;
+        }
     }
 }

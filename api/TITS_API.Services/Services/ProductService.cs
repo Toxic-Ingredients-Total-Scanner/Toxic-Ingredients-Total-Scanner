@@ -12,6 +12,7 @@ using TITS_API.Models.Models;
 using TITS_API.Repositories.Repositories;
 using System.Linq;
 using TITS_API.Architecture;
+using System.Text.RegularExpressions;
 
 namespace TITS_API.Services.Services
 {
@@ -122,7 +123,6 @@ namespace TITS_API.Services.Services
                 }
             }
 
-            product.ModifiedDate = DateTime.Now;
             var p = await _productRepository.Update(product);
 
             p.Ingredients = ingredients;
@@ -152,7 +152,6 @@ namespace TITS_API.Services.Services
                     }
                 }
 
-                product.ModifiedDate = DateTime.Now;
                 Product p = await _productRepository.Add(product);
 
                 if (ingredients != null)
@@ -196,7 +195,19 @@ namespace TITS_API.Services.Services
                 {
                     return null;
                 }
-                else return product; 
+                else
+                {
+                    product.UpdatedBy = "PwSAPI";
+
+                    Regex regex = new Regex(@"(0{5}|0{6})\d{8}");
+                    if (product.Gtin.Length >= 13 && regex.IsMatch(product.Gtin))
+                    {
+                        int start = product.Gtin.IndexOfAny(new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' });
+                        product.Gtin = product.Gtin.Substring(start, 8);
+                    }
+
+                    return product;
+                } 
             }
             catch(Exception)
             {

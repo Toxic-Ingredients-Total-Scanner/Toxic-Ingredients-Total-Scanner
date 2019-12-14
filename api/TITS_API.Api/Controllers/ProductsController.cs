@@ -84,7 +84,6 @@ namespace TITS_API.Api.Controllers
                 return Conflict();
             }
             
-            product.ModifiedDate = DateTime.Now;
             var _product = await _productRepository.Add(product);
             if (_product == null)
             {
@@ -101,7 +100,6 @@ namespace TITS_API.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<Product>> Update(Product product)
         {
-            product.ModifiedDate = DateTime.Now;
             var _product = await _productRepository.Update(product);
             if (_product == null)
             {
