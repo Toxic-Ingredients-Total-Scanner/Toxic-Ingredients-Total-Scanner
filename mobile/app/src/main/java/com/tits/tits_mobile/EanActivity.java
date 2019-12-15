@@ -68,15 +68,15 @@ public class EanActivity extends AppCompatActivity {
 
                 if(result.equals("not found")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(EanActivity.this);
-                    builder.setMessage("Product not found, do you want to add new one?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    builder.setMessage("Nie znaleziono produktu, chcesz dodać nowy?")
+                            .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     startActivity(new Intent(EanActivity.this, editProduct.class).putExtra("EAN", EAN));
                                 }
                             })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-
+                                    startActivity(new Intent(EanActivity.this, MainActivity.class));
                                 }
                             });
                     // Create the AlertDialog object and return it
@@ -88,13 +88,13 @@ public class EanActivity extends AppCompatActivity {
                     prod = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).readValue(result, Product.class);
                     if(prod.getIngredients() == null) {
                         AlertDialog.Builder builder1 = new AlertDialog.Builder(EanActivity.this);
-                        builder1.setMessage("Product found, but no ingredients in our DB's, do you want add?")
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        builder1.setMessage("Znaleziono produkt bez składników, czy chcesz je dodać?")
+                                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         startActivity(new Intent(EanActivity.this, editProduct.class).putExtra("prod", prod));
                                     }
                                 })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         Picasso.get().load(prod.getProductImage()).into(prodImg);
                                         brand.setText(prod.getBrand());
@@ -102,11 +102,11 @@ public class EanActivity extends AppCompatActivity {
                                         description.setText(prod.getDescription());
                                     }
                                 });
-                        // Create the AlertDialog object and return it
+
                         AlertDialog alertDialog1 = builder1.create();
                         alertDialog1.show();
                     } else {
-                        Picasso.get().load(prod.getProductImage()).into(prodImg);
+                        Picasso.get().load(prod.getProductImage()).error(R.drawable.nophoto).into(prodImg);
                         brand.setText(prod.getBrand());
                         productName.setText(prod.getProductName());
                         description.setText(prod.getDescription());
@@ -115,7 +115,7 @@ public class EanActivity extends AppCompatActivity {
 
                     }
                 }
-                //eanTxtView.setText(prod.getProductName());
+
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -126,7 +126,7 @@ public class EanActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else {
-            brand.setText("Invalid EAN");
+            brand.setText("Nieprawidłowy kod EAN");
         }
 
         showIngredients.setOnClickListener(new View.OnClickListener() {

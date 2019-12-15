@@ -26,7 +26,6 @@
         <activity android:name=".editProduct"></activity>
         <activity android:name=".ingredientDetails" />
         <activity android:name=".ingredientsList" />
-        <activity android:name=".productWithoutIndgredients" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,10 +34,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".ScanBarcodeActivity" />
-        <activity android:name=".newProductForm" />
         <activity
             android:name=".EanActivity"
             android:windowSoftInputMode="adjustPan" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.tits.tits_mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -100,7 +101,6 @@ public class editProduct extends AppCompatActivity {
         if(ingList != null){
             for(Ingredient i : ingList){
                 ingStrings.add(i.getPolishName());
-                //System.out.println(i.getPolishName());
             }
         }
 
@@ -188,6 +188,8 @@ public class editProduct extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+
+                startActivity(new Intent(editProduct.this, MainActivity.class));
 
             }
         });

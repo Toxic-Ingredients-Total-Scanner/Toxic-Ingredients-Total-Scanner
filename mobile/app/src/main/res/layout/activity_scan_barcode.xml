@@ -23,8 +23,9 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="565dp"
-        android:text="No Barcode Detected"
-        android:textColor="@android:color/white"
+        android:text="Nie wykryto kodu kreskowego"
+        android:fontFamily="@font/catamaran"
+        android:textColor="@color/textBlack"
         android:textSize="20sp" />
 
 
