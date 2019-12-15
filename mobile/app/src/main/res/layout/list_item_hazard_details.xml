@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/ingName"
+        android:id="@+id/hazardDetails"
         android:layout_width="0dp"
         android:textSize="20dp"
         android:layout_height="wrap_content"
@@ -15,15 +15,4 @@
         android:fontFamily="@font/catamaran"
         android:textColor="@color/textBlack"/>
 
-    <ImageView
-        android:id="@+id/deleteImg"
-        android:clickable="true"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_toRightOf="@id/ingName"
-        android:src="@drawable/delete_icon"/>
 </LinearLayout>

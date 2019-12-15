@@ -71,6 +71,8 @@ public class ingredientsList extends AppCompatActivity {
         Bundle extra = getIntent().getBundleExtra("ingList");
         ingList = (ArrayList<Ingredient>) extra.getSerializable("arr");
 
+        for(Ingredient ing : ingList) System.out.println("Got from previous activity: " + ing.getPolishName());
+
         ArrayList<IngredientEntry> ingEntryList = new ArrayList<>();
 
         for(Ingredient i : ingList){
@@ -79,9 +81,11 @@ public class ingredientsList extends AppCompatActivity {
             if(i.getHazardStatements() != null) {
                 for (HazardStatement hs : i.getHazardStatements()) {
                     if (hs.getCode().equals("X404")) {
-                        ingEntryList.add(new IngredientEntry(i.getPolishName(), "kciuk"));
+                        ingEntryList.add(new IngredientEntry(i.getPolishName(), "plus"));
+                        break;
                     } else {
-                        ingEntryList.add(new IngredientEntry(i.getPolishName(), "skull"));
+                        ingEntryList.add(new IngredientEntry(i.getPolishName(), "minus"));
+                        break;
                     }
                 }
             }
@@ -96,64 +100,6 @@ public class ingredientsList extends AppCompatActivity {
         list.setAdapter(ingAdapter);
 
 
-
-
-//        ArrayAdapter adapter = new ArrayAdapter(
-//                this,R.layout.list_item ,R.id.itemName, ingStrings
-//        );
-
-
-
-
-
-//        adapter = new ArrayAdapter<String>(
-//                this, R.layout.list_item, R.id.ingName, ingStrings
-//        );
-//
-//
-//
-//        list.setAdapter(adapter);
-//
-//
-//        for(int i=0; i<list.getCount(); i++){
-//            list.getItemAtPosition(1);
-//            View v = list.getAdapter().getView(i, null, null);
-//            hazardImg = (ImageView) v.findViewById(R.id.hazardImg);
-//            hazardText = (TextView) v.findViewById(R.id.ingName);
-//            //System.out.println(hazardText.getText().toString());
-//            Ingredient temp = findIng(hazardText.getText().toString());
-//            System.out.println(temp.getPolishName());
-//            hazardImg.setImageResource(R.drawable.kciuk);
-//            System.out.println(hazardImg.getMaxHeight());
-//            //System.out.println(temp.getHazardStatements().);
-//
-////            ArrayList<HazardStatement> hzrd = temp.getHazardStatements();
-////            for(HazardStatement hz : hzrd){
-////                System.out.println(hz.getCode());
-////            }
-//
-//            if(temp.getHazardStatements() != null) {
-//                for(HazardStatement hs : temp.getHazardStatements()){
-//                    if(hs.getCode().equals("X404")){
-//                        hazardImg.setImageResource(R.drawable.kciuk);
-//                        //hazardImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.kciuk));
-//                        System.out.println("found x404");
-//
-//
-//                        list.invalidateViews();
-////                        v.refreshDrawableState();
-////                        getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
-//
-//
-//
-//                    } else hazardImg.setImageResource(R.drawable.skull);
-//                }
-//            }
-//            adapter.notifyDataSetChanged();
-//            list.setAdapter(adapter);
-//
-//
-//        }
 
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener(){

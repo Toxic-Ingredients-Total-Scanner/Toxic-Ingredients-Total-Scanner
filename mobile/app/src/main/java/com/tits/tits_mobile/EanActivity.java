@@ -106,7 +106,7 @@ public class EanActivity extends AppCompatActivity {
                         AlertDialog alertDialog1 = builder1.create();
                         alertDialog1.show();
                     } else {
-                        Picasso.get().load(prod.getProductImage()).into(prodImg);
+                        Picasso.get().load(prod.getProductImage()).error(R.drawable.nophoto).into(prodImg);
                         brand.setText(prod.getBrand());
                         productName.setText(prod.getProductName());
                         description.setText(prod.getDescription());
@@ -115,7 +115,7 @@ public class EanActivity extends AppCompatActivity {
 
                     }
                 }
-                //eanTxtView.setText(prod.getProductName());
+
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {

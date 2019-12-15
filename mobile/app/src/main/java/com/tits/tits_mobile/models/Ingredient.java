@@ -48,5 +48,39 @@ public class Ingredient implements Serializable {
         this.englishName = englishName;
     }
 
+    public String getMolecularFormula() {
+        return molecularFormula;
+    }
 
+    public void setMolecularFormula(String molecularFormula) {
+        this.molecularFormula = molecularFormula;
+    }
+
+    public String getStrucutreImageUrl() {
+        return strucutreImageUrl;
+    }
+
+    public void setStrucutreImageUrl(String strucutreImageUrl) {
+        this.strucutreImageUrl = strucutreImageUrl;
+    }
+
+    public String getPubChemUrl() {
+        return pubChemUrl;
+    }
+
+    public void setPubChemUrl(String pubChemUrl) {
+        this.pubChemUrl = pubChemUrl;
+    }
+
+    public String getWikiUrl() {
+        return wikiUrl;
+    }
+
+    public void setWikiUrl(String wikiUrl) {
+        this.wikiUrl = wikiUrl;
+    }
+
+    public void setHazardStatements(ArrayList<HazardStatement> hazardStatements) {
+        this.hazardStatements = hazardStatements;
+    }
 }
