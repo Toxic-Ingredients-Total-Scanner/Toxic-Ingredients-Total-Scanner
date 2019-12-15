@@ -107,7 +107,6 @@ public class ingredientDetails extends AppCompatActivity {
 
                 hazardStatementsList.setAdapter(adapter);
 
-                //ingDetails.setText(result);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

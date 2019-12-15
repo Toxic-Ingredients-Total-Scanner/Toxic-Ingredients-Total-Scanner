@@ -101,7 +101,6 @@ public class editProduct extends AppCompatActivity {
         if(ingList != null){
             for(Ingredient i : ingList){
                 ingStrings.add(i.getPolishName());
-                //System.out.println(i.getPolishName());
             }
         }
 

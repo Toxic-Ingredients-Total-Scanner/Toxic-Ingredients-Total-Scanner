@@ -73,7 +73,6 @@
         android:ems="10"
         android:hint="EAN"
         android:inputType="textPersonName"
-        android:text="4009900018784"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

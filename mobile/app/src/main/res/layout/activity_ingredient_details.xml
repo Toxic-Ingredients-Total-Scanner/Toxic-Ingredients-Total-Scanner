@@ -58,6 +58,7 @@
         android:fontFamily="@font/catamaran"
         android:textColor="@color/textBlack"
         android:autoLink="web"
+        android:textColorLink="@color/colorAccent"
         android:layout_marginTop="10dp"/>
 
     <TextView
@@ -68,6 +69,7 @@
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/catamaran"
         android:textColor="@color/textBlack"
+        android:textColorLink="@color/colorAccent"
         android:autoLink="web"
         android:layout_marginTop="10dp"/>
 

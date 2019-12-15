@@ -1,26 +1,19 @@
 package com.tits.tits_mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
+
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tits.tits_mobile.models.HazardStatement;
 import com.tits.tits_mobile.models.Ingredient;
-import com.tits.tits_mobile.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +24,7 @@ public class ingredientsList extends AppCompatActivity {
     List<String> ingStrings;
     ListView list;
     String json;
-    ImageView hazardImg;
-    TextView hazardText;
-    ArrayAdapter adapter;
     IngredientAdapter ingAdapter;
-    boolean alreadyRecreated = false;
 
     public Ingredient findIngredientByName(String name) {
         for(Ingredient ingredientObj : ingList) {
@@ -46,14 +35,6 @@ public class ingredientsList extends AppCompatActivity {
         return null;
     }
 
-    public Ingredient findIng(String name){
-        for(Ingredient ingob : ingList){
-            if(ingob.getPolishName().equals(name)){
-                return ingob;
-            }
-        }
-        return null;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,15 +44,13 @@ public class ingredientsList extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         list = findViewById(R.id.listvieww);
-        //hazardImg = findViewById(R.id.hazardImg);
-        //ingList = new ArrayList<>();
+
         ingStrings = new ArrayList<>();
-        //View v;
+
 
         Bundle extra = getIntent().getBundleExtra("ingList");
         ingList = (ArrayList<Ingredient>) extra.getSerializable("arr");
 
-        for(Ingredient ing : ingList) System.out.println("Got from previous activity: " + ing.getPolishName());
 
         ArrayList<IngredientEntry> ingEntryList = new ArrayList<>();
 
@@ -91,10 +70,6 @@ public class ingredientsList extends AppCompatActivity {
             }
         }
 
-        for(IngredientEntry ingEnt : ingEntryList){
-            System.out.println(ingEnt.getmIngredientName());
-            //System.out.println(ingEnt.getmIngredientHazardImage());
-        }
 
         ingAdapter = new IngredientAdapter(this, ingEntryList);
         list.setAdapter(ingAdapter);
