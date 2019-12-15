@@ -9,6 +9,7 @@
 
     self.searchFor = searchFor;
     self.getFullProductInfoByEan = getFullProductInfoByEan;
+    self.getProductByEan = getProductByEan;
 
 
     function searchFor(searching) {
@@ -27,5 +28,14 @@
           return null;
         });
     }
+    function getProductByEan(eanCode) {
+      return $http.get('/api/Products?ean=' + eanCode)
+        .then(function(response) {
+          return response;
+        }, function errorCallback(response) {
+          return null;
+        });
+    }
+
   }
 })(window.angular);

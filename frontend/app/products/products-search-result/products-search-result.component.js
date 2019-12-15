@@ -5,11 +5,21 @@
         controller: productsSearchResultController
     });
 
-    productsSearchResultController.$inject = ['productsService', '$routeParams'];
+    productsSearchResultController.$inject = ['productsService', '$routeParams', '$location'];
 
-    function productsSearchResultController(productsService, $routeParams) {
+    function productsSearchResultController(productsService, $routeParams, $location) {
         var $ctrl = this;
-
         $ctrl.ean = $routeParams.ean;
+        $ctrl.product = getProductByEan();
+
+        function getProductByEan() {
+            productsService.getProductByEan($ctrl.ean).then(
+                function(response) {
+                    if(response) {
+                        $location.path(/product/ + response.data.gtin);
+                    }
+                }
+            )
+        }
     }
 })(window.angular);

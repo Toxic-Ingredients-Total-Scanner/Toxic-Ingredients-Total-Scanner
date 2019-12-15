@@ -114,6 +114,21 @@ input:focus {
   overflow: hidden;
 }
 
+.edit-desc input {
+  width: 100%;
+}
+.edit-desc .edit-desc-label {
+  font-weight: bold;
+  text-align: right;
+}
+
+.not-found {
+  height: 100%;
+  padding: 25% 0%;
+}
+.not-found h1 {
+  text-align: center;
+}
 
 div.hint {
   padding: 10px;

@@ -9,11 +9,20 @@
       $locationProvider.hashPrefix('');
 
       $routeProvider
+          .when("/", {
+              template: "<home-page></home-page>"
+          })
           .when("/product/:ean", {
               template: "<product-view></product-view>"
           })
-          .when("/", {
-            template: "<home-page></home-page>"
+          .when("/product-search/:ean", {
+              template: "<products-search-result></products-search-result>"
+          })
+          .when("/edit-product/:ean", {
+              template: "<edit-product></edit-product>"
+          })
+          .when("/add-new-product/", {
+              template: "<edit-product></edit-product>"
           });
       $routeProvider.otherwise({redirectTo:'/'});
 

@@ -5,13 +5,18 @@
         controller: searchInputController
     });
 
-    searchInputController.$inject = ['productsService'];
+    searchInputController.$inject = ['productsService', '$location'];
 
-    function searchInputController(productsService) {
+    function searchInputController(productsService, $location) {
         var $ctrl = this;
         $ctrl.searchInput = "";
         $ctrl.hints = [];
         $ctrl.search = search;
+        $ctrl.submit = submit;
+
+        function submit() {
+            $location.path(/product-search/ + $ctrl.searchInput);
+        }
 
         function search() {
             if($ctrl.searchInput.length < 1) $ctrl.hints = [];
