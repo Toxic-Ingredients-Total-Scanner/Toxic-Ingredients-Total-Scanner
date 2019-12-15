@@ -13,6 +13,8 @@
     $ctrl.ean = $routeParams.ean;
     $ctrl.product = getProductsByEan();
     $ctrl.toggleIngredient = toggleIngredient;
+    $ctrl.getLegalIcon = getLegalIcon;
+    $ctrl.getProductImage = getProductImage;
 
     $ctrl.getProductsByEan = getProductsByEan;
 
@@ -24,10 +26,18 @@
       )
     }
 
+    function getLegalIcon() {
+      return $ctrl.product.isLegal ? 'fa-check-square' : 'fa-times';
+    }
+
+    function getProductImage() {
+      try{ return $ctrl.product.productImage || '../img/no_image_placeholder.png'; }
+      catch (e) {return '../img/no_image_placeholder.png';}
+    }
+
     function toggleIngredient(ingredient){
       ingredient.isOpen = ingredient.isOpen || false;
-      ingredient.isOpen = ingredient.isOpen ? false : true ;
-      console.log("Now " + ingredient.englishName + " isOpen: " + ingredient.isOpen);
+      ingredient.isOpen = !ingredient.isOpen;
     }
   }
 })(window.angular);

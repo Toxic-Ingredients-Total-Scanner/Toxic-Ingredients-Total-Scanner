@@ -20,7 +20,6 @@
     }
 
     function getFullProductInfoByEan(eanCode) {
-      console.log("Run with " + eanCode);
       return $http.get('/api/Products/fullRequest?ean=' + eanCode)
         .then(function(response) {
           return response;
