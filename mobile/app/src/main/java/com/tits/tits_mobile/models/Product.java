@@ -19,7 +19,7 @@ public class Product implements Serializable {
     private String productImage;
     private String base64Image;
     private String url;
-    private String isLegal;
+    private Boolean isLegal;
     //private String modifiedDate;
     private ArrayList<Ingredient> ingredients;
 
@@ -124,14 +124,13 @@ public class Product implements Serializable {
         this.url = url;
     }
 
-    public String getIsLegal() {
+    public Boolean getLegal() {
         return isLegal;
     }
 
-    public void setIsLegal(String isLegal) {
-        this.isLegal = isLegal;
+    public void setLegal(Boolean legal) {
+        isLegal = legal;
     }
-
 
     @Override
     public String toString() {

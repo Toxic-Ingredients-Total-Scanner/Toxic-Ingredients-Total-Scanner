@@ -152,25 +152,35 @@ public class editProduct extends AppCompatActivity {
                     ingredientsList.add(new Ingredient(item));
                 }
 
+                if(prod!=null){
+                    prod.setBrand(brandEditText.getText().toString());
+                    prod.setProductName(productNameEditText.getText().toString());
+                    prod.setIngredients(ingredientsList);
+                } else {
+                    editedProduct.setBrand(brandEditText.getText().toString());
+                    editedProduct.setProductName(productNameEditText.getText().toString());
+                    editedProduct.setIngredients(ingredientsList);
+                }
 
-                editedProduct.setBrand(brandEditText.getText().toString());
-                editedProduct.setProductName(productNameEditText.getText().toString());
-                editedProduct.setIngredients(ingredientsList);
+
+
                 if(prod!=null) {
-                    editedProduct.setId(prod.getId());
-                    editedProduct.setGtin(prod.getGtin());
+                    prod.setId(prod.getId());
+                    prod.setGtin(prod.getGtin());
                 } else {
                     editedProduct.setGtin(EAN);
                 }
 
                 try {
-                    json = new ObjectMapper().writeValueAsString(editedProduct);
+                    if(prod!=null) json = new ObjectMapper().writeValueAsString(prod);
+                    else json = new ObjectMapper().writeValueAsString(editedProduct);
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                     json = "JsonProcessingException";
                 }
-
                 System.out.println(json);
+
+                //System.out.println(json);
 
                 if(prod!=null){
                     HttpPutRequest putRequest = new HttpPutRequest();
