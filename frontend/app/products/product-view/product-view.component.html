@@ -1,4 +1,58 @@
-<div>
-    <h1 ng-click="$ctrl.getProductByEan($ctrl.ean)">SIEMANO KOLANO {{$ctrl.ean}}</h1>
-    <pre>{{$ctrl.product}}</pre>
+<div class="container">
+    <div class="row">
+        <h1>{{$ctrl.product.productName}}</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6 card main-desc">
+            <p ng-if="$ctrl.product.productName"><span class="desc-label">Product name:</span> {{$ctrl.product.productName}}</p>
+            <p ng-if="$ctrl.product.gtin"><span class="desc-label">Ean code:</span> {{$ctrl.product.gtin}}</p>
+            <p ng-if="$ctrl.product.brand"><span class="desc-label">Brand:</span> {{$ctrl.product.brand}}</p>
+            <p ng-if="$ctrl.product.brandOwner"><span class="desc-label">Brand owner:</span> {{$ctrl.product.brandOwner}}</p>
+            <p ng-if="$ctrl.product.manufacturer"><span class="desc-label">Manufacturer:</span> {{$ctrl.product.manufacturer}}</p>
+            <p ng-if="$ctrl.product.countryOfOrigin"><span class="desc-label">Country of origin:</span> {{$ctrl.product.countryOfOrigin}}</p>
+            <p ng-if="$ctrl.product.isLegal"><span class="desc-label">Is legal:</span> <i class="fas {{$ctrl.getLegalIcon()}}"></i>
+            </p>
+            <p ng-if="$ctrl.product.description"><span class="desc-label">Description:</span> {{$ctrl.product.description}}</p>
+        </div>
+        <div class="col-md-6 left-margin">
+            <div class="card"><img style="width:100%" src="{{$ctrl.getProductImage()}}"/></div>
+        </div>
+    </div>
+</div>
+<p>&nbsp;</p>
+<div class="container">
+    <div class="row card">
+        <div class="row">
+            <div class="col-12"><h2>Ingredients</h2></div>
+        </div>
+        <div class="row" ng-repeat="ingredient in $ctrl.product.ingredients">
+            <div class="col-md-12 ingredient-head"
+                 ng-click="$ctrl.toggleIngredient(ingredient)"
+                 ng-class="{'is-opened': ingredient.isOpen}"><span>{{ingredient.englishName}}</span><i class="fas fa-arrow-circle-down"></i>
+            </div>
+            <div ng-show="ingredient.isOpen" class="col-md-12 ingredient">
+                <div class="row">
+                    <div class="col-6 ingredient-desc">
+                        <p ng-if="ingredient.englishName"><span class="desc-label">Name:</span> {{ingredient.englishName}}</p>
+                        <p ng-if="ingredient.molecularFormula"><span class="desc-label">Molecular formula:</span> {{ingredient.molecularFormula}}</p>
+                        <p ng-if="ingredient.pubChemUrl"><span class="desc-label">PubChem page:</span>
+                            <a href="{{ingredient.pubChemUrl}}" target="_blank" rel="nofollow"> View on PubChem <i class="fas fa-external-link-alt"></i></a>
+                        </p>
+                        <p ng-if="ingredient.ghsClasificationRaportUrl"><span class="desc-label">GHS classification report:</span>
+                            <a href="{{ingredient.ghsClasificationRaportUrl}}" target="_blank" rel="nofollow"> View GHS classification report <i class="fas fa-external-link-alt"></i></a>
+                        </p>
+                        <p ng-if="ingredient.wikiUrl"><span class="desc-label">Wikipedia article:</span>
+                            <a href="{{ingredient.wikiUrl}}" target="_blank" rel="nofollow"> Read Wikipedia article <i class="fas fa-external-link-alt"></i></a>
+                        </p>
+                        <p><span class="desc-label">Hazard statements:</span>
+                        <ul ng-repeat="hazard in ingredient.hazardStatements" class="row">
+                            <li>{{hazard.code}}, {{hazard.descriptionEnglish}}</li>
+                        </ul></p>
+                    </div>
+                    <div class="col-6 ingredient-image" ng-style="{'background-image':'url({{ingredient.structureImageUrl}})'}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

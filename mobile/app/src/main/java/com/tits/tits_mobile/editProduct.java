@@ -15,11 +15,13 @@ import android.widget.ListView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tits.tits_mobile.HttpHandler.HttpGetRequest;
+import com.tits.tits_mobile.HttpHandler.HttpPostRequest;
 import com.tits.tits_mobile.HttpHandler.HttpPutRequest;
 import com.tits.tits_mobile.models.Ingredient;
 import com.tits.tits_mobile.models.Product;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -39,8 +41,10 @@ public class editProduct extends AppCompatActivity {
     String json;
     ArrayList<String> autocomplete;
     String result;
+    String EAN;
     ArrayList<String> reqHints;
     String[] reqHintsArr;
+
 
 
     @Override
@@ -66,14 +70,22 @@ public class editProduct extends AppCompatActivity {
 
         final String myUrl = "http://vps756014.ovh.net/api/Ingredients/names";
 
-        prod = (Product) Objects.requireNonNull(getIntent().getExtras()).getSerializable("prod");
+        EAN = getIntent().getStringExtra("EAN");
+        prod = (Product) getIntent().getExtras().getSerializable("prod");
         if (prod != null) {
-            ingList = prod.getIngredients();
+            if(prod.getIngredients() != null){
+                ingList = prod.getIngredients();
+            } else ingList = new ArrayList<Ingredient>();
+        } else ingList = new ArrayList<Ingredient>();
+
+        if(prod!=null){
+            eanEditText.setText(prod.getGtin());
+            brandEditText.setText(prod.getBrand());
+            productNameEditText.setText(prod.getProductName());
+        } else {
+            eanEditText.setText(EAN);
         }
 
-        eanEditText.setText(prod.getGtin());
-        brandEditText.setText(prod.getBrand());
-        productNameEditText.setText(prod.getProductName());
 
         HttpGetRequest getRequest = new HttpGetRequest(editProduct.this);
         try {
@@ -85,10 +97,13 @@ public class editProduct extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        for(Ingredient i : ingList){
-            ingStrings.add(i.getPolishName());
-            //System.out.println(i.getPolishName());
+        if(ingList != null){
+            for(Ingredient i : ingList){
+                ingStrings.add(i.getPolishName());
+                //System.out.println(i.getPolishName());
+            }
         }
+
 
         final ArrayAdapter<String> hintAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, reqHints.toArray(new String[0]));
@@ -141,8 +156,12 @@ public class editProduct extends AppCompatActivity {
                 editedProduct.setBrand(brandEditText.getText().toString());
                 editedProduct.setProductName(productNameEditText.getText().toString());
                 editedProduct.setIngredients(ingredientsList);
-                editedProduct.setId(prod.getId());
-                editedProduct.setGtin(prod.getGtin());
+                if(prod!=null) {
+                    editedProduct.setId(prod.getId());
+                    editedProduct.setGtin(prod.getGtin());
+                } else {
+                    editedProduct.setGtin(EAN);
+                }
 
                 try {
                     json = new ObjectMapper().writeValueAsString(editedProduct);
@@ -153,12 +172,23 @@ public class editProduct extends AppCompatActivity {
 
                 System.out.println(json);
 
-                HttpPutRequest putRequest = new HttpPutRequest();
-                try {
-                    putRequest.execute(json);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(prod!=null){
+                    HttpPutRequest putRequest = new HttpPutRequest();
+                    try {
+                        putRequest.execute(json);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    HttpPostRequest postRequest = new HttpPostRequest();
+                    try {
+                        result = postRequest.execute(json).get();
+                        //System.out.println(result);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+
             }
         });
     }

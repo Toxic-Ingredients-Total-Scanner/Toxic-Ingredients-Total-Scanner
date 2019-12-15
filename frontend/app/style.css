@@ -1,7 +1,134 @@
 body {
   font-family: "Catamaran";
+  color: #111111;
+  background-color: #f8f9fa;
+}
+a {
+  color: #E73D1C;
+}
+a:hover {
+  color: #9A1701;
+}
+p {
+  text-align: justify;
+}
+.card {
+  background-color: #fff;
+  border-bottom: 3px solid #E73D1C;
+  border-radius: 7px;
+  padding: 30px;
+  box-shadow: 0 5px 10px #C6C6C6;
+}
+.card h2 {
+  text-align: center;
+}
+input:focus {
+  outline: none !important;
+  border: 1px solid #E73D1C;
+}
+.no-padding {
+  margin: 0px;
+  padding: 0px;
 }
 
+#main-page-1 {
+  background: url("../img/woman1.jpg") no-repeat center;
+  background-size: cover;
+  padding: 0 20%;
+}
+.text-and-pic {
+  padding: 70px 0px;
+}
+#home-page-search-input-card {
+  margin: 200px 0px;
+}
+#img-healthcare {
+  background: url("../img/healthcare.jpg") no-repeat center top;
+  background-size: cover;
+}
+.inner-text {
+  padding: 50px 20px;
+}
+
+.main-desc p {
+  border-bottom: solid 1px #ccc;
+}
+.main-desc .desc-label {
+  font-weight: bold;
+}
+.ingredient-head {
+  text-transform: capitalize;
+  width: 100%;
+  border-bottom: solid 1px #ccc;
+  cursor: pointer;
+  padding: 10px;
+  -moz-transition: ease-in-out 0.2s;
+  -ms-transition: ease-in-out 0.2s;
+  -o-transition: ease-in-out 0.2s;
+  -webkit-transition: ease-in-out 0.2s;
+  transition: ease-in-out 0.2s;
+}
+.ingredient-head i {
+  float: right;
+}
+.ingredient-head:hover {
+  background-color: #E73D1C;
+  color: #fff;
+}
+.left-margin {
+  padding: 0px 0px 0px 30px;
+}
+.ingredient-desc {
+  margin: 10px 0px;
+}
+.ingredient-desc p {
+  border-bottom: solid 1px #ccc;
+}
+.ingredient-desc .desc-label {
+  font-weight: bold;
+}
+.ingredient-image {
+  text-align: right;
+  min-height: 100%;
+  background-size: contain;
+  background: #f5f5f5 no-repeat center;
+}
+.ingredient {
+  -moz-transition: ease-in-out 0.5s;
+  -ms-transition: ease-in-out 0.5s;
+  -o-transition: ease-in-out 0.5s;
+  -webkit-transition: ease-in-out 0.5s;
+  transition: ease-in-out 0.5s;
+  overflow: auto;
+  max-height: 10999px;
+  border: 1px solid #E73D1C;
+}
+.is-opened {
+  background-color: #E73D1C;
+  color: #fff;
+}
+.ng-hide:not(.ng-hide-animate) {
+  border: none;
+  max-height: 0px;
+  display: block!important;
+  overflow: hidden;
+}
+
+.edit-desc input {
+  width: 100%;
+}
+.edit-desc .edit-desc-label {
+  font-weight: bold;
+  text-align: right;
+}
+
+.not-found {
+  height: 100%;
+  padding: 25% 0%;
+}
+.not-found h1 {
+  text-align: center;
+}
 
 div.hint {
   padding: 10px;
@@ -9,21 +136,20 @@ div.hint {
   border-bottom: 1px solid #ccc;
 }
 div.hint:hover {
-  background-color: #999999;
+  background-color: #C6C6C6;
 }
 div.search-hints {
-  -webkit-box-shadow: 1px 1px 3px 3px #ccc;
-  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow: 1px 1px 3px 3px #ccc;
-  /* Firefox 3.5 - 3.6 */
-  box-shadow: 1px 1px 3px 3px #ccc;
+  box-shadow: 0 5px 10px #C6C6C6;
   border: solid 1px #ccc;
+  position: absolute;
+  display: block;
+  width: 100%;
+  z-index: 1000;
+  background-color: #fff;
 }
 
 .search-input {
   width: 100%;
-  padding: 100px;
-  margin: 50px 0px;
 }
 .search-input p {
   color: red;
@@ -31,4 +157,14 @@ div.search-hints {
 }
 .search-input input.product-search {
   width: 100%;
+}
+.search-input input[type=button],
+.search-input input[type=submit],
+.search-input input[type=reset] {
+  background-color: #E73D1C;
+  border: none;
+  color: #fff;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
 }
