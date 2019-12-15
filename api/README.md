@@ -17,11 +17,11 @@ Follow these steps to run this api.
 	    }
 	  },
 	  "ConnectionStrings": {
-	    "DefaultConnection": "**connection string to your database**"
+	    "DefaultConnection": "connection string to your database"
 	  },
 	  "PwSAPI": {
-	    "Login": "**your email used to sign up to [http://produktywsieci.gs1.pl/](http://produktywsieci.gs1.pl/)**",
-	    "Key": "**your api key**"
+	    "Login": "your email used to sign up to http://produktywsieci.gs1.pl/",
+	    "Key": "your api key"
 	  },
 	  "AllowedHosts": "*"
 }
