@@ -5,17 +5,30 @@
         controller: searchInputController
     });
 
-    searchInputController.$inject = ['productsService'];
+    searchInputController.$inject = ['productsService', '$location'];
 
-    function searchInputController(productsService) {
+    function searchInputController(productsService, $location) {
         var $ctrl = this;
-        $ctrl.search = "";
+        $ctrl.searchInput = "";
         $ctrl.hints = [];
+        $ctrl.search = search;
+        $ctrl.submit = submit;
 
-        $ctrl.searchFor = searchFor;
+        function submit() {
+            $location.path(/product-search/ + $ctrl.searchInput);
+        }
+
+        function search() {
+            if($ctrl.searchInput.length < 1) $ctrl.hints = [];
+            if($ctrl.searchInput.length < 3) return;
+            var eanRegex = /^[0-9]*$/;
+            if(!$ctrl.searchInput.match(eanRegex)){
+                searchFor();
+            }
+        }
 
         function searchFor() {
-            productsService.searchFor($ctrl.search).then(
+            productsService.searchFor($ctrl.searchInput).then(
               function(response) {
                   $ctrl.hints = response.data;
               }

@@ -1,8 +1,9 @@
-<div class="search-input">
-    <h2>Type product name:</h2>
-    <input class="product-search" ng-model="$ctrl.search" ng-change="$ctrl.searchFor()" ng-model-options="{debounce:500}">
-    <search-hints hints="$ctrl.hints"></search-hints>
-
-    <a href="route1/param">Route 1</a>
-    <a href="route2/potasse">Route 2</a>
+<div class="container-fluid" id="home-page-1">
+    <div class="search-input dropdown">
+        <h2>Type product name or ean code:</h2>
+        <form ng-submit="$ctrl.submit()">
+            <input class="product-search" ng-model="$ctrl.searchInput" ng-change="$ctrl.search()" ng-model-options="{debounce:500}">
+        </form>
+        <search-hints hints="$ctrl.hints"></search-hints>
+    </div>
 </div>

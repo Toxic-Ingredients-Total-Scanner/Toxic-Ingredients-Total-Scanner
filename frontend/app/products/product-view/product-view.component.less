@@ -1,0 +1,78 @@
+.main-desc {
+
+  p{
+    border-bottom: solid 1px #ccc;
+  }
+
+  .desc-label {
+    font-weight: bold;
+  }
+}
+
+.ingredient-head {
+  text-transform: capitalize;
+  width: 100%;
+  border-bottom: solid 1px #ccc;
+  cursor: pointer;
+  padding: 10px;
+  -moz-transition: ease-in-out 0.2s;
+  -ms-transition: ease-in-out 0.2s;;
+  -o-transition: ease-in-out 0.2s;
+  -webkit-transition: ease-in-out 0.2s;
+  transition: ease-in-out 0.2s;
+
+  i{
+    float: right;
+  }
+
+  &:hover {
+    background-color: #E73D1C;
+    color: #fff;
+  }
+}
+
+.left-margin {
+  padding: 0px 0px 0px 30px;
+}
+
+.ingredient-desc{
+  margin: 10px 0px;
+
+  p{
+    border-bottom: solid 1px #ccc;
+  }
+
+  .desc-label {
+    font-weight: bold;
+  }
+}
+
+.ingredient-image {
+  text-align: right;
+  min-height: 100%;
+  background-size: contain;
+  background: #f5f5f5 no-repeat center;
+}
+
+.ingredient {
+  -moz-transition: ease-in-out 0.5s;
+  -ms-transition: ease-in-out 0.5s;;
+  -o-transition: ease-in-out 0.5s;
+  -webkit-transition: ease-in-out 0.5s;
+  transition: ease-in-out 0.5s;
+  overflow: auto;
+  max-height:10999px;
+  border: 1px solid #E73D1C;
+}
+
+.is-opened {
+  background-color: #E73D1C;
+  color: #fff;
+}
+
+.ng-hide:not(.ng-hide-animate) {
+  border: none;
+  max-height: 0px;
+  display: block!important;
+  overflow: hidden;
+}

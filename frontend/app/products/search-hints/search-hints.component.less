@@ -4,13 +4,16 @@ div.hint {
   border-bottom: 1px solid #ccc;
 
   &:hover {
-    background-color: #999999;
+    background-color: #C6C6C6;
   }
 }
 
 div.search-hints {
-  -webkit-box-shadow: 1px 1px 3px 3px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-  -moz-box-shadow:    1px 1px 3px 3px #ccc;  /* Firefox 3.5 - 3.6 */
-  box-shadow:         1px 1px 3px 3px #ccc;
+  box-shadow: 0 5px 10px #C6C6C6;
   border: solid 1px #ccc;
+  position: absolute;
+  display: block;
+  width: 100%;
+  z-index: 1000;
+  background-color: #fff;
 }
