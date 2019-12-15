@@ -102,6 +102,8 @@ namespace TITS_API.Api.Controllers
                 return Conflict();
             }
 
+            ingredient.PolishName = ingredient.PolishName.ToLower();
+
             var _ingredient = await _ingredientRepository.Add(ingredient);
             if (_ingredient == null)
             {
@@ -118,6 +120,8 @@ namespace TITS_API.Api.Controllers
         [HttpPut]
         public async Task<ActionResult<Ingredient>> Update(Ingredient ingredient)
         {
+            ingredient.PolishName = ingredient.PolishName.ToLower();
+
             var _ingredient = await _ingredientRepository.Update(ingredient);
             if (_ingredient == null)
             {

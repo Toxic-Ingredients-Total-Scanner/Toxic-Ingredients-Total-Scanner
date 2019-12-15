@@ -86,6 +86,7 @@ namespace TITS_API.Services.Services
         {
             if (ingredient.PolishName == null) return null;
 
+            ingredient.PolishName = ingredient.PolishName.ToLower();
             var ing = await _ingredientRepository.GetByName(ingredient.PolishName);
 
             if(ing != null)
