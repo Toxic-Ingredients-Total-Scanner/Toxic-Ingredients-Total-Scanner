@@ -50,6 +50,21 @@ input:focus {
   padding: 50px 20px;
 }
 
+.edit-desc input {
+  width: 100%;
+}
+.edit-desc textarea {
+  width: 100%;
+  height: 5rem;
+}
+.edit-desc .edit-desc-label {
+  font-weight: bold;
+  text-align: right;
+}
+.edit-desc .desc-row {
+  margin-top: 10px;
+}
+
 .main-desc p {
   border-bottom: solid 1px #ccc;
 }
@@ -112,14 +127,6 @@ input:focus {
   max-height: 0px;
   display: block!important;
   overflow: hidden;
-}
-
-.edit-desc input {
-  width: 100%;
-}
-.edit-desc .edit-desc-label {
-  font-weight: bold;
-  text-align: right;
 }
 
 .not-found {
