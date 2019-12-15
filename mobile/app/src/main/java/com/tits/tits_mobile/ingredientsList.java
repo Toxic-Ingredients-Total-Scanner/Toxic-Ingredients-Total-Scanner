@@ -34,6 +34,7 @@ public class ingredientsList extends AppCompatActivity {
     ImageView hazardImg;
     TextView hazardText;
     ArrayAdapter adapter;
+    IngredientAdapter ingAdapter;
     boolean alreadyRecreated = false;
 
     public Ingredient findIngredientByName(String name) {
@@ -61,71 +62,98 @@ public class ingredientsList extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        list = findViewById(R.id.listview);
+        list = findViewById(R.id.listvieww);
         //hazardImg = findViewById(R.id.hazardImg);
         //ingList = new ArrayList<>();
         ingStrings = new ArrayList<>();
-        View v;
+        //View v;
 
         Bundle extra = getIntent().getBundleExtra("ingList");
         ingList = (ArrayList<Ingredient>) extra.getSerializable("arr");
 
+        ArrayList<IngredientEntry> ingEntryList = new ArrayList<>();
 
         for(Ingredient i : ingList){
             ingStrings.add(i.getPolishName());
+
+            if(i.getHazardStatements() != null) {
+                for (HazardStatement hs : i.getHazardStatements()) {
+                    if (hs.getCode().equals("X404")) {
+                        ingEntryList.add(new IngredientEntry(i.getPolishName(), "kciuk"));
+                    } else {
+                        ingEntryList.add(new IngredientEntry(i.getPolishName(), "skull"));
+                    }
+                }
+            }
         }
+
+        for(IngredientEntry ingEnt : ingEntryList){
+            System.out.println(ingEnt.getmIngredientName());
+            //System.out.println(ingEnt.getmIngredientHazardImage());
+        }
+
+        ingAdapter = new IngredientAdapter(this, ingEntryList);
+        list.setAdapter(ingAdapter);
+
+
 
 
 //        ArrayAdapter adapter = new ArrayAdapter(
 //                this,R.layout.list_item ,R.id.itemName, ingStrings
 //        );
 
-        adapter = new ArrayAdapter<String>(
-                this, R.layout.list_item, R.id.ingName, ingStrings
-        );
 
 
 
-        list.setAdapter(adapter);
 
-        for(int i=0; i<list.getCount(); i++){
-            v = list.getAdapter().getView(i, null, null);
-            hazardImg = (ImageView) v.findViewById(R.id.hazardImg);
-            hazardText = (TextView) v.findViewById(R.id.ingName);
-            //System.out.println(hazardText.getText().toString());
-            Ingredient temp = findIng(hazardText.getText().toString());
-            System.out.println(temp.getPolishName());
-            hazardImg.setImageResource(R.drawable.kciuk);
-            System.out.println(hazardImg.getMaxHeight());
-            //System.out.println(temp.getHazardStatements().);
-
-//            ArrayList<HazardStatement> hzrd = temp.getHazardStatements();
-//            for(HazardStatement hz : hzrd){
-//                System.out.println(hz.getCode());
+//        adapter = new ArrayAdapter<String>(
+//                this, R.layout.list_item, R.id.ingName, ingStrings
+//        );
+//
+//
+//
+//        list.setAdapter(adapter);
+//
+//
+//        for(int i=0; i<list.getCount(); i++){
+//            list.getItemAtPosition(1);
+//            View v = list.getAdapter().getView(i, null, null);
+//            hazardImg = (ImageView) v.findViewById(R.id.hazardImg);
+//            hazardText = (TextView) v.findViewById(R.id.ingName);
+//            //System.out.println(hazardText.getText().toString());
+//            Ingredient temp = findIng(hazardText.getText().toString());
+//            System.out.println(temp.getPolishName());
+//            hazardImg.setImageResource(R.drawable.kciuk);
+//            System.out.println(hazardImg.getMaxHeight());
+//            //System.out.println(temp.getHazardStatements().);
+//
+////            ArrayList<HazardStatement> hzrd = temp.getHazardStatements();
+////            for(HazardStatement hz : hzrd){
+////                System.out.println(hz.getCode());
+////            }
+//
+//            if(temp.getHazardStatements() != null) {
+//                for(HazardStatement hs : temp.getHazardStatements()){
+//                    if(hs.getCode().equals("X404")){
+//                        hazardImg.setImageResource(R.drawable.kciuk);
+//                        //hazardImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.kciuk));
+//                        System.out.println("found x404");
+//
+//
+//                        list.invalidateViews();
+////                        v.refreshDrawableState();
+////                        getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
+//
+//
+//
+//                    } else hazardImg.setImageResource(R.drawable.skull);
+//                }
 //            }
-
-            if(temp.getHazardStatements() != null) {
-                for(HazardStatement hs : temp.getHazardStatements()){
-                    if(hs.getCode().equals("X404")){
-                        hazardImg.setImageResource(R.drawable.kciuk);
-                        //hazardImg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.kciuk));
-                        System.out.println("found x404");
-
-
-                        list.invalidateViews();
-//                        v.refreshDrawableState();
-//                        getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
-
-
-
-                    } else hazardImg.setImageResource(R.drawable.skull);
-                }
-            }
-            adapter.notifyDataSetChanged();
-            list.setAdapter(adapter);
-
-
-        }
+//            adapter.notifyDataSetChanged();
+//            list.setAdapter(adapter);
+//
+//
+//        }
 
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
