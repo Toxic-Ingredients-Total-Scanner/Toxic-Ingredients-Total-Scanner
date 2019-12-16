@@ -10,7 +10,7 @@
             <p ng-if="$ctrl.product.brandOwner"><span class="desc-label">Brand owner:</span> {{$ctrl.product.brandOwner}}</p>
             <p ng-if="$ctrl.product.manufacturer"><span class="desc-label">Manufacturer:</span> {{$ctrl.product.manufacturer}}</p>
             <p ng-if="$ctrl.product.countryOfOrigin"><span class="desc-label">Country of origin:</span> {{$ctrl.product.countryOfOrigin}}</p>
-            <p ng-if="$ctrl.product.isLegal"><span class="desc-label">Is legal:</span> <i class="fas {{$ctrl.getLegalIcon()}}"></i>
+            <p><span class="desc-label">Is legal:</span> <i class="fas {{$ctrl.getLegalIcon()}}"></i>
             </p>
             <p ng-if="$ctrl.product.description"><span class="desc-label">Description:</span> {{$ctrl.product.description}}</p>
         </div>
@@ -21,7 +21,7 @@
 </div>
 <p>&nbsp;</p>
 <div class="container">
-    <div class="row card">
+    <div ng-if="$ctrl.product.ingredients" class="row card">
         <div class="row">
             <div class="col-12"><h2>Ingredients</h2></div>
         </div>
@@ -53,6 +53,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div ng-if="!$ctrl.product.ingredients" class="row card">
+        <div class="col-12"><h2>No ingredients found</h2></div>
+        <div class="col-12"><p>You can add some ingredients <a href="/edit-product/{{$ctrl.product.gtin}}">here</a></p></div>
+    </div>
+    <div class="row meta-links">
+        <div class="col-12">
+            <a href="/edit-product/{{$ctrl.product.gtin}}">Edit this product</a>
         </div>
     </div>
 </div>
