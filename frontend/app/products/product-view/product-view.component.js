@@ -15,7 +15,6 @@
     $ctrl.toggleIngredient = toggleIngredient;
     $ctrl.getLegalIcon = getLegalIcon;
     $ctrl.getProductImage = getProductImage;
-
     $ctrl.getProductsByEan = getProductsByEan;
 
     function getProductsByEan() {
@@ -31,7 +30,7 @@
     }
 
     function getProductImage() {
-      try{ return $ctrl.product.productImage || '../img/no_image_placeholder.png'; }
+      try{ return $ctrl.product.productImage || $ctrl.product.base64Image ||'../img/no_image_placeholder.png'; }
       catch (e) {return '../img/no_image_placeholder.png';}
     }
 

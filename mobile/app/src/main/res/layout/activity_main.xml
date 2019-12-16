@@ -53,8 +53,8 @@
 
     <Button
         android:id="@+id/eanTextButton"
-        android:layout_width="153dp"
-        android:layout_height="48dp"
+        android:layout_width="213dp"
+        android:layout_height="52dp"
         android:layout_marginBottom="228dp"
         android:background="@color/colorAccent"
         android:text="Kontynuuj z kodem EAN"
@@ -72,7 +72,7 @@
         android:layout_marginBottom="324dp"
         android:ems="10"
         android:hint="EAN"
-        android:inputType="textPersonName"
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
