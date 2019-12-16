@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="card edit-desc">
+        <h2>Main product info</h2>
+        <div ng-if="!$ctrl.ean" class="row desc-row">
+            <div class="col-3 edit-desc-label">Ean code</div>
+            <div ng-if="$ctrl.adding" class="col-9"><input ng-model="$ctrl.product.gtin"></div>
+        </div>
+        <div class="row desc-row">
+            <div class="col-3 edit-desc-label">Product name</div>
+            <div class="col-9"><input ng-model="$ctrl.product.productName"></div>
+        </div>
+        <div class="row desc-row">
+            <div class="col-3 edit-desc-label">Brand</div>
+            <div class="col-9"><input ng-model="$ctrl.product.brand"></div>
+        </div>
+        <div class="row desc-row">
+            <div class="col-3 edit-desc-label">Brand owner</div>
+            <div class="col-9"><input ng-model="$ctrl.product.brandOwner"></div>
+        </div>
+        <div class="row desc-row">
+            <div class="col-3 edit-desc-label">Manufacturer</div>
+            <div class="col-9"><input ng-model="$ctrl.product.manufacturer"></div>
+        </div>
+        <div class="row desc-row">
+            <div class="col-3 edit-desc-label">Country of origin</div>
+            <div class="col-9"><input ng-model="$ctrl.product.countryOfOrigin"></div>
+        </div>
+        <div class="row desc-row">
+            <div class="col-3 edit-desc-label">Url</div>
+            <div class="col-9"><input ng-model="$ctrl.product.url"></div>
+        </div>
+        <div class="row desc-row">
+            <div class="col-3 edit-desc-label">Is legal</div>
+            <div class="col-9"><input type="checkbox" ng-model="$ctrl.product.isLegal"></div>
+        </div>
+        <div class="row desc-row">
+            <div class="col-3 edit-desc-label">Description</div>
+            <div class="col-9"><textarea ng-model="$ctrl.product.description"></textarea></div>
+        </div>
+        <div class="row desc-row">
+            <div class="col-3 edit-desc-label">Image</div>
+            <div class="col-9"><input
+                    type="file"
+                    ng-model="$ctrl.imageFile"
+                    accept="image/*"
+                    ng-change="$ctrl.getBase64()"></div>
+        </div>
+    </div>
+    <div class="card edit-desc ingredients-card">
+        <h2>Ingredients</h2>
+        <div ng-repeat="ingredient in $ctrl.product.ingredients" class="row desc-row">
+            <div class="col-12 trash-icon">
+                <i class="fas fa-trash-alt"
+                   ng-click="$ctrl.removeIngredient(ingredient)"></i>
+                <input ng-model="ingredient.polishName">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 plus-button desc-row" ng-click="$ctrl.addNewIngredient()"><i class="fas fa-plus-circle"></i>Add new ingredient</div>
+        </div>
+    </div>
+    <button ng-click="$ctrl.updateProduct()">Update product</button>
+</div>
