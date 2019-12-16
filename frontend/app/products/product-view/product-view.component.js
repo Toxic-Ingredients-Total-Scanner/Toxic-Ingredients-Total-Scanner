@@ -16,6 +16,11 @@
     $ctrl.getLegalIcon = getLegalIcon;
     $ctrl.getProductImage = getProductImage;
     $ctrl.getProductsByEan = getProductsByEan;
+    $ctrl.warning = openWarning();
+
+    function openWarning() {
+      alert("This is just application for test purposes. Some products contains random ingredients list!")
+    }
 
     function getProductsByEan() {
       productsService.getFullProductInfoByEan($ctrl.ean).then(

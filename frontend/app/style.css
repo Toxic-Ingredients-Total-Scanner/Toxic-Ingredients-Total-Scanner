@@ -44,7 +44,7 @@ input:focus {
   padding: 70px 0px;
 }
 #home-page-search-input-card {
-  margin: 200px 0px;
+  margin: 50% 0px;
 }
 #img-healthcare {
   background: url("../img/healthcare.jpg") no-repeat center top;
@@ -99,6 +99,14 @@ input:focus {
 }
 .ingredients-card {
   margin-top: 30px;
+}
+
+.not-found {
+  height: 100%;
+  padding: 25% 0%;
+}
+.not-found h1 {
+  text-align: center;
 }
 
 .main-desc p {
@@ -163,14 +171,6 @@ input:focus {
   max-height: 0px;
   display: block!important;
   overflow: hidden;
-}
-
-.not-found {
-  height: 100%;
-  padding: 25% 0%;
-}
-.not-found h1 {
-  text-align: center;
 }
 
 div.hint {
