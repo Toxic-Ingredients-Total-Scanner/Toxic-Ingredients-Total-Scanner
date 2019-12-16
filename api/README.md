@@ -37,7 +37,7 @@ Follow these steps to run this api.  <br/>
 	   - NuGet targets and builds tasks
 2. If you use any other software:
 	- Install the [.NET Core SDK](https://dot.net/core) (3.0 or higher) for your operating system.
-	- Git clone this repository or otherwise copy this sample to your machine: 
+	- Git clone this repository: 
 		`git clone https://github.com/Toxic-Ingredients-Total-Scanner/Toxic-Ingredients-Total-Scanner.git`
 	- Navigate to the local folder on your machine at the command prompt or terminal.
 3. Use this command in terminal to migrate models to database:
