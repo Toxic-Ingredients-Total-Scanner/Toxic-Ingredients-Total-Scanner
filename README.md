@@ -40,10 +40,10 @@ MIT
 
 ## Credits
 ### Authors
-Michał Ratajczak <br/>
-Konrad Tarnacki <br/>
-Kacper Wleklak <br/>
-Mateusz Galan <br/>
-Norbert Pałuczyński 
+- Michał Ratajczak 
+- Konrad Tarnacki
+- Kacper Wleklak 
+- Mateusz Galan 
+- Norbert Pałuczyński 
 ### Access to the products database granted by: 
 [GS1 Polska - Produkty w sieci](http://produktywsieci.gs1.pl/)
