@@ -16,30 +16,28 @@ namespace TITS_API.Architecture
         {
             ChangeTracker.Tracked += (sender, e) =>
             {
-                if (!e.FromQuery && e.Entry.State == EntityState.Added && e.Entry.Entity is TrackedEntity entity)
+                if (!e.FromQuery && e.Entry.Entity is TrackedEntity entity)
                 {
-                    var now = DateTimeOffset.Now;
-                    entity.CreatedAt = now;
-                    entity.UpdatedAt = now;
-                    entity.UpdatedBy ??= "default";
+                    if(e.Entry.State == EntityState.Added)
+                    {
+                        var now = DateTimeOffset.Now;
+                        entity.CreatedAt = now;
+                        entity.UpdatedAt = now;
+                        entity.UpdatedBy ??= "default";
 
-                    MD5 md5Hash = MD5.Create();
-                    entity.Checksum = GetMd5Hash(md5Hash, entity.ToString());
+                        MD5 md5Hash = MD5.Create();
+                        entity.Checksum = GetMd5Hash(md5Hash, entity.ToString());
+                    }
+                    else if(e.Entry.State == EntityState.Modified)
+                    {
+                        entity.UpdatedAt = DateTimeOffset.Now;
+                        entity.UpdatedBy ??= "default";
+
+                        MD5 md5Hash = MD5.Create();
+                        entity.Checksum = GetMd5Hash(md5Hash, entity.ToString());
+                    }
                 }
             };
-
-            ChangeTracker.StateChanged += (sender, e) =>
-            {
-                if (e.NewState == EntityState.Modified && e.Entry.Entity is TrackedEntity entity)
-                {
-                    entity.UpdatedAt = DateTimeOffset.Now;
-                    entity.UpdatedBy ??= "default";
-
-                    MD5 md5Hash = MD5.Create();
-                    entity.Checksum = GetMd5Hash(md5Hash, entity.ToString());
-                }
-            };
-
         }
 
         public DbSet<Product> Products { get; set; }
