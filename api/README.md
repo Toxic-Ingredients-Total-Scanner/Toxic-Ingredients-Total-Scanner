@@ -3,8 +3,8 @@
 
 ## Script
 
-Follow these steps to run this api. 
-\n
+Follow these steps to run this api.  <br/>
+
 **Requirements**
 
 1. To run this app you have to add `appsettings.json` file in `/api/TITS_API.Api`. This file should looks like:
