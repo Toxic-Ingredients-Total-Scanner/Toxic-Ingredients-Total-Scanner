@@ -2,7 +2,7 @@
 
 The project was created as part of the Database course at the Poznan University of Technology.
 
-## Overview (What problems project solves)
+## Overview
 Main goal of the project was to create the app which returns to the user list of ingredients (based on EAN code - scanned or typed by the user) that the product has. <br/>
 Application creates separate requests for every ingredient to external database getting info like harmfulness, molecular formulas or chemical particle visualization.
 The source of these information is [PubChem](https://pubchem.ncbi.nlm.nih.gov/). <br/>
