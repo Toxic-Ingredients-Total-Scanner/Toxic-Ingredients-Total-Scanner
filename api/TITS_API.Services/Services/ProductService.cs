@@ -26,12 +26,12 @@ namespace TITS_API.Services.Services
         private readonly IngredientService _ingredientService;
         
 
-        public ProductService(DatabaseContext context, IngredientService ingredientService)
+        public ProductService(DatabaseContext context, PubChemService pubChemService)
         {
             _productRepository = new ProductRepository(context);
             _ingredientRepository = new IngredientRepository(context);
             _productCompositionRepository = new ProductCompositionRepository(context);
-            _ingredientService = ingredientService;
+            _ingredientService = new IngredientService(context, pubChemService);
         }
 
 
