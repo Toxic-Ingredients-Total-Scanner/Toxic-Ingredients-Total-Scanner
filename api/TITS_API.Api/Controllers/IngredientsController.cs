@@ -89,6 +89,22 @@ namespace TITS_API.Api.Controllers
         }
 
         /// <summary>
+        /// Get all ingredients names as string array calling sql function.
+        /// </summary>
+        /// <returns>string[]</returns>
+        [Route("namessql")]
+        [HttpGet]
+        public async Task<ActionResult<string[]>> GetIngredientNamesSql()
+        {
+            var names = await _ingredientRepository.GetAllNames();
+            if (names == null)
+            {
+                return NotFound();
+            }
+            return names;
+        }
+
+        /// <summary>
         /// Add ingredient without hazard statements.
         /// </summary>
         /// <param name="ingredient"></param>

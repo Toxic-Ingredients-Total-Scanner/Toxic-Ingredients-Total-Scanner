@@ -6,6 +6,7 @@ using TITS_API.Architecture;
 using TITS_API.Models.Models;
 using TITS_API.Repositories.Interfaces;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace TITS_API.Repositories.Repositories
 {
@@ -73,6 +74,11 @@ namespace TITS_API.Repositories.Repositories
         public async Task<string[]> GetAllNames()
         {
             return await Task.Run(() => _context.Ingredients.Select(i => i.PolishName).ToArray());
+        }
+
+        public async Task<string[]> GetAllNamesSql()
+        {
+            return await Task.Run(() => _context.Ingredients.FromSqlRaw("select * from ingredient_names()").Select(i => i.PolishName).ToArray());
         }
     }
 }
